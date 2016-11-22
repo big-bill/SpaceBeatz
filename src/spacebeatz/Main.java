@@ -13,7 +13,7 @@ public class Main extends Application {
 		try {
 			Parent parent = FXMLLoader.load(getClass().getResource("MainMenu.fxml"));
 			Scene scene = new Scene(parent);
-			primaryStage.setTitle("Space Beatz");
+			primaryStage.setTitle("Space Beatz Menu");
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setResizable(false);
 			primaryStage.setScene(scene);

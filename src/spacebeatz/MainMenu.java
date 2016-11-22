@@ -1,4 +1,5 @@
 package spacebeatz;
+
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -6,15 +7,24 @@ import java.net.URL;
 
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.media.AudioSpectrumListener;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaPlayer.Status;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import javafx.stage.Window;
+
+import spacebeatzgame.SpaceBeatzGame;
 
 
 public class MainMenu {
@@ -36,17 +46,12 @@ public class MainMenu {
 
     @FXML
     private Button playButton;
-    
-    private Media audioFile;
-    private MediaPlayer mediaPlayer;
-    
     private Media backgroundMusicAudio;
     private MediaPlayer backgroundMusicPlayer;
     
+    
     @FXML
     public void initialize() {
-    	audioFile = null;
-    	mediaPlayer = null;
     	
     	try {
     	/*	
@@ -95,24 +100,14 @@ public class MainMenu {
     //-----------------------------------------------------------------------------------------------------------
   
     public void playButtonListener() {
-    	// For now this will play music
-    	// TODO: Send chosen file to game file to play
-    	try {
-    		// If music is currently being played, stop it
-    		if(mediaPlayer != null) mediaPlayer.stop();
-    		
+    	try {    		
+    		// Since the media player successfully accessed the audio file, we stop playing the menu music
+    		if(backgroundMusicPlayer.getStatus() != Status.STOPPED) backgroundMusicPlayer.stop();
     		File musicFile = new File(chosenSong.getText());
     		URI uri = musicFile.toURI();
     		URL url = uri.toURL();
-    
-    		
-    		audioFile = new Media(url.toString());
-    		mediaPlayer = new MediaPlayer(audioFile);
-    		
-    		// Since the media player successfully accessed the audio file, we stop playing the menu music
-    		if(backgroundMusicPlayer.getStatus() != Status.STOPPED) backgroundMusicPlayer.stop();
-    		
-    		mediaPlayer.play();
+  
+			SpaceBeatzGame game = new SpaceBeatzGame(url);
     	}
     	catch (NullPointerException | MalformedURLException | IllegalArgumentException e1) {
     		System.err.println("No song found!");
