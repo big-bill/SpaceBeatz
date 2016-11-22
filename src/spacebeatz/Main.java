@@ -6,8 +6,7 @@ import javafx.stage.Stage;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 
-//Test Comment for GitHub Push by Robert Munshower
-//test push again
+
 public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
