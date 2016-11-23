@@ -7,8 +7,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane id="anchorPane" fx:id="anchorPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.60" fx:controller="spacebeatz.MainMenu">
+<AnchorPane id="anchorPane" fx:id="anchorPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="spacebeatz.MainMenu">
    <children>
       <ImageView fx:id="spaceBeatzLogo" fitHeight="150.0" fitWidth="345.0" layoutX="228.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true">
          <image>
