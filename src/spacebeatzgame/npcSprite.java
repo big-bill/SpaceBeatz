@@ -1,12 +1,15 @@
 package spacebeatzgame;
 
-
-public class npcSprite extends Sprite{
+public class npcSprite extends Sprite {
+	
+	public npcSprite() {
+		super();
+	}
+	
+	public npcSprite(String imageFile, double setWidth, double setHeight, boolean preserveRatio, boolean smooth) {
+		super();
+		super.setAllImageAttributes(imageFile, setWidth, setHeight, preserveRatio, smooth);
+	}
     
-    
-	// Class npcSprite extends sprite and is currently blank much of the logic located
-    // in the main including the random position & velocity generation needs to be move to this class.
-    
-    
-
+	// TODO: Add code regarding spawn rate and spawn position on Y axis, change spawns to right side as well
 }

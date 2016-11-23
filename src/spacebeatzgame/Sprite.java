@@ -15,40 +15,43 @@ public class Sprite {
     /**
      * Sprite image.
      */
-    private Image image;
+    protected Image image;
     /**
      * Sprite x position.
      */
-    private double positionX;
+    protected double positionX;
     /**
      * Sprite y position.
      */
-    private double positionY;
+    protected double positionY;
     /**
      * Sprite velocity x
      */
-    private double velocityX;
+    protected double velocityX;
     /**
      * Sprite velocity y
      */
-    private double velocityY;
+    protected double velocityY;
     /**
      * Sprite width
      */
-    private double width;
+    protected double width;
     /**
      * Sprite height
      */
-    private double height;
+    protected double height;
     /**
      * Sprite ImageView
      */
-    private ImageView spriteIV = new ImageView();
+    protected ImageView spriteIV = new ImageView();
 
     /**
      * Constructor no-args sets default position and velocities to zero
      */
     public Sprite() {
+    	image = null;
+    	width = 0.0;
+    	height = 0.0;
         positionX = 0;
         positionY = 0;
         velocityX = 0;
@@ -167,8 +170,7 @@ public class Sprite {
      */
     public boolean beyondWindow(Sprite sprite,ScreenAttributes screen) {
         boolean flag = false;
-        if(sprite.getPositionX() > screen.getScreenWidth() 
-                || sprite.getPositionY() >screen.getScreenHeight()){
+        if(sprite.getPositionX() > screen.getScreenWidth() || sprite.getPositionY() >screen.getScreenHeight()){
             flag = true;
         }
         return flag;

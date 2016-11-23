@@ -2,34 +2,49 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane id="anchorPane" fx:id="anchorPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.60" fx:controller="spacebeatz.MainMenu">
+<AnchorPane id="anchorPane" fx:id="anchorPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="spacebeatz.MainMenu">
    <children>
-      <ImageView fx:id="spaceBeatzLogo" fitHeight="150.0" fitWidth="345.0" layoutX="228.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="710.0" fitWidth="1155.0" layoutX="-66.0" layoutY="-85.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../../res/spacebeatzlogo.jpg" />
+            <Image url="file:/M:/Eclipse/WorkSpace/SpaceBeatz/src/spacebeatz/res/bluebackground.jpg" />
          </image>
       </ImageView>
-      <Label fx:id="chooseSongLabel" layoutX="131.0" layoutY="215.0" text="Choose your music:">
-         <font>
-            <Font size="18.0" />
-         </font>
-      </Label>
-      <Label fx:id="chosenSong" layoutX="294.0" layoutY="219.0" onMousePressed="#browseButtonListener" prefHeight="20.0" prefWidth="314.0" text="No song chosen. . .">
+      <ImageView id="bigBangGif" fx:id="bigBang" fitHeight="643.0" fitWidth="860.0" layoutX="-21.0" layoutY="58.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="file:/M:/Eclipse/WorkSpace/SpaceBeatz/src/spacebeatz/res/bigBang.gif" />
+         </image>
+      </ImageView>
+      <Label fx:id="chosenSong" layoutX="289.0" layoutY="560.0" onMousePressed="#browseButtonListener" prefHeight="20.0" prefWidth="314.0" text="No song chosen. . ." textFill="WHITE">
          <font>
             <Font name="System Italic" size="14.0" />
          </font>
       </Label>
-      <Button fx:id="browseButton" layoutX="608.0" layoutY="216.0" mnemonicParsing="false" onAction="#browseButtonListener" text="Browse" />
-      <Button fx:id="playButton" layoutX="368.0" layoutY="368.0" mnemonicParsing="false" onAction="#playButtonListener" text="PLAY">
+      <Button fx:id="browseButton" layoutX="628.0" layoutY="557.0" mnemonicParsing="false" onAction="#browseButtonListener" text="Browse" />
+      <Button fx:id="playButton" layoutX="318.0" layoutY="139.0" mnemonicParsing="false" onAction="#playButtonListener" prefHeight="39.0" prefWidth="144.0" text="PLAY" textAlignment="CENTER">
          <font>
             <Font size="18.0" />
          </font>
       </Button>
+      <ImageView fx:id="spaceBeatzLogo" fitHeight="150.0" fitWidth="345.0" layoutX="228.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="file:/M:/Eclipse/WorkSpace/SpaceBeatz/src/spacebeatz/res/spacebeatzlogo.jpg" />
+         </image>
+      </ImageView>
+      <Label fx:id="chooseSongLabel" layoutX="71.0" layoutY="552.0" text="Choose your music:" textFill="WHITE">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <TextArea editable="false" layoutX="152.0" layoutY="392.0" prefHeight="148.0" prefWidth="476.0" text="Use the buttons below to slect what songs you like. Use the play button to start the game! &lt;3" wrapText="true">
+         <font>
+            <Font name="Arial" size="29.0" />
+         </font>
+      </TextArea>
    </children>
 </AnchorPane>

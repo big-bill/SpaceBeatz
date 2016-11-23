@@ -7,23 +7,15 @@ import java.net.URL;
 
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
-import javafx.scene.Scene;
-import javafx.scene.chart.BarChart;
-import javafx.scene.chart.CategoryAxis;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.media.AudioSpectrumListener;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaPlayer.Status;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 import javafx.stage.Window;
-
 import spacebeatzgame.SpaceBeatzGame;
 
 
@@ -36,9 +28,6 @@ public class MainMenu {
     private ImageView spaceBeatzLogo;
 
     @FXML
-    private Label chooseSongLabel;
-
-    @FXML
     private Label chosenSong;
 
     @FXML
@@ -46,13 +35,19 @@ public class MainMenu {
 
     @FXML
     private Button playButton;
+
+    @FXML
+    private ImageView bigBang;
+
+    @FXML
+    private Label chooseSongLabel;
+
     private Media backgroundMusicAudio;
     private MediaPlayer backgroundMusicPlayer;
     
     
     @FXML
     public void initialize() {
-    	
     	try {
     	/*	
     	 *  Music Source:
@@ -60,7 +55,7 @@ public class MainMenu {
     	 * 		Licensed under Creative Commons: By Attribution 3.0 License
     	 * 		http://creativecommons.org/licenses/by/3.0/
     	 */    		
-    		File file = new File("res/backgroundmusic.mp3");
+    		File file = new File("src/spacebeatz/res/backgroundmusic.mp3");
 	    	URI uri = file.toURI();
 	    	URL url = uri.toURL();
 	
@@ -107,6 +102,7 @@ public class MainMenu {
     		URI uri = musicFile.toURI();
     		URL url = uri.toURL();
   
+    		// TODO: There may be a better way to handle this
 			SpaceBeatzGame game = new SpaceBeatzGame(url);
     	}
     	catch (NullPointerException | MalformedURLException | IllegalArgumentException e1) {
