@@ -1,11 +1,10 @@
 /bin/
-
 /.settings
 /.classpath
-
 /build.fxbuild
 /build
 /dist
+/*.zip
 /nbproject
 /*.xml
-/*mf/
+/*mf
