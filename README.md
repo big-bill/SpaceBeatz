@@ -32,6 +32,8 @@ based of audio file which I think is possible but difficult to implement. Also w
 
 <b>*)</b>Ship can travel out of the window bounds we either need to hinder this or allow the the ship to re-emerge on the opposite end of the screen which could add an interesting dynamic during game play. 
 
+<b>*)</b>At the end, include the JAR and a BAT file to run the game
+
 
 
 <b>WISHES/IDEAS</b>
