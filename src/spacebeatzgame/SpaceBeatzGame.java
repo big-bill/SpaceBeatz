@@ -75,7 +75,7 @@ public class SpaceBeatzGame extends Application {
             if(count > 3) enemy[count] = new npcSprite("src/spacebeatzgame/res/asteroid.png", 55, 55, true, true);
             else enemy[count] = new npcSprite("src/spacebeatzgame/res/enemy.png", 80, 80, true, true);
             
-         	enemy[count].setPosition(screen.getScreenWidth() + 80, Math.random() * 600);
+         	enemy[count].setPosition(screen.getScreenWidth() + 100, Math.random() * 600);
             enemy[count].addVelocity((Math.random() * (-100) - 400), 0);
 
         }
@@ -146,26 +146,26 @@ public class SpaceBeatzGame extends Application {
                 ship.setVelocity(0, 0);
                 if(input.contains("A") && !gamePaused) {
                     if(ship.getBoundary().getMinX()<=screen.getBoundary().getMinX())
-                        ship.setPosition(screen.getBoundary().getMinX(),ship.positionY);
+                        ship.setPosition(screen.getBoundary().getMinX(), ship.positionY);
                     else
                         ship.addVelocity(-700, 0);
                 }
                 if(input.contains("D") && !gamePaused) {
                     if(ship.getBoundary().getMaxX()>=screen.getBoundary().getMaxX())
-                        ship.setPosition(screen.getBoundary().getMaxX()-55,ship.positionY); 
+                        ship.setPosition(screen.getBoundary().getMaxX()-55, ship.positionY); 
                     else
                         ship.addVelocity(700, 0);
                 }
                 if(input.contains("W") && !gamePaused) {
                     if(ship.getBoundary().getMinY()<= screen.getBoundary().getMinY())
-                        ship.setPosition(ship.positionX,screen.getBoundary().getMinY()); 
+                        ship.setPosition(ship.positionX, screen.getBoundary().getMinY()); 
                     else    
                         ship.addVelocity(0, -700);
                     
                 }
                 if(input.contains("S") && !gamePaused) {  //minus 15 accounts for the tool bar as system will not allow ship animated here
                     if(ship.getBoundary().getMaxY()>=screen.getBoundary().getMaxY()-15)
-                        ship.setPosition(ship.positionX,screen.getBoundary().getMaxY()-55);
+                        ship.setPosition(ship.positionX, screen.getBoundary().getMaxY()-55);
                     else
                         ship.addVelocity(0, 700);
                 }
@@ -201,11 +201,12 @@ public class SpaceBeatzGame extends Application {
                     enemy[count].update(elapsedTime);
                     if(enemy[count].intersects(ship)) {
                     	// ship.death();  temp change later
-                     	enemy[count].setPosition(screen.getScreenWidth() + 80, Math.random() * 600);
+                     	enemy[count].setPosition(screen.getScreenWidth() - 100, Math.random() * 600);
                     }
-                    else if(enemy[count].beyondWindow(enemy[count], screen)) {
+                    else if(enemy[count].getPositionX() <= -100) {
                     	// enemy[count].hide()   temp change later
-                    	enemy[count].setPosition(screen.getScreenWidth() + 80, Math.random() * 600);
+                    	enemy[count].setPosition(screen.getScreenWidth() - 100, Math.random() * 600);
+           
                     }
                 }
                 
