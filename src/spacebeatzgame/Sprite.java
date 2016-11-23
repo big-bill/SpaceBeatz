@@ -16,30 +16,47 @@ public class Sprite {
      * Sprite image.
      */
     protected Image image;
+    
     /**
      * Sprite x position.
      */
     protected double positionX;
+    
     /**
      * Sprite y position.
      */
     protected double positionY;
+    
     /**
      * Sprite velocity x
      */
     protected double velocityX;
+    
+    /**
+     * Stored value of the sprite's velocity on the X-axis
+     */
+    protected double storedVelocityX;
+    
     /**
      * Sprite velocity y
      */
     protected double velocityY;
+    
+    /**
+     * Stored value of the sprite's velocity on the Y-axis
+     */
+    protected double storedVelocityY;
+    
     /**
      * Sprite width
      */
     protected double width;
+    
     /**
      * Sprite height
      */
     protected double height;
+    
     /**
      * Sprite ImageView
      */
@@ -60,7 +77,7 @@ public class Sprite {
 
     /**
      * Sets the image of the sprite along with the requested sizes. Preserves
-     * the ratio, smooths image, and loads in background.
+     * the ratio, smoothes image, and loads in background.
      *
      * @param imageFile The sprite image file name.
      * @param setWidth The requested width of the sprite.
@@ -130,6 +147,24 @@ public class Sprite {
         positionX += velocityX * time;
         positionY += velocityY * time;
     }
+    
+    /**
+     * Pauses the sprite's animation
+     */
+    public void pauseSprite() {
+    	storedVelocityX = velocityX;
+    	storedVelocityY = velocityY;
+    	setVelocity(0.0, 0.0);
+    }
+    
+    /**
+     * Resume the sprite's animation
+     */
+    public void resumeSprite() {
+    	velocityX = storedVelocityX;
+    	velocityY = storedVelocityY;
+    	setVelocity(velocityX, velocityY);
+    }
 
     /**
      * Renders the sprite position.
@@ -192,6 +227,10 @@ public class Sprite {
 
     public double getPositionY() {
         return positionY;
+    }
+    
+    public double getVelocityX() {
+        return velocityX;
     }
 
     public double getVelocityY() {

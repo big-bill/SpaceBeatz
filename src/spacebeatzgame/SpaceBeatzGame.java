@@ -28,6 +28,7 @@ public class SpaceBeatzGame extends Application {
     private Timeline timeline; 
     Long lastNanoTimeHero = System.nanoTime();
     Long lastNanoTimeEnemy = System.nanoTime();
+    private boolean gamePaused;
     
     private Media audioFile;
     private MediaPlayer player;
@@ -35,6 +36,7 @@ public class SpaceBeatzGame extends Application {
      
     
     public SpaceBeatzGame(URL url) {
+    	gamePaused = false;
     	this.url = url;
     	Stage stage = new Stage();
     	start(stage);
@@ -73,7 +75,7 @@ public class SpaceBeatzGame extends Application {
             if(count > 3) enemy[count] = new npcSprite("src/spacebeatzgame/res/asteroid.png", 55, 55, true, true);
             else enemy[count] = new npcSprite("src/spacebeatzgame/res/enemy.png", 80, 80, true, true);
             
-            enemy[count].setPosition(Math.random()* 10, Math.random()*1000);
+            // enemy[count].setPosition(screen.getScreenWidth() + 30, screen.getScreenHeight() - 30);
             enemy[count].addVelocity(Math.random()* 100 + 10000, 0);
 
         }
@@ -83,7 +85,7 @@ public class SpaceBeatzGame extends Application {
 
         
         //set hero sprite position by using screen size references from ScreenAtrributes class as X,Y coord
-        ship.setPosition(300,300);
+        ship.setPosition(300, 300);
         
         
         //Create GraphicsContext NOTE: This class is used to issue draw calls to a Canvas using a buffer.  NOTE 2: Class has lots of options we may need to use
@@ -142,41 +144,55 @@ public class SpaceBeatzGame extends Application {
 
                 // game logic
                 ship.setVelocity(0, 0);
-                if(input.contains("A")) {
+                if(input.contains("A") && !gamePaused) {
                     if(ship.getBoundary().getMinX()<=screen.getBoundary().getMinX())
                         ship.setPosition(screen.getBoundary().getMinX(),ship.positionY);
                     else
                         ship.addVelocity(-700, 0);
                 }
-                if(input.contains("D")) {
+                if(input.contains("D") && !gamePaused) {
                     if(ship.getBoundary().getMaxX()>=screen.getBoundary().getMaxX())
                         
                         ship.setPosition(screen.getBoundary().getMaxX()-55,ship.positionY); 
                     else
                         ship.addVelocity(700, 0);
                 }
-                if(input.contains("W")) {
+                if(input.contains("W") && !gamePaused) {
                     if(ship.getBoundary().getMinY()<= screen.getBoundary().getMinY())
                         ship.setPosition(ship.positionX,screen.getBoundary().getMinY()); 
                     else    
                         ship.addVelocity(0, -700);
                     
                 }
-                if(input.contains("S")) {                                        //minus 15 accounts for the tool bar as system will not allow ship animated here
+                if(input.contains("S") && !gamePaused) {                                        //minus 15 accounts for the tool bar as system will not allow ship animated here
                     if(ship.getBoundary().getMaxY()>=screen.getBoundary().getMaxY()-15)
                         ship.setPosition(ship.positionX,screen.getBoundary().getMaxY()-55);
                     else
                         ship.addVelocity(0, 700);
                 }
                 if(input.contains(KeyCode.ESCAPE.toString())) {
-                	//TODO: Create menu and pause game, and a button to resume 
+                	// TODO: Create menu and pause game, and a button to resume 
+                	// The game will stop working after multiple ESC presses, this code isn't good
+                	// There is a way to fix this but I doubt it would be used if we had a menu, I'll wait to add it
                 	
-                	// As of now the game will pause
-                	for(int i = 0; i < enemy.length; ++i) {
-                		enemy[i].setVelocity(0.0, 0.0);
+                	
+                	// First check if the game is paused
+                	if(gamePaused) {
+                		// Step through the enemy sprites array and resume their animation
+                		for(int i = 0; i < enemy.length; ++i) enemy[i].resumeSprite();
+                		player.play();
+            			gamePaused = false;
                 	}
-                	ship.setVelocity(0.0, 0.0);
-                	player.pause();
+                	
+                	else {
+                		// Step through the enemy sprites array and pause their animation
+	                	for(int i = 0; i < enemy.length; ++i) enemy[i].pauseSprite();
+	                	ship.setVelocity(0.0, 0.0);
+	                	player.pause();
+	                	gamePaused = true;
+                	}
+                	input.clear();
+                	return;
                 }
 
                 ship.update(elapsedTime);
@@ -188,11 +204,13 @@ public class SpaceBeatzGame extends Application {
                     enemy[count].render(gc);
                     enemy[count].update(elapsedTime);
                     if(enemy[count].intersects(ship)) {
+                    	// ship.death();
                         enemy[count].setPosition(0, 0);
                     }
                     else if(enemy[count].beyondWindow(enemy[count], screen)) {
-                        enemy[count].setPosition(Math.random()*-1000+Math.random()*100,Math.random()*1000-Math.random()*100);
-                        enemy[count].setVelocity(Math.random()*1000,Math.random()*1000);
+                    	// enemy[count].hide()
+                    	enemy[count].setPosition(screen.getScreenWidth() + 100, screen.getScreenHeight() - 80);
+                        enemy[count].setVelocity(Math.random()*1000, 0.0);
                     }
                 }
                 
