@@ -8,17 +8,16 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane id="anchorPane" fx:id="anchorPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="spacebeatz.MenuController">
    <children>
       <ImageView fitHeight="710.0" fitWidth="1155.0" layoutX="-66.0" layoutY="-85.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="file:/M:/Eclipse/WorkSpace/SpaceBeatz/src/spacebeatz/res/bluebackground.jpg" />
+            <Image url="@res/bluebackground.jpg" />
          </image>
       </ImageView>
       <ImageView id="bigBangGif" fx:id="bigBang" fitHeight="643.0" fitWidth="860.0" layoutX="-21.0" layoutY="58.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="file:/M:/Eclipse/WorkSpace/SpaceBeatz/src/spacebeatz/res/bigBang.gif" />
+            <Image url="@res/bigBang.gif" />
          </image>
       </ImageView>
       <Label fx:id="chosenSong" layoutX="289.0" layoutY="560.0" onMousePressed="#browseButtonListener" prefHeight="20.0" prefWidth="314.0" text="No song chosen. . ." textFill="WHITE">
@@ -34,7 +33,7 @@
       </Button>
       <ImageView fx:id="spaceBeatzLogo" fitHeight="150.0" fitWidth="345.0" layoutX="228.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="file:/M:/Eclipse/WorkSpace/SpaceBeatz/src/spacebeatz/res/spacebeatzlogo.jpg" />
+            <Image url="@res/spacebeatzlogo.png" />
          </image>
       </ImageView>
       <Label fx:id="chooseSongLabel" layoutX="71.0" layoutY="552.0" text="Choose your music:" textFill="WHITE">
