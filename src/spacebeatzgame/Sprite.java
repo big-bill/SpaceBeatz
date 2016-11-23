@@ -69,10 +69,10 @@ public class Sprite {
     	image = null;
     	width = 0.0;
     	height = 0.0;
-        positionX = 0;
-        positionY = 0;
-        velocityX = 0;
-        velocityY = 0;
+        positionX = 0.0;
+        positionY = 0.0;
+        velocityX = 0.0;
+        velocityY = 0.0;
     }
 
     /**

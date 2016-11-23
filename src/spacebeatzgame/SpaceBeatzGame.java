@@ -75,8 +75,8 @@ public class SpaceBeatzGame extends Application {
             if(count > 3) enemy[count] = new npcSprite("src/spacebeatzgame/res/asteroid.png", 55, 55, true, true);
             else enemy[count] = new npcSprite("src/spacebeatzgame/res/enemy.png", 80, 80, true, true);
             
-            // enemy[count].setPosition(screen.getScreenWidth() + 30, screen.getScreenHeight() - 30);
-            enemy[count].addVelocity(Math.random()* 100 + 10000, 0);
+         	enemy[count].setPosition(screen.getScreenWidth() + 80, Math.random() * 600);
+            enemy[count].addVelocity((Math.random() * (-100) - 400), 0);
 
         }
         
@@ -152,7 +152,6 @@ public class SpaceBeatzGame extends Application {
                 }
                 if(input.contains("D") && !gamePaused) {
                     if(ship.getBoundary().getMaxX()>=screen.getBoundary().getMaxX())
-                        
                         ship.setPosition(screen.getBoundary().getMaxX()-55,ship.positionY); 
                     else
                         ship.addVelocity(700, 0);
@@ -164,7 +163,7 @@ public class SpaceBeatzGame extends Application {
                         ship.addVelocity(0, -700);
                     
                 }
-                if(input.contains("S") && !gamePaused) {                                        //minus 15 accounts for the tool bar as system will not allow ship animated here
+                if(input.contains("S") && !gamePaused) {  //minus 15 accounts for the tool bar as system will not allow ship animated here
                     if(ship.getBoundary().getMaxY()>=screen.getBoundary().getMaxY()-15)
                         ship.setPosition(ship.positionX,screen.getBoundary().getMaxY()-55);
                     else
@@ -172,10 +171,7 @@ public class SpaceBeatzGame extends Application {
                 }
                 if(input.contains(KeyCode.ESCAPE.toString())) {
                 	// TODO: Create menu and pause game, and a button to resume 
-                	// The game will stop working after multiple ESC presses, this code isn't good
-                	// There is a way to fix this but I doubt it would be used if we had a menu, I'll wait to add it
-                	
-                	
+              
                 	// First check if the game is paused
                 	if(gamePaused) {
                 		// Step through the enemy sprites array and resume their animation
@@ -204,13 +200,12 @@ public class SpaceBeatzGame extends Application {
                     enemy[count].render(gc);
                     enemy[count].update(elapsedTime);
                     if(enemy[count].intersects(ship)) {
-                    	// ship.death();
-                        enemy[count].setPosition(0, 0);
+                    	// ship.death();  temp change later
+                     	enemy[count].setPosition(screen.getScreenWidth() + 80, Math.random() * 600);
                     }
                     else if(enemy[count].beyondWindow(enemy[count], screen)) {
-                    	// enemy[count].hide()
-                    	enemy[count].setPosition(screen.getScreenWidth() + 100, screen.getScreenHeight() - 80);
-                        enemy[count].setVelocity(Math.random()*1000, 0.0);
+                    	// enemy[count].hide()   temp change later
+                    	enemy[count].setPosition(screen.getScreenWidth() + 80, Math.random() * 600);
                     }
                 }
                 
