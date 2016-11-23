@@ -74,7 +74,7 @@ public class MenuController {
     	catch (Exception e) {
     		e.printStackTrace();
     	}
-    	playButton.setDisable(true);    	
+    	    	
     }
 
     //-----------------------------------------------------------------------------------------------------------
