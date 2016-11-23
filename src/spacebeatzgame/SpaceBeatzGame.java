@@ -47,7 +47,7 @@ public class SpaceBeatzGame extends Application {
 		player = new MediaPlayer(audioFile);
 		
         player.setAudioSpectrumInterval(.1);  //default is .1 this greatly hinders performance we may can up it as we optimize our code
-        player.setAudioSpectrumNumBands(4);   //default is 128 this greatly hinders performance we may can up it as we optimize our code
+        player.setAudioSpectrumNumBands(8);   //default is 128 this greatly hinders performance we may can up it as we optimize our code
         
 
         //play the song
@@ -143,16 +143,30 @@ public class SpaceBeatzGame extends Application {
                 // game logic
                 ship.setVelocity(0, 0);
                 if(input.contains("A")) {
-                    ship.addVelocity(-700, 0);
+                    if(ship.getBoundary().getMinX()<=screen.getBoundary().getMinX())
+                        ship.setPosition(screen.getBoundary().getMinX(),ship.positionY);
+                    else
+                        ship.addVelocity(-700, 0);
                 }
                 if(input.contains("D")) {
-                    ship.addVelocity(700, 0);
+                    if(ship.getBoundary().getMaxX()>=screen.getBoundary().getMaxX())
+                        
+                        ship.setPosition(screen.getBoundary().getMaxX()-55,ship.positionY); 
+                    else
+                        ship.addVelocity(700, 0);
                 }
                 if(input.contains("W")) {
-                    ship.addVelocity(0, -700);
+                    if(ship.getBoundary().getMinY()<= screen.getBoundary().getMinY())
+                        ship.setPosition(ship.positionX,screen.getBoundary().getMinY()); 
+                    else    
+                        ship.addVelocity(0, -700);
+                    
                 }
-                if(input.contains("S")) {
-                    ship.addVelocity(0, 700);
+                if(input.contains("S")) {                                        //minus 15 accounts for the tool bar as system will not allow ship animated here
+                    if(ship.getBoundary().getMaxY()>=screen.getBoundary().getMaxY()-15)
+                        ship.setPosition(ship.positionX,screen.getBoundary().getMaxY()-55);
+                    else
+                        ship.addVelocity(0, 700);
                 }
                 if(input.contains(KeyCode.ESCAPE.toString())) {
                 	//TODO: Create menu and pause game, and a button to resume 
@@ -186,7 +200,7 @@ public class SpaceBeatzGame extends Application {
             
             
         }.start();
-                Circle[] circle = new Circle[4];//matches band rate
+                Circle[] circle = new Circle[8];//matches band rate
                 player.setAudioSpectrumListener(
                         (double timestamp,
                                 double duration,
