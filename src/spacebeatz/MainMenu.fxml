@@ -2,49 +2,93 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.effect.GaussianBlur?>
+<?import javafx.scene.effect.Glow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="anchorPane" fx:id="anchorPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="spacebeatz.MenuController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="561.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="spacebeatz.MenuController">
    <children>
-      <ImageView fitHeight="710.0" fitWidth="1155.0" layoutX="-66.0" layoutY="-85.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="620.0" fitWidth="845.0" pickOnBounds="true">
          <image>
             <Image url="@res/bluebackground.jpg" />
          </image>
       </ImageView>
-      <ImageView id="bigBangGif" fx:id="bigBang" fitHeight="643.0" fitWidth="860.0" layoutX="-21.0" layoutY="58.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="447.0" fitWidth="854.0" layoutX="-8.0" layoutY="64.0" pickOnBounds="true">
          <image>
             <Image url="@res/bigBang.gif" />
          </image>
       </ImageView>
-      <Label fx:id="chosenSong" layoutX="289.0" layoutY="560.0" onMousePressed="#browseButtonListener" prefHeight="20.0" prefWidth="314.0" text="No song chosen. . ." textFill="WHITE">
+      <Button fx:id="browseButton" layoutX="473.0" layoutY="453.0" mnemonicParsing="false" onAction="#browseButtonListener" prefHeight="40.0" prefWidth="70.0" text="Browse">
          <font>
-            <Font name="System Italic" size="14.0" />
-         </font>
-      </Label>
-      <Button fx:id="browseButton" layoutX="628.0" layoutY="557.0" mnemonicParsing="false" onAction="#browseButtonListener" text="Browse" />
-      <Button fx:id="playButton" layoutX="318.0" layoutY="139.0" mnemonicParsing="false" onAction="#playButtonListener" prefHeight="39.0" prefWidth="144.0" text="PLAY" textAlignment="CENTER">
-         <font>
-            <Font size="18.0" />
+            <Font name="Agency FB Bold" size="14.0" />
          </font>
       </Button>
-      <ImageView fx:id="spaceBeatzLogo" fitHeight="150.0" fitWidth="345.0" layoutX="228.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@res/spacebeatzlogo.png" />
-         </image>
-      </ImageView>
-      <Label fx:id="chooseSongLabel" layoutX="71.0" layoutY="552.0" text="Choose your music:" textFill="WHITE">
+      <Label fx:id="chosenSong" layoutX="5.0" layoutY="514.0" onMousePressed="#browseButtonListener" prefHeight="35.0" prefWidth="793.0" text="Selected Song . . . " textFill="WHITE">
          <font>
-            <Font size="24.0" />
+            <Font name="Agency FB Bold" size="24.0" />
          </font>
       </Label>
-      <TextArea editable="false" layoutX="152.0" layoutY="392.0" prefHeight="148.0" prefWidth="476.0" text="Use the buttons below to slect what songs you like. Use the play button to start the game! &lt;3" wrapText="true">
+      <Button fx:id="playButton" disable="true" layoutX="561.0" layoutY="453.0" mnemonicParsing="false" onAction="#playButtonListener" prefHeight="40.0" prefWidth="70.0" text="PLAY">
          <font>
-            <Font name="Arial" size="29.0" />
+            <Font name="Agency FB Bold" size="14.0" />
          </font>
-      </TextArea>
+      </Button>
+      <Label alignment="CENTER" layoutX="169.0" layoutY="64.0" prefHeight="136.0" prefWidth="462.0" text="Space Beatz" wrapText="true">
+         <font>
+            <Font name="Agency FB Bold" size="110.0" />
+         </font>
+         <textFill>
+            <LinearGradient endX="1.0" endY="1.0">
+               <stops>
+                  <Stop color="#ee0404" />
+                  <Stop color="#edce05" offset="0.15807560137457038" />
+                  <Stop color="#05edc7" offset="0.3076983844847335" />
+                  <Stop color="#056ded" offset="0.46403602322550064" />
+                  <Stop color="#1736d1" offset="0.6110123632341905" />
+                  <Stop color="#4919cf" offset="0.7569222261721372" />
+                  <Stop color="#c61b9e" offset="0.9425287356321839" />
+                  <Stop color="#c61b9e" offset="1.0" />
+               </stops>
+            </LinearGradient>
+         </textFill>
+         <effect>
+            <Glow level="1.0">
+               <input>
+                  <GaussianBlur radius="0.0" />
+               </input>
+            </Glow>
+         </effect>
+      </Label>
+      <Label alignment="CENTER" layoutY="422.0" prefHeight="78.0" prefWidth="473.0" text="Select Your Music" wrapText="true">
+         <font>
+            <Font name="Agency FB Bold" size="72.0" />
+         </font>
+         <textFill>
+            <LinearGradient endX="1.0" endY="1.0">
+               <stops>
+                  <Stop color="#ee0404" />
+                  <Stop color="#edce05" offset="0.15807560137457038" />
+                  <Stop color="#05edc7" offset="0.3076983844847335" />
+                  <Stop color="#056ded" offset="0.46403602322550064" />
+                  <Stop color="#1736d1" offset="0.6110123632341905" />
+                  <Stop color="#4919cf" offset="0.7569222261721372" />
+                  <Stop color="#c61b9e" offset="0.9425287356321839" />
+                  <Stop color="#c61b9e" offset="1.0" />
+               </stops>
+            </LinearGradient>
+         </textFill>
+         <effect>
+            <Glow level="1.0">
+               <input>
+                  <GaussianBlur radius="0.0" />
+               </input>
+            </Glow>
+         </effect>
+      </Label>
    </children>
 </AnchorPane>

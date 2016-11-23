@@ -14,9 +14,9 @@ public class Main extends Application {
 			Scene scene = new Scene(parent);
 			primaryStage.setTitle("Space Beatz Menu");
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-			primaryStage.setResizable(false);
 			primaryStage.setScene(scene);
 			primaryStage.show();
+                        primaryStage.setResizable(false);
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
