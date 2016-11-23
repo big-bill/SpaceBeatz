@@ -21,6 +21,7 @@ import spacebeatzgame.SpaceBeatzGame;
 
 
 public class MenuController {
+    private String songPath;
 
     @FXML
     private AnchorPane anchorPane;
@@ -89,6 +90,7 @@ public class MenuController {
 		if (fileChosen != null) {
                         String songName;
                         songName = fileChosen.getAbsolutePath();
+                        songPath = songName;
                         int slashPos = songName.lastIndexOf("\\");
                         songName = songName.substring(slashPos+1,songName.length());
 			chosenSong.setText(songName); 
@@ -103,7 +105,7 @@ public class MenuController {
     	try {    		
     		// Since the media player successfully accessed the audio file, we stop playing the menu music
     		if(backgroundMusicPlayer.getStatus() != Status.STOPPED) backgroundMusicPlayer.stop();
-    		File musicFile = new File(chosenSong.getText());
+    		File musicFile = new File(songPath);
     		URI uri = musicFile.toURI();
     		URL url = uri.toURL();
   
