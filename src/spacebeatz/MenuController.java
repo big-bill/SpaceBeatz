@@ -5,6 +5,7 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 
+import javafx.animation.Animation;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -19,7 +20,7 @@ import javafx.stage.Window;
 import spacebeatzgame.SpaceBeatzGame;
 
 
-public class MainMenu {
+public class MenuController {
 
     @FXML
     private AnchorPane anchorPane;
@@ -63,7 +64,7 @@ public class MainMenu {
 	    	backgroundMusicAudio = new Media(url.toString());
 	    	backgroundMusicPlayer = new MediaPlayer(backgroundMusicAudio);
 	    	backgroundMusicPlayer.setVolume(0.2);
-	    	backgroundMusicPlayer.setCycleCount(Timeline.INDEFINITE);
+	    	backgroundMusicPlayer.setCycleCount(Animation.INDEFINITE);
 	    	backgroundMusicPlayer.play();
     	
     	} 
