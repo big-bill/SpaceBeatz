@@ -33,7 +33,7 @@
             <Font name="Agency FB Bold" size="24.0" />
          </font>
       </Label>
-      <Button fx:id="playButton" disable="true" layoutX="561.0" layoutY="453.0" mnemonicParsing="false" onAction="#playButtonListener" prefHeight="40.0" prefWidth="70.0" text="PLAY">
+      <Button fx:id="playButton" disable="true" layoutX="561.0" layoutY="453.0" mnemonicParsing="false" onAction="#playButtonListener" prefHeight="40.0" prefWidth="70.0" text="Play">
          <font>
             <Font name="Agency FB Bold" size="14.0" />
          </font>
