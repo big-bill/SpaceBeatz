@@ -73,8 +73,7 @@ public class MenuController {
     	}
     	catch (Exception e) {
     		e.printStackTrace();
-    	}
-    	    	
+    	}   	
     }
 
     //-----------------------------------------------------------------------------------------------------------
@@ -87,9 +86,14 @@ public class MenuController {
         fileChooser.getExtensionFilters().add(extFilter);
         Window stage = null;  // TODO: Is this needed? Couldn't figure out how to implement a FileChooser without a stage
 		File fileChosen = fileChooser.showOpenDialog(stage);
-		if (fileChosen != null) {  
-			chosenSong.setText(fileChosen.getAbsolutePath()); 
-			playButton.setDisable(false); 
+		if (fileChosen != null) {
+                        String songName;
+                        songName = fileChosen.getAbsolutePath();
+                        int slashPos = songName.lastIndexOf("\\");
+                        songName = songName.substring(slashPos+1,songName.length());
+			chosenSong.setText(songName); 
+			playButton.setDisable(false);
+                        
 		}
     }
     
