@@ -8,10 +8,8 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import javafx.animation.AnimationTimer;
-import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.event.EventHandler;
-import javafx.scene.CacheHint;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -30,250 +28,256 @@ import javafx.stage.Stage;
 
 public class SpaceBeatzGame extends Application {
 
-    Long lastNanoTimeHero = System.nanoTime();
-    Long lastNanoTimeEnemy = System.nanoTime();
-    private boolean gamePaused;
+	Long lastNanoTimeHero = System.nanoTime();
+	Long lastNanoTimeEnemy = System.nanoTime();
+	private Stage gameStage;
+	private boolean gamePaused;
 
-    private double screenHeight; // Screen height used by the Scene object
-    private double screenWidth;  // Screen width used by the Scene object
+	private double screenHeight; // Screen height used by the Scene object
+	private double screenWidth;  // Screen width used by the Scene object
 
-    private ArrayList<npcSprite> enemy;
+	private ArrayList<npcSprite> enemy;  // ArrayList used to hold enemy sprites
+	private int enemyIndex;				 // Index that steps through the enemy ArrayList properly
+	private final int enemyTotal = 80;   // Total amount of enemies in the ArrayList
 
-    private Media audioFile;
-    private MediaPlayer player;
-    private URL url;
-    private Stage gameStage;
-    private int bandRate;   	// Band rate for the audio spectrum listener
-    private boolean imageSmooth;
-    private boolean circleVisualization;
+	private Media audioFile;
+	private MediaPlayer player;
+	private URL url;
+	private int bandRate;   	// Band rate for the audio spectrum listener
+	private boolean imageSmooth;
+	private boolean circleVisualization;
 
-    private int currentLevel;
+	private int currentLevel;
 
-    public SpaceBeatzGame(URL url, Stage gameStage, boolean smooth, boolean circVis) {
-        gamePaused = false;
-        screenHeight = 600;
-        screenWidth = 600;
-        bandRate = 32;
-        currentLevel = 2;
-        this.url = url;
-        this.gameStage = gameStage;
-        imageSmooth = smooth;
-        circleVisualization = circVis;
-        start(gameStage);
-    }
+	public SpaceBeatzGame(URL url, Stage gameStage, boolean smooth, boolean circVis) {
+		enemyIndex = 0;
+		gamePaused = false;
+		screenHeight = 600;
+		screenWidth = 600;
+		bandRate = 128;
+		currentLevel = 2;
+		this.url = url;
+		this.gameStage = gameStage;
+		imageSmooth = smooth;
+		circleVisualization = circVis;
 
-    @Override
-    public void start(Stage gameStage) {
+		// Initialize the enemy Sprite ArrayList
+		enemy = new ArrayList<npcSprite>();
+		for(int i = 0; i < enemyTotal; ++i) {
+			if (enemy.size() % 20 == 0) {
+				enemy.add(new npcSprite("src/spacebeatzgame/res/enemy.png", 80, 80, true, imageSmooth));
+			} else {
+				enemy.add(new npcSprite("src/spacebeatzgame/res/asteroid.png", 55, 55, true, imageSmooth));
+			}
+		}
 
-        audioFile = new Media(url.toString());
-        player = new MediaPlayer(audioFile);
+		start(gameStage);
+	}
 
-        player.setAudioSpectrumInterval(.2);  //default is .1 this greatly hinders performance we can decrease it as we optimize our code
-        player.setAudioSpectrumNumBands(bandRate);   //default is 128 this greatly hinders performance we may can up it as we optimize our code
+	@Override
+	public void start(Stage gameStage) {
 
-        //play the song
-        player.play();
+		audioFile = new Media(url.toString());
+		player = new MediaPlayer(audioFile);
 
-        //Get screen attributes
-        ScreenAttributes screen = new ScreenAttributes();
+		player.setAudioSpectrumInterval(.2);  //default is .1 this greatly hinders performance we can decrease it as we optimize our code
+		player.setAudioSpectrumNumBands(bandRate);   //default is 128 this greatly hinders performance we may can up it as we optimize our code
 
-        Group rootGroup = new Group();
+		//play the song
+		player.play();
 
-        //create pane for visualizations
-        Pane visualPane = new Pane();
+		//Get screen attributes
+		ScreenAttributes screen = new ScreenAttributes();
 
-        Image background;
-        ImagePattern bgPattern = null;
-        try {
-            File f = new File("src/spacebeatzgame/res/Space.jpg");
-            URI uri = f.toURI();
-            URL url = uri.toURL();
+		Group rootGroup = new Group();
 
-            background = new Image(url.toString(), screen.getScreenWidth(), screen.getScreenHeight(), true, imageSmooth);
-            bgPattern = new ImagePattern(background);
+		//create pane for visualizations
+		Pane visualPane = new Pane();
 
-        } catch (MalformedURLException | NullPointerException | IllegalArgumentException e1) {
-            e1.printStackTrace();
-            e1.getMessage();
-            System.exit(1);
-        }
+		Image background;
+		ImagePattern bgPattern = null;
+		try {
+			File f = new File("src/spacebeatzgame/res/Space.jpg");
+			URI uri = f.toURI();
+			URL url = uri.toURL();
 
-        // TODO: Change to field?
-        Sprite ship = new Sprite();
-        ship.setAllImageAttributes("src/spacebeatzgame/res/ship.png", 55, 55, true, imageSmooth);
+			background = new Image(url.toString(), screen.getScreenWidth(), screen.getScreenHeight(), true, imageSmooth);
+			bgPattern = new ImagePattern(background);
 
-        // Initialize the enemy Sprite
-        enemy = new ArrayList<npcSprite>();
+		} catch (MalformedURLException | NullPointerException | IllegalArgumentException e1) {
+			e1.printStackTrace();
+			e1.getMessage();
+			System.exit(1);
+		}
 
-        //Now get the canvas Use custom canvas for debugging
-        Canvas canvas = new Canvas(screen.getScreenWidth(), screen.getScreenHeight());
+		// TODO: Change to field?
+		Sprite ship = new Sprite();
+		ship.setAllImageAttributes("src/spacebeatzgame/res/ship.png", 55, 55, true, imageSmooth);
 
-        //set hero sprite position by using screen size references from ScreenAtrributes class as X,Y coord
-        ship.setPosition(300, 300);
+		//Now get the canvas Use custom canvas for debugging
+		Canvas canvas = new Canvas(screen.getScreenWidth(), screen.getScreenHeight());
 
-        //Create GraphicsContext NOTE: This class is used to issue draw calls to a Canvas using a buffer.  NOTE 2: Class has lots of options we may need to use
-        //See http://docs.oracle.com/javafx/2/canvas/jfxpub-canvas.htm# for GraphicContext tutorial
-        GraphicsContext gc = canvas.getGraphicsContext2D();
+		//set hero sprite position by using screen size references from ScreenAtrributes class as X,Y coord
+		ship.setPosition(300, 300);
 
-        //Add the canvas to the rootGroup
-        rootGroup.getChildren().addAll(visualPane, canvas);
+		//Create GraphicsContext NOTE: This class is used to issue draw calls to a Canvas using a buffer.  NOTE 2: Class has lots of options we may need to use
+		//See http://docs.oracle.com/javafx/2/canvas/jfxpub-canvas.htm# for GraphicContext tutorial
+		GraphicsContext gc = canvas.getGraphicsContext2D();
 
-        //Create the Scene with rootGroup
-        Scene scene = new Scene(rootGroup, screenWidth, screenHeight);
+		//Add the canvas to the rootGroup
+		rootGroup.getChildren().addAll(visualPane, canvas);
 
-        scene.setFill(bgPattern);
-        //Add Scene to gameStage
-        gameStage.setScene(scene);
-        //Format the Stage
-        gameStage.setTitle("SpaceBeatz");
-        gameStage.setFullScreen(true);
+		//Create the Scene with rootGroup
+		Scene scene = new Scene(rootGroup, screenWidth, screenHeight);
 
-        gameStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
-        // gameStage.setMaximized(true);
+		scene.setFill(bgPattern);
+		//Add Scene to gameStage
+		gameStage.setScene(scene);
+		//Format the Stage
+		gameStage.setTitle("SpaceBeatz");
+		gameStage.setFullScreen(true);
 
-        gameStage.show();
+		gameStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
+		// gameStage.setMaximized(true);
 
-        //This Block handles keyboard input
-        ArrayList<String> input = new ArrayList<>();
+		gameStage.show();
 
-        scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent e) {
-                String code = e.getCode().toString();
-                if (!input.contains(code)) {
-                    input.add(code);
-                }
-            }
-        });
+		//This Block handles keyboard input
+		ArrayList<String> input = new ArrayList<>();
 
-        scene.setOnKeyReleased(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent e) {
-                String code = e.getCode().toString();
-                input.remove(code);
-            }
-        });
+		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+			@Override
+			public void handle(KeyEvent e) {
+				String code = e.getCode().toString();
+				if (!input.contains(code)) {
+					input.add(code);
+				}
+			}
+		});
 
-        
-        new AnimationTimer() {
+		scene.setOnKeyReleased(new EventHandler<KeyEvent>() {
+			@Override
+			public void handle(KeyEvent e) {
+				String code = e.getCode().toString();
+				input.remove(code);
+			}
+		});
 
-            public void handle(long currentNanoTime) {
 
-                // calculate time since last update.
-                double elapsedTime = (currentNanoTime - lastNanoTimeHero.doubleValue()) / 1000000000.0;
-                lastNanoTimeHero = currentNanoTime;
+		new AnimationTimer() {
 
-                // If the game is resumed and the gamePaused boolean value is true, we resume the game
-                // This will only occur if the "Resume" button is pressed from the main menu
-                if (gameStage.isFocused() && gamePaused) {
-                    input.add(KeyCode.ESCAPE.toString());
-                }
+			public void handle(long currentNanoTime) {
 
-                ship.setVelocity(0, 0);
+				// calculate time since last update.
+				double elapsedTime = (currentNanoTime - lastNanoTimeHero.doubleValue()) / 1000000000.0;
+				lastNanoTimeHero = currentNanoTime;
 
-                // If the input contains the ESC key being pressed we pause the game
-                if (input.contains(KeyCode.ESCAPE.toString())) {
-                    // TODO: Create menu and pause game, and a button to resume 
+				// If the game is resumed and the gamePaused boolean value is true, we resume the game
+				// This will only occur if the "Resume" button is pressed from the main menu
+				if (gameStage.isFocused() && gamePaused) {
+					input.add(KeyCode.ESCAPE.toString());
+				}
 
-                    // First check if the game is paused
-                    if (!gamePaused) {
-                        // Step through the enemy sprites ArrayList and pause their animation
-                        for (int i = 0; i < enemy.size(); ++i) {
-                            enemy.get(i).pauseSprite();
-                        }
-                        player.pause();
-                        gamePaused = true;
-                        gameStage.hide();
-                    } // If the first if statement was not entered, that means we are resuming since the Resume button has been pressed
-                    else {
-                        // Step through the enemy sprites ArrayList and resume their animation
-                        for (int i = 0; i < enemy.size(); ++i) {
-                            enemy.get(i).resumeSprite();
-                        }
-                        player.play();
-                        gamePaused = false;
-                    }
-                    input.clear();
-                    return;
-                }
+				ship.setVelocity(0, 0);
 
-                // If the game is not paused, we move the ship based on the input provided
-                if (!gamePaused) {
-                    ship.moveSprite(input, screen);
-                }
+				// If the input contains the ESC key being pressed we pause the game
+				if (input.contains(KeyCode.ESCAPE.toString())) {
+					// TODO: Create menu and pause game, and a button to resume 
 
-                // Update the ship's position
-                ship.update(elapsedTime);
+					// First check if the game is paused
+					if (!gamePaused) {
+						// Step through the enemy sprites ArrayList and pause their animation
+						for (int i = 0; i < enemy.size(); ++i) {
+							if(enemy.get(i).isVisible()) {
+								enemy.get(i).pauseSprite();
+							}
+						}
+						player.pause();
+						gamePaused = true;
+						gameStage.hide();
+					} // If the first if statement was not entered, that means we are resuming since the Resume button has been pressed
+					else {
+						// Step through the enemy sprites ArrayList and resume their animation
+						for (int i = 0; i < enemy.size(); ++i) {
+							enemy.get(i).resumeSprite();
+						}
+						player.play();
+						gamePaused = false;
+					}
+					input.clear();
+					return;
+				}
 
-                // render
-                gc.clearRect(0, 0, screen.getScreenWidth(), screen.getScreenHeight());
-                ship.render(gc);
+				// If the game is not paused, we move the ship based on the input provided
+				if (!gamePaused) {
+					ship.moveSprite(input, screen);
+				}
 
-                // Step through the enemy ArrayList and render each sprite on the canvas
-                for (int i = 0; i < enemy.size(); i++) {
-                    enemy.get(i).render(gc);
-                    enemy.get(i).update(elapsedTime);
-                    if (enemy.get(i).intersects(ship)) {
-                        // ship.deathAnimation();
-                        // enemy[count].deathAnimation();
-                        enemy.remove(i);
-                        //enemy.trimToSize();
-                    } else if (enemy.get(i).getPositionX() <= -100) {
-                        // enemy[count].hide()   temp change later
-                        enemy.remove(i);
-                        //enemy.trimToSize(); 
-                    }
-                }
+				// Update the ship's position
+				ship.update(elapsedTime);
 
-            }
+				// render
+				gc.clearRect(0, 0, screen.getScreenWidth(), screen.getScreenHeight());
+				ship.render(gc);
 
-        }.start();
+				// Step through the enemy ArrayList and render each sprite on the canvas
+				for (int i = 0; i < enemy.size(); i++) {
+					if(enemy.get(i).isVisible()) {
+					enemy.get(i).render(gc);
+					enemy.get(i).update(elapsedTime);
+					if (enemy.get(i).intersects(ship)) {
+						// ship.deathAnimation();
+						// enemy[count].deathAnimation();
+						enemy.get(i).hide(screen);	// TODO: Change to death
+						//enemy.trimToSize();
+					} else if (enemy.get(i).getPositionX() <= -100) {
+						// enemy[count].removeFromView();
+						enemy.get(i).hide(screen);
+					}
+					}
+				}
 
-        //Create circle array incase additional visualization feature selected
-        Circle[] circle = new Circle[(bandRate / 5)];//matches band rate /5 '5'.333 no remainder
-        // This Listener is responsible for spawning enemies based on frequency levels
-        player.setAudioSpectrumListener((double timestamp, double duration, float[] magnitudes, float[] phases) -> {
-            //If additional visualization selected 
-            if (circleVisualization) {
-                visualPane.getChildren().clear();
-                Random rand = new Random(System.currentTimeMillis());
-                for (int count = 0; count < (phases.length / 6) - 1; count++) {
-                    int red = rand.nextInt(255);
-                    int green = rand.nextInt(255);
-                    int blue = rand.nextInt(255);
-                    circle[count] = new Circle(Math.random() * 1000);
-                    circle[count].setCenterX(Math.random() * gameStage.getWidth() - 100);
-                    circle[count].setCenterY(Math.random() * gameStage.getHeight() - 100);
-                    circle[count].setFill(Color.rgb(red, green, blue, .70));
-                    visualPane.getChildren().add(circle[count]);
-                    //Caching circles here does not seem to help likely due to the way they are altered in size and position
-                }
-            }
-            int newLevels = 0;
-            for (int i = 0; i < magnitudes.length; ++i) {
-                if (magnitudes[i] != -60) {
-                    newLevels++;
-                } else {
-                    break;
-                }
-            }
-            for (int i = 0; i < 2; i++) {
-                if (newLevels > currentLevel) {
-                    currentLevel = newLevels;
+			}
 
-                    // Spawn an enemy, if the size of the ArrayList is divisble by 20, we spawn an enemy space ship (FEATURES COMING SOON - OR NEVER)
-                    // Move this to sprite class or maybe
-                    if (enemy.size() % 20 == 0) {
-                        enemy.add(new npcSprite("src/spacebeatzgame/res/enemy.png", 80, 80, true, imageSmooth));
-                    } else {
-                        enemy.add(new npcSprite("src/spacebeatzgame/res/asteroid.png", 55, 55, true, imageSmooth));
-                    }
-                    enemy.get(enemy.size() - 1).setPosition(screen.getScreenWidth() + 100, (Math.random() * screen.getBoundary().getMaxY()));
-                    enemy.get(enemy.size() - 1).addVelocity((Math.random() * (-100) - 400), 0);
-                } else {
-                    currentLevel--;  // Turn down the level one by one to help spawn more enemies
-                }
-            }
-        });
-    }
+		}.start();
+
+		//Create circle array incase additional visualization feature selected
+		Circle[] circle = new Circle[(bandRate / 5)];//matches band rate /5 '5'.333 no remainder
+		// This Listener is responsible for spawning enemies based on frequency levels
+		player.setAudioSpectrumListener((double timestamp, double duration, float[] magnitudes, float[] phases) -> {
+			//If additional visualization selected 
+			if (circleVisualization) {
+				visualPane.getChildren().clear();
+				Random rand = new Random(System.currentTimeMillis());
+				for (int count = 0; count < (phases.length / 20) - 1; count++) {
+					int red = rand.nextInt(255);
+					int green = rand.nextInt(255);
+					int blue = rand.nextInt(255);
+					circle[count] = new Circle(Math.random() * 500);
+					circle[count].setCenterX(Math.random() * gameStage.getWidth() - 100);
+					circle[count].setCenterY(Math.random() * gameStage.getHeight() - 100);
+					circle[count].setFill(Color.rgb(red, green, blue, .70));
+					visualPane.getChildren().add(circle[count]);
+					//Caching circles here does not seem to help likely due to the way they are altered in size and position
+				}
+			}
+			int newLevels = 0;
+			for (int i = 0; i < magnitudes.length; ++i) {
+				if (magnitudes[i] != -60) {
+					newLevels++;
+				} else {
+					break;
+				}
+			}
+			// This loop repeats two times, meaning each .2 seconds there is a chance two enemies will spawn
+			for (int x = 0; x < (newLevels/30); ++x) {
+				enemy.get(enemyIndex).placeIntoView(screen);
+				// Increase enemy index
+				enemyIndex++;
+				if(enemyIndex >= enemyTotal) {
+					enemyIndex = 0;
+				}
+			}
+		});
+	}
 }
