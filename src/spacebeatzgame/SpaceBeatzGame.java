@@ -1,8 +1,10 @@
 package spacebeatzgame;
 
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Random;
 
 import javafx.animation.AnimationTimer;
 import javafx.animation.Timeline;
@@ -12,6 +14,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
@@ -19,13 +22,11 @@ import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
-//import javafx.scene.paint.ImagePattern;for starry background image on game
-import javafx.scene.shape.Circle;
+import javafx.scene.paint.ImagePattern;
 import javafx.stage.Stage;
 
 
-public class SpaceBeatzGame extends Application {
-    private Timeline timeline; 
+public class SpaceBeatzGame extends Application { 
     Long lastNanoTimeHero = System.nanoTime();
     Long lastNanoTimeEnemy = System.nanoTime();
     private boolean gamePaused;
@@ -33,16 +34,23 @@ public class SpaceBeatzGame extends Application {
     private double screenHeight; // Screen height used by the Scene object
     private double screenWidth;  // Screen width used by the Scene object
     
+    private ArrayList<npcSprite> enemy;
+    
     private Media audioFile;
     private MediaPlayer player;
     private URL url;
     private Stage gameStage;
+    private int bandRate;   	// Band rate for the audio spectrum listener
+    
+    private int currentLevel;
      
     
     public SpaceBeatzGame(URL url, Stage gameStage) {
     	gamePaused = false;
     	screenHeight = 600;  
-    	screenWidth = 600;   
+    	screenWidth = 600;  
+    	bandRate = 32;
+    	currentLevel = 2;
     	this.url = url;
     	this.gameStage = gameStage;
     	start(gameStage);
@@ -54,8 +62,8 @@ public class SpaceBeatzGame extends Application {
 		audioFile = new Media(url.toString());
 		player = new MediaPlayer(audioFile);
 		
-        player.setAudioSpectrumInterval(.4);  //default is .1 this greatly hinders performance we may can up it as we optimize our code
-        player.setAudioSpectrumNumBands(4);   //default is 128 this greatly hinders performance we may can up it as we optimize our code
+        player.setAudioSpectrumInterval(.2);  //default is .1 this greatly hinders performance we may can up it as we optimize our code
+        player.setAudioSpectrumNumBands(bandRate);   //default is 128 this greatly hinders performance we may can up it as we optimize our code
         
 
         //play the song
@@ -70,24 +78,28 @@ public class SpaceBeatzGame extends Application {
         //create pane for visualizations
         Pane visualPane = new Pane();
         
-        //Image background = new Image("images/Space.jpg",screen.getScreenWidth(),screen.getScreenHeight(),true,true);
-        //ImagePattern bgPattern = new ImagePattern(background);
-        //create sprites
+        Image background;
+        ImagePattern bgPattern = null;
+    	try {
+	        File f = new File("src/spacebeatzgame/res/Space.jpg");
+	        URI uri = f.toURI();
+			URL url = uri.toURL();
+			
+		    background = new Image(url.toString(), screen.getScreenWidth(), screen.getScreenHeight(), true, true);
+	        bgPattern = new ImagePattern(background);
         
+		} catch (MalformedURLException | NullPointerException | IllegalArgumentException e1) {
+			e1.printStackTrace();
+			e1.getMessage();
+			System.exit(1);
+		}
+        
+        // TODO: Change to field?
         Sprite ship = new Sprite();
         ship.setAllImageAttributes("src/spacebeatzgame/res/ship.png", 55, 55, true, true);
-        npcSprite[] enemy = new npcSprite[20];  // Temporarily reduce from 50 to improve current performance
-        for(int count = 0; count < enemy.length; count++){
-            if(count > 3) enemy[count] = new npcSprite("src/spacebeatzgame/res/asteroid.png", 55, 55, true, true);
-            else enemy[count] = new npcSprite("src/spacebeatzgame/res/enemy.png", 80, 80, true, true);
-            
-            // TODO: While this position won't go over the top Y position, it will clip through the bottom, due to the task bar
-            // I've tried everything, adding 80 in and out of the random number gen, subtracting it, subtracting 15 and adding
-            // We can tinker with it later
-            enemy[count].setPosition(screen.getScreenWidth() + 100, (Math.random() * screen.getBoundary().getMaxY()));
-            enemy[count].addVelocity((Math.random() * (-100) - 400), 0);
-
-        }
+        
+        // Initialize the enemy Sprite
+        enemy = new ArrayList<npcSprite>();
         
         //Now get the canvas Use custom canvas for debugging
         Canvas canvas = new Canvas(screen.getScreenWidth(), screen.getScreenHeight());
@@ -107,9 +119,7 @@ public class SpaceBeatzGame extends Application {
         //Create the Scene with rootGroup
         Scene scene = new Scene(rootGroup, screenWidth, screenHeight, Color.BLACK);
         
-        //scene.setFill(bgPattern);
-        
-
+        scene.setFill(bgPattern);
         //Add Scene to gameStage
         primaryStage.setScene(scene);
         //Format the Stage
@@ -166,9 +176,8 @@ public class SpaceBeatzGame extends Application {
               
                 	// First check if the game is paused
                 	if(!gamePaused) {
-                		// Step through the enemy sprites array and pause their animation
-	                	for(int i = 0; i < enemy.length; ++i) enemy[i].pauseSprite();
-	                	// ship.setVelocity(0.0, 0.0);
+                		// Step through the enemy sprites ArrayList and pause their animation
+	                	for(int i = 0; i < enemy.size(); ++i) enemy.get(i).pauseSprite();
 	                	player.pause();
 	                	gamePaused = true;
                         gameStage.hide();
@@ -176,8 +185,8 @@ public class SpaceBeatzGame extends Application {
                 	
                 	// If the first if statement was not entered, that means we are resuming since the Resume button has been pressed
                 	else {
-                		// Step through the enemy sprites array and resume their animation
-                		for(int i = 0; i < enemy.length; ++i) enemy[i].resumeSprite();
+                		// Step through the enemy sprites ArrayList and resume their animation
+                		for(int i = 0; i < enemy.size(); ++i) enemy.get(i).resumeSprite();
                 		player.play();
             			gamePaused = false;
                 	}
@@ -194,17 +203,21 @@ public class SpaceBeatzGame extends Application {
                 // render
                 gc.clearRect(0, 0, screen.getScreenWidth(), screen.getScreenHeight());
                 ship.render(gc);
-                for(int count = 0; count < enemy.length; count++) {
-                    enemy[count].render(gc);
-                    enemy[count].update(elapsedTime);
-                    if(enemy[count].intersects(ship)) {
+                
+                // Step through the enemy ArrayList and render each sprite on the canvas
+                for(int i = 0; i < enemy.size(); i++) {
+                    enemy.get(i).render(gc);
+                    enemy.get(i).update(elapsedTime);
+                    if(enemy.get(i).intersects(ship)) {
                     	// ship.deathAnimation();
                     	// enemy[count].deathAnimation();
-                        enemy[count].setPosition(screen.getScreenWidth() + 100, (Math.random() * screen.getBoundary().getMaxY()));
+                        enemy.remove(i);
+                        //enemy.trimToSize();
                    }
-                    else if(enemy[count].getPositionX() <= -100) {
+                    else if(enemy.get(i).getPositionX() <= -100) {
                     	// enemy[count].hide()   temp change later
-                        enemy[count].setPosition(screen.getScreenWidth() + 100, (Math.random() * screen.getBoundary().getMaxY()));        
+                    	 enemy.remove(i);
+                         //enemy.trimToSize(); 
                     }
                 }
                 
@@ -213,28 +226,34 @@ public class SpaceBeatzGame extends Application {
             
         }.start();
         
-        Circle[] circle = new Circle[8];//matches band rate
+        // This Listener is responsible for spawning enemies based on frequency levels
         player.setAudioSpectrumListener((double timestamp, double duration, float[] magnitudes, float[] phases) -> {
-	        visualPane.getChildren().clear();
-	        int i = 0;
-	        int x = 10;
-	        double y = primaryStage.getScene().getHeight() / 2;
-	        Random rand = new Random(System.currentTimeMillis());
-	        // Build random colored circles
-	        for (int count = 0; count < phases.length; count++) {
-	            // System.out.println(phases.length);
-	            int red = rand.nextInt(255);
-	            int green = rand.nextInt(255);
-	            int blue = rand.nextInt(255);
-	            circle[count] = new Circle(Math.random()*1000);
-	            circle[count].setCenterX(Math.random()*primaryStage.getWidth()-100);
-	            circle[count].setCenterY(Math.random()*primaryStage.getHeight()-100);
-	            circle[count].setFill(Color.rgb(red, green, blue, .70));
-	            visualPane.getChildren().add(circle[count]);
-	 
-	        }
-                    
-                    // System.out.println(player.statusProperty().toString());
-	    }); // setAudioSpectrumListener()        
-    }//end start method for gameStage    
+	      
+        	int newLevels = 0;
+        	for(int i = 0; i < magnitudes.length; ++i) {
+        		if(magnitudes[i] != -60) newLevels++;
+        		else break;
+        	}
+        	for(int i = 0; i < 2; i++) {
+	        	if(newLevels > currentLevel) { 
+	        		currentLevel = newLevels;
+	        		
+	        	    // Spawn an enemy, if the size of the ArrayList is divisble by 20, we spawn an enemy space ship (FEATURES COMING SOON - OR NEVER)
+	                // Move this to sprite class or maybe
+	            	 if(enemy.size() % 20 == 0) {
+	            		 enemy.add(new npcSprite("src/spacebeatzgame/res/enemy.png", 80, 80, true, true));
+	            	 }
+	                 else {
+	                	 enemy.add(new npcSprite("src/spacebeatzgame/res/asteroid.png", 55, 55, true, true));
+	                 }
+	            	 enemy.get(enemy.size() - 1).setPosition(screen.getScreenWidth() + 100, (Math.random() * screen.getBoundary().getMaxY()));
+	                 enemy.get(enemy.size() - 1).addVelocity((Math.random() * (-100) - 400), 0);
+	            }
+	        	
+	        	else {
+	        		currentLevel--;  // Turn down the level one by one to help spawn more enemies
+	        	}
+        	}
+	    }); 
+    }
 }
