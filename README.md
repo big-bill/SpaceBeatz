@@ -21,7 +21,7 @@ fix for display purposes We need probably two or three random number generators 
 <b>*)</b> <strike>Worry about image changes when everything works, also don't worry about the space.png background image this will be replace by the audio visualization "maybe" if not we can later make it move to cause give a traveling effect</strike><b>Done: Munshower</b>
 
 <b>*)</b> <strike>Difficulty currently the main generates 50 enemysprites with the random postioning and velocity and size tune this may be way too much we will need to implement a way maybe to alter this value prior to game start maybe in the gui or maybe
-based of audio file which I think is possible but difficult to implement. Also we can simply limit the the the amount of of enemies by not allowing the the loop to traverse the entire array ie make array and of 100 enemies maybe we use them maybe we don't but place a var in the loop the that limits traversal.</srtike><b>DONE: BIG BILL</b>
+based of audio file which I think is possible but difficult to implement. Also we can simply limit the the the amount of of enemies by not allowing the the loop to traverse the entire array ie make array and of 100 enemies maybe we use them maybe we don't but place a var in the loop the that limits traversal.</strike><b>DONE: BIG BILL</b>
 
 <b>*)</b><strike>Ship can travel out of the window bounds we either need to hinder this or allow the the ship to re-emerge on the opposite end of the screen which could add an interesting dynamic during game play.</strike><b>DONE: Munshower</b> 
 
