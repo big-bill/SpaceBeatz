@@ -8,8 +8,10 @@ import java.net.URL;
 import javafx.animation.Animation;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
+import javafx.scene.Group;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.media.Media;
@@ -61,6 +63,16 @@ public class MenuController {
      * 
      */
     @FXML
+    private MenuItem quitMenuItem;
+    /**
+     * 
+     */
+    @FXML
+    private MenuItem aboutMenuItem;
+    /**
+     * 
+     */
+    @FXML
     private ImageView bigBang;
     /**
      * 
@@ -70,7 +82,8 @@ public class MenuController {
     /**
      * 
      */
-        
+    @FXML
+    private Group textFieldGroup;
     //Non-FXML Variables
     //-----------------------------------------------------------------------------------------------------------
     private String songPath;
@@ -202,5 +215,27 @@ public class MenuController {
         resumeButton.setDisable(true);
         resumeButton.setFocusTraversable(false);
     }
+    //-----------------------------------------------------------------------------------------------------------
+    /**
+     * 
+     */
+    public void quitMenuItemListener() {
+        System.exit(0);
+        
+    }//-----------------------------------------------------------------------------------------------------------
+    /**
+     * Sets TextField group items visible.
+     */
+    public void aboutMenuItemListener() {
+        textFieldGroup.setVisible(true);
+        
+    }//-----------------------------------------------------------------------------------------------------------
+    /**
+     * Sets TextField group items invisible.
+     */
+    public void closeTextFieldButtonListener() {
+        textFieldGroup.setVisible(false);
+    }
+    
 
 }

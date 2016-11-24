@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.Group?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SplitMenuButton?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.effect.GaussianBlur?>
 <?import javafx.scene.effect.Glow?>
 <?import javafx.scene.image.Image?>
@@ -100,5 +104,24 @@
             <Font name="Agency FB Bold" size="14.0" />
          </font>
       </Button>
+      <SplitMenuButton maxHeight="40.0" maxWidth="70.0" minHeight="40.0" minWidth="70.0" mnemonicParsing="false" popupSide="RIGHT" prefHeight="40.0" prefWidth="70.0" text="File">
+        <items>
+            <MenuItem fx:id="aboutMenuItem" mnemonicParsing="false" onAction="#aboutMenuItemListener" text="About" />
+          <MenuItem fx:id="quitMenuItem" mnemonicParsing="false" onAction="#quitMenuItemListener" text="Quit" />
+        </items>
+         <font>
+            <Font name="Agency FB" size="14.0" />
+         </font>
+      </SplitMenuButton>
+      <Group fx:id="textFieldGroup" layoutY="42.0" opacity="0.95" visible="false">
+         <children>
+            <TextArea editable="false" focusTraversable="false" layoutY="-13.0" prefHeight="471.0" prefWidth="800.0" text="                                                                                                   Space Beatz 2016&#10;------------------------------------------------------------------------------------------------------------------------------------------------------------------&#10;                                                                                                 Development Team&#10;                             &#10;                              Robert Munshower                                        Billy Matthews                                        Andrew Smith     &#10;------------------------------------------------------------------------------------------------------------------------------------------------------------------&#10;This game is joint developement project between three developers. It was created as their final project for Java II. The program written in Java uses many aspects of the JavaFX API. The game itself is procedural and declarative in nature taking advantage of FXML. This unique game uses audio visualization techniques that create a dynammic and customized game play experience.&#10;------------------------------------------------------------------------------------------------------------------------------------------------------------------&#10;Game Controls&#10;&#10;W  -  UP&#10;&#10;A   -  Left&#10;&#10;S   -   Down&#10;&#10;D  -    Right&#10;&#10;Escape - Pause&#10;------------------------------------------------------------------------------------------------------------------------------------------------------------------&#10;&#10;Please Enjoy The Game." wrapText="true" />
+            <Button layoutX="716.0" layoutY="417.0" maxHeight="40.0" maxWidth="70.0" minHeight="40.0" minWidth="70.0" mnemonicParsing="false" onAction="#closeTextFieldButtonListener" prefHeight="40.0" prefWidth="70.0" text="Close">
+               <font>
+                  <Font name="Agency FB" size="14.0" />
+               </font>
+            </Button>
+         </children>
+      </Group>
    </children>
 </AnchorPane>
