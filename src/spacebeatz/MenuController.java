@@ -10,6 +10,7 @@ import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.ImageView;
@@ -84,6 +85,16 @@ public class MenuController {
      */
     @FXML
     private Group textFieldGroup;
+    /**
+     * 
+     */
+    @FXML
+    private CheckBox imageSmothingCheckBox;
+    /**
+     * 
+     */
+    @FXML
+    private CheckBox circleVisualCheckBox;
     //Non-FXML Variables
     //-----------------------------------------------------------------------------------------------------------
     private String songPath;
@@ -170,7 +181,7 @@ public class MenuController {
             URL url = uri.toURL();
 
             // TODO: There may be a better way to handle this
-            SpaceBeatzGame game = new SpaceBeatzGame(url,gameStage);
+            SpaceBeatzGame game = new SpaceBeatzGame(url,gameStage,imageSmothingCheckBox.isSelected(),circleVisualCheckBox.isSelected());
             browseButton.setDisable(true);
             browseButton.setVisible(false);
             browseButton.setFocusTraversable(false);
@@ -182,6 +193,8 @@ public class MenuController {
             newGameButton.setVisible(true);
             newGameButton.setDisable(false);
             newGameButton.setFocusTraversable(true);
+            imageSmothingCheckBox.setDisable(true);
+            circleVisualCheckBox.setDisable(true);
 
         } catch (NullPointerException | MalformedURLException | IllegalArgumentException e1) {
             System.err.println("No song found!");
@@ -214,6 +227,9 @@ public class MenuController {
         resumeButton.setVisible(false);
         resumeButton.setDisable(true);
         resumeButton.setFocusTraversable(false);
+        imageSmothingCheckBox.setDisable(false);
+        circleVisualCheckBox.setDisable(false);
+        
     }
     //-----------------------------------------------------------------------------------------------------------
     /**
