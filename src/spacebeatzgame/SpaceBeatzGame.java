@@ -149,66 +149,46 @@ public class SpaceBeatzGame extends Application {
          new AnimationTimer() {
         	 
             public void handle(long currentNanoTime) {
-            	
-            	if(gameStage.isFocused() && gamePaused) {
-            		input.clear();
-            		input.add(KeyCode.ESCAPE.toString());
-            	}
-            	
+               	
                 // calculate time since last update.
                 double elapsedTime = (currentNanoTime - lastNanoTimeHero.doubleValue()) / 1000000000.0;
                 lastNanoTimeHero = currentNanoTime;
-
-                // game logic
+            	
+            	// If the game is resumed and the gamePaused boolean value is true, we resume the game
+                // This will only occur if the "Resume" button is pressed from the main menu
+            	if(gameStage.isFocused() && gamePaused) input.add(KeyCode.ESCAPE.toString());
+                
                 ship.setVelocity(0, 0);
-                if(input.contains("A") && !gamePaused) {
-                    if(ship.getBoundary().getMinX()<=screen.getBoundary().getMinX())
-                        ship.setPosition(screen.getBoundary().getMinX(), ship.positionY);
-                    else
-                        ship.addVelocity(-700, 0);
-                }
-                if(input.contains("D") && !gamePaused) {
-                    if(ship.getBoundary().getMaxX()>=screen.getBoundary().getMaxX())
-                        ship.setPosition(screen.getBoundary().getMaxX() - 55, ship.positionY); 
-                    else
-                        ship.addVelocity(700, 0);
-                }
-                if(input.contains("W") && !gamePaused) {
-                    if(ship.getBoundary().getMinY()<= screen.getBoundary().getMinY())
-                        ship.setPosition(ship.positionX, screen.getBoundary().getMinY()); 
-                    else    
-                        ship.addVelocity(0, -700);
-                    
-                }
-                if(input.contains("S") && !gamePaused) {  //minus 15 accounts for the tool bar as system will not allow ship animated here
-                    if(ship.getBoundary().getMaxY()>=screen.getBoundary().getMaxY() - 15)
-                        ship.setPosition(ship.positionX, screen.getBoundary().getMaxY() - 55);
-                    else
-                        ship.addVelocity(0, 700);
-                }
+                
+                // If the input contains the ESC key being pressed we pause the game
                 if(input.contains(KeyCode.ESCAPE.toString())) {
                 	// TODO: Create menu and pause game, and a button to resume 
               
                 	// First check if the game is paused
-                	if(gamePaused) {
+                	if(!gamePaused) {
+                		// Step through the enemy sprites array and pause their animation
+	                	for(int i = 0; i < enemy.length; ++i) enemy[i].pauseSprite();
+	                	// ship.setVelocity(0.0, 0.0);
+	                	player.pause();
+	                	gamePaused = true;
+                        gameStage.hide();
+                	}
+                	
+                	// If the first if statement was not entered, that means we are resuming since the Resume button has been pressed
+                	else {
                 		// Step through the enemy sprites array and resume their animation
                 		for(int i = 0; i < enemy.length; ++i) enemy[i].resumeSprite();
                 		player.play();
             			gamePaused = false;
                 	}
-                	
-                	else {
-                		// Step through the enemy sprites array and pause their animation
-	                	for(int i = 0; i < enemy.length; ++i) enemy[i].pauseSprite();
-	                	ship.setVelocity(0.0, 0.0);
-	                	player.pause();
-	                	gamePaused = true;
-                        gameStage.hide();
-                	}
                 	input.clear();
                 	return;
                 }
+                
+                // If the game is not paused, we move the ship based on the input provided
+                if(!gamePaused) ship.moveSprite(input, screen);
 
+                // Update the ship's position
                 ship.update(elapsedTime);
 
                 // render
@@ -218,6 +198,8 @@ public class SpaceBeatzGame extends Application {
                     enemy[count].render(gc);
                     enemy[count].update(elapsedTime);
                     if(enemy[count].intersects(ship)) {
+                    	// ship.deathAnimation();
+                    	// enemy[count].deathAnimation();
                         enemy[count].setPosition(screen.getScreenWidth() + 100, (Math.random() * screen.getBoundary().getMaxY()));
                    }
                     else if(enemy[count].getPositionX() <= -100) {
@@ -232,31 +214,27 @@ public class SpaceBeatzGame extends Application {
         }.start();
         
         Circle[] circle = new Circle[8];//matches band rate
-        player.setAudioSpectrumListener(
-                (double timestamp,
-                        double duration,
-                        float[] magnitudes,
-                        float[] phases) -> {
-                    visualPane.getChildren().clear();
-                    int i = 0;
-                    int x = 10;
-                    double y = primaryStage.getScene().getHeight() / 2;
-                    Random rand = new Random(System.currentTimeMillis());
-                    // Build random colored circles
-                    for (int count = 0; count < phases.length; count++) {
-                        // System.out.println(phases.length);
-                        int red = rand.nextInt(255);
-                        int green = rand.nextInt(255);
-                        int blue = rand.nextInt(255);
-                        circle[count] = new Circle(Math.random()*1000);
-                        circle[count].setCenterX(Math.random()*primaryStage.getWidth()-100);
-                        circle[count].setCenterY(Math.random()*primaryStage.getHeight()-100);
-                        circle[count].setFill(Color.rgb(red, green, blue, .70));
-                        visualPane.getChildren().add(circle[count]);
-             
-                    }
+        player.setAudioSpectrumListener((double timestamp, double duration, float[] magnitudes, float[] phases) -> {
+	        visualPane.getChildren().clear();
+	        int i = 0;
+	        int x = 10;
+	        double y = primaryStage.getScene().getHeight() / 2;
+	        Random rand = new Random(System.currentTimeMillis());
+	        // Build random colored circles
+	        for (int count = 0; count < phases.length; count++) {
+	            // System.out.println(phases.length);
+	            int red = rand.nextInt(255);
+	            int green = rand.nextInt(255);
+	            int blue = rand.nextInt(255);
+	            circle[count] = new Circle(Math.random()*1000);
+	            circle[count].setCenterX(Math.random()*primaryStage.getWidth()-100);
+	            circle[count].setCenterY(Math.random()*primaryStage.getHeight()-100);
+	            circle[count].setFill(Color.rgb(red, green, blue, .70));
+	            visualPane.getChildren().add(circle[count]);
+	 
+	        }
                     
                     // System.out.println(player.statusProperty().toString());
-                }); // setAudioSpectrumListener()        
+	    }); // setAudioSpectrumListener()        
     }//end start method for gameStage    
 }

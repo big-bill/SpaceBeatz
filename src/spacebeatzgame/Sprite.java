@@ -4,6 +4,7 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
+import java.util.ArrayList;
 
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
@@ -103,6 +104,52 @@ public class Sprite {
     		e.printStackTrace();
     	}
 
+    }
+    
+    /**
+     * Move the sprite based on the input provided with the ArrayList passed.
+     * Also determines whether or not the sprite can move in a direction any further 
+     * based on the boundaries passed by ScreenAttributes object.
+     * 
+     * 
+     * @param input User input, determines direction the sprite will move
+     * @param screen Provides boundaries for the sprite object
+     */
+    public void moveSprite(ArrayList<String> input, ScreenAttributes screen) {
+    	
+    	// If the user is holding down the "A" key, the ship moves left 
+    	if(input.contains("A")) {
+            if(this.getBoundary().getMinX() <= screen.getBoundary().getMinX())
+                this.setPosition(screen.getBoundary().getMinX(), this.positionY);
+            else
+            	this.addVelocity(-700, 0);
+        }
+    	
+    	// If the user is holding down the "D" key, the ship moves right 
+        if(input.contains("D")) {
+            if(this.getBoundary().getMaxX() >= screen.getBoundary().getMaxX())
+            	this.setPosition(screen.getBoundary().getMaxX() - 55, this.positionY); 
+            else
+            	this.addVelocity(700, 0);
+        }
+        
+        // If the user is holding down the "W" key, the ship moves up
+        if(input.contains("W")) {
+            if(this.getBoundary().getMinY() <= screen.getBoundary().getMinY())
+            	this.setPosition(this.positionX, screen.getBoundary().getMinY()); 
+            else    
+            	this.addVelocity(0, -700);
+            
+        }
+        
+        // If the user is holding down the "S" key, the ship moves down 
+        if(input.contains("S")) {
+            if(this.getBoundary().getMaxY() >= screen.getBoundary().getMaxY() - 15)
+            	this.setPosition(this.positionX, screen.getBoundary().getMaxY() - 55);
+            else
+            	this.addVelocity(0, 700);
+        }
+    	
     }
 
     /**
