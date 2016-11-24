@@ -30,6 +30,9 @@ public class SpaceBeatzGame extends Application {
     Long lastNanoTimeEnemy = System.nanoTime();
     private boolean gamePaused;
     
+    private double screenHeight; // Screen height used by the Scene object
+    private double screenWidth;  // Screen width used by the Scene object
+    
     private Media audioFile;
     private MediaPlayer player;
     private URL url;
@@ -37,6 +40,8 @@ public class SpaceBeatzGame extends Application {
     
     public SpaceBeatzGame(URL url) {
     	gamePaused = false;
+    	screenHeight = 600;  
+    	screenWidth = 600;   
     	this.url = url;
     	Stage stage = new Stage();
     	start(stage);
@@ -48,8 +53,8 @@ public class SpaceBeatzGame extends Application {
 		audioFile = new Media(url.toString());
 		player = new MediaPlayer(audioFile);
 		
-        player.setAudioSpectrumInterval(.1);  //default is .1 this greatly hinders performance we may can up it as we optimize our code
-        player.setAudioSpectrumNumBands(8);   //default is 128 this greatly hinders performance we may can up it as we optimize our code
+        player.setAudioSpectrumInterval(.4);  //default is .1 this greatly hinders performance we may can up it as we optimize our code
+        player.setAudioSpectrumNumBands(4);   //default is 128 this greatly hinders performance we may can up it as we optimize our code
         
 
         //play the song
@@ -75,7 +80,10 @@ public class SpaceBeatzGame extends Application {
             if(count > 3) enemy[count] = new npcSprite("src/spacebeatzgame/res/asteroid.png", 55, 55, true, true);
             else enemy[count] = new npcSprite("src/spacebeatzgame/res/enemy.png", 80, 80, true, true);
             
-         	enemy[count].setPosition(screen.getScreenWidth() + 100, Math.random() * 600);
+            // TODO: While this position won't go over the top Y position, it will clip through the bottom, due to the task bar
+            // I've tried everything, adding 80 in and out of the random number gen, subtracting it, subtracting 15 and adding
+            // We can tinker with it later
+            enemy[count].setPosition(screen.getScreenWidth() + 100, (Math.random() * screen.getBoundary().getMaxY()));
             enemy[count].addVelocity((Math.random() * (-100) - 400), 0);
 
         }
@@ -92,20 +100,22 @@ public class SpaceBeatzGame extends Application {
         //See http://docs.oracle.com/javafx/2/canvas/jfxpub-canvas.htm# for GraphicContext tutorial
         GraphicsContext gc = canvas.getGraphicsContext2D();
   
-
         //Add the canvas to the rootGroup
         rootGroup.getChildren().addAll(visualPane, canvas);
+        
         //Create the Scene with rootGroup
-        Scene scene = new Scene(rootGroup, 600, 600);
+        Scene scene = new Scene(rootGroup, screenWidth, screenHeight, Color.BLACK);
+        
         //scene.setFill(bgPattern);
+        
+
         //Add Scene to stage
         primaryStage.setScene(scene);
         //Format the Stage
         primaryStage.setTitle("SpaceBeatz");
         primaryStage.setFullScreen(true);
+    
         
-        // For now I turn off the ESC key for the exiting the menu, when the ESC key is pressed the game will catch it and hopefully open the menu
-        // TODO: Create menu when ESC is pressed down
         primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
         // primaryStage.setMaximized(true);
        
@@ -152,7 +162,7 @@ public class SpaceBeatzGame extends Application {
                 }
                 if(input.contains("D") && !gamePaused) {
                     if(ship.getBoundary().getMaxX()>=screen.getBoundary().getMaxX())
-                        ship.setPosition(screen.getBoundary().getMaxX()-55, ship.positionY); 
+                        ship.setPosition(screen.getBoundary().getMaxX() - 55, ship.positionY); 
                     else
                         ship.addVelocity(700, 0);
                 }
@@ -164,8 +174,8 @@ public class SpaceBeatzGame extends Application {
                     
                 }
                 if(input.contains("S") && !gamePaused) {  //minus 15 accounts for the tool bar as system will not allow ship animated here
-                    if(ship.getBoundary().getMaxY()>=screen.getBoundary().getMaxY()-15)
-                        ship.setPosition(ship.positionX, screen.getBoundary().getMaxY()-55);
+                    if(ship.getBoundary().getMaxY()>=screen.getBoundary().getMaxY() - 15)
+                        ship.setPosition(ship.positionX, screen.getBoundary().getMaxY() - 55);
                     else
                         ship.addVelocity(0, 700);
                 }
@@ -200,13 +210,11 @@ public class SpaceBeatzGame extends Application {
                     enemy[count].render(gc);
                     enemy[count].update(elapsedTime);
                     if(enemy[count].intersects(ship)) {
-                    	// ship.death();  temp change later
-                     	enemy[count].setPosition(screen.getScreenWidth() - 100, Math.random() * 600);
-                    }
+                        enemy[count].setPosition(screen.getScreenWidth() + 100, (Math.random() * screen.getBoundary().getMaxY()));
+                   }
                     else if(enemy[count].getPositionX() <= -100) {
                     	// enemy[count].hide()   temp change later
-                    	enemy[count].setPosition(screen.getScreenWidth() - 100, Math.random() * 600);
-           
+                        enemy[count].setPosition(screen.getScreenWidth() + 100, (Math.random() * screen.getBoundary().getMaxY()));        
                     }
                 }
                 
