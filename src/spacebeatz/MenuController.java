@@ -96,14 +96,13 @@ public class MenuController {
         Window stage = null;  // TODO: Is this needed? Couldn't figure out how to implement a FileChooser without a stage
 		File fileChosen = fileChooser.showOpenDialog(stage);
 		if (fileChosen != null) {
-                        String songName;
-                        songName = fileChosen.getAbsolutePath();
-                        songPath = songName;
-                        int slashPos = songName.lastIndexOf("\\");
-                        songName = songName.substring(slashPos+1,songName.length());
+            String songName;
+            songName = fileChosen.getAbsolutePath();
+            songPath = songName;
+            int slashPos = songName.lastIndexOf("\\");
+            songName = songName.substring(slashPos+1,songName.length());
 			chosenSong.setText(songName); 
-			playButton.setDisable(false);
-                        
+			playButton.setDisable(false);               
 		}
     }
 
@@ -119,7 +118,7 @@ public class MenuController {
             URL url = uri.toURL();
 
             // TODO: There may be a better way to handle this
-            SpaceBeatzGame game = new SpaceBeatzGame(url,gameStage);
+            SpaceBeatzGame game = new SpaceBeatzGame(url, gameStage);
 
             playButton.setDisable(true);
             playButton.setVisible(false);

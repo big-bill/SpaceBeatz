@@ -39,7 +39,7 @@ public class SpaceBeatzGame extends Application {
     private Stage gameStage;
      
     
-    public SpaceBeatzGame(URL url,Stage gameStage) {
+    public SpaceBeatzGame(URL url, Stage gameStage) {
     	gamePaused = false;
     	screenHeight = 600;  
     	screenWidth = 600;   
@@ -147,8 +147,14 @@ public class SpaceBeatzGame extends Application {
         
 
          new AnimationTimer() {
-           
+        	 
             public void handle(long currentNanoTime) {
+            	
+            	if(gameStage.isFocused() && gamePaused) {
+            		input.clear();
+            		input.add(KeyCode.ESCAPE.toString());
+            	}
+            	
                 // calculate time since last update.
                 double elapsedTime = (currentNanoTime - lastNanoTimeHero.doubleValue()) / 1000000000.0;
                 lastNanoTimeHero = currentNanoTime;
@@ -197,7 +203,7 @@ public class SpaceBeatzGame extends Application {
 	                	ship.setVelocity(0.0, 0.0);
 	                	player.pause();
 	                	gamePaused = true;
-                                gameStage.hide();
+                        gameStage.hide();
                 	}
                 	input.clear();
                 	return;
@@ -224,39 +230,33 @@ public class SpaceBeatzGame extends Application {
             
             
         }.start();
-                Circle[] circle = new Circle[8];//matches band rate
-                player.setAudioSpectrumListener(
-                        (double timestamp,
-                                double duration,
-                                float[] magnitudes,
-                                float[] phases) -> {
-                            visualPane.getChildren().clear();
-                            int i = 0;
-                            int x = 10;
-                            double y = primaryStage.getScene().getHeight() / 2;
-                            Random rand = new Random(System.currentTimeMillis());
-                            // Build random colored circles
-                            for (int count = 0; count < phases.length; count++) {
-                                // System.out.println(phases.length);
-                                int red = rand.nextInt(255);
-                                int green = rand.nextInt(255);
-                                int blue = rand.nextInt(255);
-                                circle[count] = new Circle(Math.random()*1000);
-                                circle[count].setCenterX(Math.random()*primaryStage.getWidth()-100);
-                                circle[count].setCenterY(Math.random()*primaryStage.getHeight()-100);
-                                circle[count].setFill(Color.rgb(red, green, blue, .70));
-                                visualPane.getChildren().add(circle[count]);
-                     
-                            }
-                            
-                            // System.out.println(player.statusProperty().toString());
-                        }); // setAudioSpectrumListener()
-
-
-
-       
-         
         
-        
+        Circle[] circle = new Circle[8];//matches band rate
+        player.setAudioSpectrumListener(
+                (double timestamp,
+                        double duration,
+                        float[] magnitudes,
+                        float[] phases) -> {
+                    visualPane.getChildren().clear();
+                    int i = 0;
+                    int x = 10;
+                    double y = primaryStage.getScene().getHeight() / 2;
+                    Random rand = new Random(System.currentTimeMillis());
+                    // Build random colored circles
+                    for (int count = 0; count < phases.length; count++) {
+                        // System.out.println(phases.length);
+                        int red = rand.nextInt(255);
+                        int green = rand.nextInt(255);
+                        int blue = rand.nextInt(255);
+                        circle[count] = new Circle(Math.random()*1000);
+                        circle[count].setCenterX(Math.random()*primaryStage.getWidth()-100);
+                        circle[count].setCenterY(Math.random()*primaryStage.getHeight()-100);
+                        circle[count].setFill(Color.rgb(red, green, blue, .70));
+                        visualPane.getChildren().add(circle[count]);
+             
+                    }
+                    
+                    // System.out.println(player.statusProperty().toString());
+                }); // setAudioSpectrumListener()        
     }//end start method for gameStage    
 }
