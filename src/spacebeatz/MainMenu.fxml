@@ -90,5 +90,10 @@
             </Glow>
          </effect>
       </Label>
+      <Button fx:id="resumeButton" disable="true" focusTraversable="false" layoutX="561.0" layoutY="453.0" mnemonicParsing="false" onAction="#resumeButtonListener" prefHeight="40.0" prefWidth="70.0" text="Resume" visible="false">
+         <font>
+            <Font name="Agency FB Bold" size="14.0" />
+         </font>
+      </Button>
    </children>
 </AnchorPane>

@@ -36,15 +36,16 @@ public class SpaceBeatzGame extends Application {
     private Media audioFile;
     private MediaPlayer player;
     private URL url;
+    private Stage gameStage;
      
     
-    public SpaceBeatzGame(URL url) {
+    public SpaceBeatzGame(URL url,Stage gameStage) {
     	gamePaused = false;
     	screenHeight = 600;  
     	screenWidth = 600;   
     	this.url = url;
-    	Stage stage = new Stage();
-    	start(stage);
+    	this.gameStage = gameStage;
+    	start(gameStage);
     }
     
     @Override
@@ -109,7 +110,7 @@ public class SpaceBeatzGame extends Application {
         //scene.setFill(bgPattern);
         
 
-        //Add Scene to stage
+        //Add Scene to gameStage
         primaryStage.setScene(scene);
         //Format the Stage
         primaryStage.setTitle("SpaceBeatz");
@@ -196,6 +197,7 @@ public class SpaceBeatzGame extends Application {
 	                	ship.setVelocity(0.0, 0.0);
 	                	player.pause();
 	                	gamePaused = true;
+                                gameStage.hide();
                 	}
                 	input.clear();
                 	return;
@@ -256,5 +258,5 @@ public class SpaceBeatzGame extends Application {
          
         
         
-    }//end start method for stage    
+    }//end start method for gameStage    
 }

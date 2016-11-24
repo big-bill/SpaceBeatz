@@ -16,6 +16,7 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaPlayer.Status;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import javafx.stage.Window;
 import spacebeatzgame.SpaceBeatzGame;
 
@@ -37,6 +38,9 @@ public class MenuController {
 
     @FXML
     private Button playButton;
+    
+    @FXML
+    private Button resumeButton;
 
     @FXML
     private ImageView bigBang;
@@ -46,6 +50,10 @@ public class MenuController {
 
     private Media backgroundMusicAudio;
     private MediaPlayer backgroundMusicPlayer;
+    /**
+     * gameStage is passed to the spaceBeatzGame class
+     */
+    private Stage gameStage = new Stage();
     
     
     @FXML
@@ -98,26 +106,40 @@ public class MenuController {
                         
 		}
     }
-    
+
     //-----------------------------------------------------------------------------------------------------------
-  
     public void playButtonListener() {
-    	try {    		
-    		// Since the media player successfully accessed the audio file, we stop playing the menu music
-    		if(backgroundMusicPlayer.getStatus() != Status.STOPPED) backgroundMusicPlayer.stop();
-    		File musicFile = new File(songPath);
-    		URI uri = musicFile.toURI();
-    		URL url = uri.toURL();
-  
-    		// TODO: There may be a better way to handle this
-			SpaceBeatzGame game = new SpaceBeatzGame(url);
-    	}
-    	catch (NullPointerException | MalformedURLException | IllegalArgumentException e1) {
-    		System.err.println("No song found!");
-    	}
-    	catch(Exception e2) {
-    		System.err.print(e2.getMessage());
-    	}
+        try {
+            // Since the media player successfully accessed the audio file, we stop playing the menu music
+            if (backgroundMusicPlayer.getStatus() != Status.STOPPED) {
+                backgroundMusicPlayer.stop();
+            }
+            File musicFile = new File(songPath);
+            URI uri = musicFile.toURI();
+            URL url = uri.toURL();
+
+            // TODO: There may be a better way to handle this
+            SpaceBeatzGame game = new SpaceBeatzGame(url,gameStage);
+
+            playButton.setDisable(true);
+            playButton.setVisible(false);
+            resumeButton.setVisible(true);
+            resumeButton.setDisable(false);
+            resumeButton.setFocusTraversable(true);
+
+        } catch (NullPointerException | MalformedURLException | IllegalArgumentException e1) {
+            System.err.println("No song found!");
+        } catch (Exception e2) {
+            System.err.print(e2.getMessage());
+        }
     }
-    
+
+    //-----------------------------------------------------------------------------------------------------------
+    public void resumeButtonListener() {
+        
+        gameStage.show();
+        
+        
+    }
+
 }
