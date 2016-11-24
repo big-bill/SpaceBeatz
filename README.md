@@ -9,8 +9,8 @@ INSTEAD APPEND '<B>(DONE: YOUR NAME)</B>' TO THE LAST LINE OF THE ITEM AND USE <
 
 <b>*)</b> The class sprite needs to show a blow up image after collision with another sprite or we need to implement another ideajust because we collide and blow up doesn't mean the game has to end it just means we wasted a life or something else will happen.
 
-<b>*)</b> The games logic is located below the "new AnimationTimer()" line 120 on my end 
-NOTE: ALL GAME LOGIC HAS TO BE INSIDE THE TIMER The entire thing should really be in its own class, AnimationTimer is abstract if nothing else all the 'if()' statements should be contained in methods.
+<b>*)</b> <strike>The games logic is located below the "new AnimationTimer()" line 120 on my end 
+NOTE: ALL GAME LOGIC HAS TO BE INSIDE THE TIMER The entire thing should really be in its own class, AnimationTimer is abstract if nothing else all the 'if()' statements should be contained in methods.</strike><b>DONE: BIG BILL</b>
 
 <b>*)</b>)<strike>Game is run in full screen mode pressing the escape key should pause the game it currently continues to run this can be done with animationTimer.pause() or something like that</strike><b>DONE: BIG BILL</b>
 
