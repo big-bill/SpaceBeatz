@@ -7,6 +7,7 @@ import java.net.URL;
 import java.util.ArrayList;
 
 import javafx.geometry.Rectangle2D;
+import javafx.scene.CacheHint;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -99,6 +100,8 @@ public class Sprite {
 	        width = image.getRequestedWidth();
 	        height = image.getRequestedHeight();
 	        spriteIV = new ImageView(image);
+                spriteIV.setCache(true);
+                spriteIV.setCacheHint(CacheHint.SPEED);
     	} 
     	catch(IllegalArgumentException | MalformedURLException e) {
     		e.printStackTrace();
