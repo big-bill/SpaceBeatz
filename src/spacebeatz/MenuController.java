@@ -22,36 +22,69 @@ import spacebeatzgame.SpaceBeatzGame;
 
 
 public class MenuController {
-    private String songPath;
-
+    /**
+     * 
+     */
     @FXML
     private AnchorPane anchorPane;
-
+    /**
+     * 
+     */
     @FXML
     private ImageView spaceBeatzLogo;
-
+    /**
+     * 
+     */
     @FXML
     private Label chosenSong;
-
+    /**
+     * 
+     */
     @FXML
     private Button browseButton;
-
+    /**
+     * 
+     */
     @FXML
     private Button playButton;
-    
+    /**
+     * 
+     */
     @FXML
     private Button resumeButton;
-
+    /**
+     * 
+     */
+    @FXML
+    private Button newGameButton;
+    /**
+     * 
+     */
     @FXML
     private ImageView bigBang;
-
+    /**
+     * 
+     */
     @FXML
     private Label chooseSongLabel;
-
+    /**
+     * 
+     */
+        
+    //Non-FXML Variables
+    //-----------------------------------------------------------------------------------------------------------
+    private String songPath;
+    /**
+     * 
+     */
     private Media backgroundMusicAudio;
+    /**
+     * 
+     */
     private MediaPlayer backgroundMusicPlayer;
     /**
      * gameStage is passed to the spaceBeatzGame class
+     * so the controller will have access to its stage
      */
     private Stage gameStage = new Stage();
     
@@ -86,7 +119,9 @@ public class MenuController {
     }
 
     //-----------------------------------------------------------------------------------------------------------
-    
+    /**
+     * 
+     */
     public void browseButtonListener() {
     	// Open up a FileChooser and let the user choose a track to play
     	FileChooser fileChooser = new FileChooser();
@@ -96,17 +131,21 @@ public class MenuController {
         Window stage = null;  // TODO: Is this needed? Couldn't figure out how to implement a FileChooser without a stage
 		File fileChosen = fileChooser.showOpenDialog(stage);
 		if (fileChosen != null) {
-            String songName;
-            songName = fileChosen.getAbsolutePath();
-            songPath = songName;
-            int slashPos = songName.lastIndexOf("\\");
-            songName = songName.substring(slashPos+1,songName.length());
+                        String songName;
+                        songName = fileChosen.getAbsolutePath();
+                        songPath = songName;
+                        int slashPos = songName.lastIndexOf("\\");
+                        songName = songName.substring(slashPos+1,songName.length());
 			chosenSong.setText(songName); 
-			playButton.setDisable(false);               
+			playButton.setDisable(false);
+                        
 		}
     }
 
     //-----------------------------------------------------------------------------------------------------------
+    /**
+     * 
+     */
     public void playButtonListener() {
         try {
             // Since the media player successfully accessed the audio file, we stop playing the menu music
@@ -118,13 +157,18 @@ public class MenuController {
             URL url = uri.toURL();
 
             // TODO: There may be a better way to handle this
-            SpaceBeatzGame game = new SpaceBeatzGame(url, gameStage);
-
+            SpaceBeatzGame game = new SpaceBeatzGame(url,gameStage);
+            browseButton.setDisable(true);
+            browseButton.setVisible(false);
+            browseButton.setFocusTraversable(false);
             playButton.setDisable(true);
             playButton.setVisible(false);
             resumeButton.setVisible(true);
             resumeButton.setDisable(false);
             resumeButton.setFocusTraversable(true);
+            newGameButton.setVisible(true);
+            newGameButton.setDisable(false);
+            newGameButton.setFocusTraversable(true);
 
         } catch (NullPointerException | MalformedURLException | IllegalArgumentException e1) {
             System.err.println("No song found!");
@@ -134,11 +178,29 @@ public class MenuController {
     }
 
     //-----------------------------------------------------------------------------------------------------------
-    public void resumeButtonListener() {
-        
+    /**
+     * 
+     */
+    public void resumeButtonListener() { 
         gameStage.show();
-        
-        
+    }
+    //-----------------------------------------------------------------------------------------------------------
+    /**
+     * 
+     */
+    public void newGameButtonListener() {
+        gameStage.close();
+        newGameButton.setVisible(false);
+        newGameButton.setDisable(true);
+        newGameButton.setFocusTraversable(false);
+        browseButton.setDisable(false);
+        browseButton.setVisible(true);
+        browseButton.setFocusTraversable(true);
+        playButton.setVisible(true);
+        playButton.setFocusTraversable(true);
+        resumeButton.setVisible(false);
+        resumeButton.setDisable(true);
+        resumeButton.setFocusTraversable(false);
     }
 
 }

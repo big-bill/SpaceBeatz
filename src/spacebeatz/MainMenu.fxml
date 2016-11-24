@@ -95,5 +95,10 @@
             <Font name="Agency FB Bold" size="14.0" />
          </font>
       </Button>
+      <Button fx:id="newGameButton" disable="true" focusTraversable="false" layoutX="716.0" layoutY="453.0" mnemonicParsing="false" onAction="#newGameButtonListener" prefHeight="40.0" prefWidth="70.0" text="New Game" visible="false">
+         <font>
+            <Font name="Agency FB Bold" size="14.0" />
+         </font>
+      </Button>
    </children>
 </AnchorPane>
