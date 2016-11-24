@@ -182,7 +182,6 @@ public class SpaceBeatzGame extends Application {
 
 				// If the input contains the ESC key being pressed we pause the game
 				if (input.contains(KeyCode.ESCAPE.toString())) {
-					// TODO: Create menu and pause game, and a button to resume 
 
 					// First check if the game is paused
 					if (!gamePaused) {
@@ -199,7 +198,9 @@ public class SpaceBeatzGame extends Application {
 					else {
 						// Step through the enemy sprites ArrayList and resume their animation
 						for (int i = 0; i < enemy.size(); ++i) {
-							enemy.get(i).resumeSprite();
+							if(enemy.get(i).isVisible()) {
+								enemy.get(i).resumeSprite();
+							}
 						}
 						player.play();
 						gamePaused = false;
@@ -223,17 +224,17 @@ public class SpaceBeatzGame extends Application {
 				// Step through the enemy ArrayList and render each sprite on the canvas
 				for (int i = 0; i < enemy.size(); i++) {
 					if(enemy.get(i).isVisible()) {
-					enemy.get(i).render(gc);
-					enemy.get(i).update(elapsedTime);
-					if (enemy.get(i).intersects(ship)) {
-						// ship.deathAnimation();
-						// enemy[count].deathAnimation();
-						enemy.get(i).hide(screen);	// TODO: Change to death
-						//enemy.trimToSize();
-					} else if (enemy.get(i).getPositionX() <= -100) {
-						// enemy[count].removeFromView();
-						enemy.get(i).hide(screen);
-					}
+						enemy.get(i).render(gc);
+						enemy.get(i).update(elapsedTime);
+						if (enemy.get(i).intersects(ship)) {
+							// ship.deathAnimation();
+							// enemy[count].deathAnimation();
+							enemy.get(i).hide(screen);	// TODO: Change to death
+							//enemy.trimToSize();
+						} else if (enemy.get(i).getPositionX() <= -100) {
+							// If the enemy exits the screen and is no longer visible we hide it and set its velocity to 0
+							enemy.get(i).hide(screen);
+						}
 					}
 				}
 
@@ -241,7 +242,7 @@ public class SpaceBeatzGame extends Application {
 
 		}.start();
 
-		//Create circle array incase additional visualization feature selected
+		//Create circle array in case additional visualization feature selected
 		Circle[] circle = new Circle[(bandRate / 5)];//matches band rate /5 '5'.333 no remainder
 		// This Listener is responsible for spawning enemies based on frequency levels
 		player.setAudioSpectrumListener((double timestamp, double duration, float[] magnitudes, float[] phases) -> {
@@ -262,6 +263,7 @@ public class SpaceBeatzGame extends Application {
 				}
 			}
 			int newLevels = 0;
+			// Step through the magnitudes array and get their level of intensity
 			for (int i = 0; i < magnitudes.length; ++i) {
 				if (magnitudes[i] != -60) {
 					newLevels++;
@@ -269,11 +271,13 @@ public class SpaceBeatzGame extends Application {
 					break;
 				}
 			}
-			// This loop repeats two times, meaning each .2 seconds there is a chance two enemies will spawn
-			for (int x = 0; x < (newLevels/30); ++x) {
+			
+			// This loop will repeat based on the magnitude levels
+			for (int x = 0; x < (newLevels/20); ++x) {
 				enemy.get(enemyIndex).placeIntoView(screen);
 				// Increase enemy index
 				enemyIndex++;
+				// If the index is greater than the total stored amount of enemeys we reset back to 0
 				if(enemyIndex >= enemyTotal) {
 					enemyIndex = 0;
 				}

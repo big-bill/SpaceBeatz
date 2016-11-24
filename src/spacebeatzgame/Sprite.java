@@ -171,21 +171,23 @@ public class Sprite {
 	public void placeIntoView(ScreenAttributes screen) {
 		// Only change and reset the sprite's position if the sprite is not visible.
 		// If one is needed to move a sprite to a position, please use setPosition()
-		resumeSprite();
-		this.setPosition(screen.getScreenWidth() + 80, (Math.random() * screen.getBoundary().getMaxY()));
-		this.addVelocity((Math.random() * (-100) - 400), 0);
+		pauseSprite();
+		setPosition(screen.getScreenWidth() + 80, (Math.random() * screen.getBoundary().getMaxY()));
+		addVelocity((Math.random() * (-100) - 400), 0);
+		storedVelocityX = velocityX;
+		storedVelocityY = velocityY;
 		visible = true;
 	}
 
 
 	/**
-	 * This hides the sprite, places it back onto the right side, and stops its movement.
+	 * This hides the sprite and halts its velocity.
 	 * 
 	 * @param screen Used to place the sprite on the right side of the screen
 	 */
 	public void hide(ScreenAttributes screen) {
 		visible = false;
-		this.setVelocity(0.0, 0.0);
+		setVelocity(0.0, 0.0);
 	}
 
 	/**
@@ -208,9 +210,7 @@ public class Sprite {
 	 */
 	public void setVelocity(double speedX, double speedY) {
 		velocityX = speedX;
-		storedVelocityX = velocityX;
 		velocityY = speedY;
-		storedVelocityY = velocityY;
 	}
 
 	/**
@@ -235,19 +235,19 @@ public class Sprite {
 	}
 
 	/**
-	 * Pauses the sprite's animation
+	 * Pauses the sprite's animation and stores the previous velocity values.
 	 */
 	public void pauseSprite() {
-		setVelocity(0.0, 0.0);
+		velocityX = 0.0;
+		velocityY = 0.0;
 	}
 
 	/**
-	 * Resume the sprite's animation
+	 * Resume the sprite's animation. Should only be called if the sprite has been paused.
 	 */
 	public void resumeSprite() {
 		velocityX = storedVelocityX;
 		velocityY = storedVelocityY;
-		setVelocity(velocityX, velocityY);
 	}
 
 	/**
@@ -265,9 +265,7 @@ public class Sprite {
 	 * @param graphicsContext
 	 */
 	public void render(GraphicsContext graphicsContext) {
-		if(visible) {
 			graphicsContext.drawImage(image, positionX, positionY);
-		}
 	}
 
 	/**
