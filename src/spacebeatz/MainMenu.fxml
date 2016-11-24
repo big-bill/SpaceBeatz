@@ -2,10 +2,12 @@
 
 <?import javafx.scene.Group?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.SplitMenuButton?>
 <?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.effect.GaussianBlur?>
 <?import javafx.scene.effect.Glow?>
 <?import javafx.scene.image.Image?>
@@ -123,5 +125,21 @@
             </Button>
          </children>
       </Group>
+      <CheckBox fx:id="imageSmothingCheckBox" layoutX="631.0" layoutY="11.0" mnemonicParsing="false" selected="true" text="Image Smoothing" textFill="WHITE">
+         <font>
+            <Font name="Agency FB Bold" size="14.0" />
+         </font>
+         <tooltip>
+            <Tooltip text="Disabling May Improve Performance" />
+         </tooltip>
+      </CheckBox>
+      <CheckBox fx:id="circleVisualCheckBox" layoutX="631.0" layoutY="40.0" mnemonicParsing="false" text="Additional Music Visualization" textFill="WHITE">
+         <font>
+            <Font name="Agency FB Bold" size="14.0" />
+         </font>
+         <tooltip>
+            <Tooltip text="Enabling May Decrease Performance" />
+         </tooltip>
+      </CheckBox>
    </children>
 </AnchorPane>
