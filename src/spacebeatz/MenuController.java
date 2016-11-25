@@ -25,6 +25,11 @@ import spacebeatzgame.SpaceBeatzGame;
 
 
 public class MenuController {
+	
+	
+	SpaceBeatzGame game;
+	
+	
 	/**
 	 * 
 	 */
@@ -110,7 +115,7 @@ public class MenuController {
 	 * gameStage is passed to the spaceBeatzGame class
 	 * so the controller will have access to its stage
 	 */
-	private Stage gameStage = new Stage();
+	private Stage gameStage;
 
 
 	@FXML
@@ -180,8 +185,9 @@ public class MenuController {
 			URI uri = musicFile.toURI();
 			URL url = uri.toURL();
 
+			gameStage = new Stage();
 			// TODO: There may be a better way to handle this
-			SpaceBeatzGame game = new SpaceBeatzGame(url,gameStage,imageSmothingCheckBox.isSelected(),circleVisualCheckBox.isSelected());
+			game = new SpaceBeatzGame(url,gameStage,imageSmothingCheckBox.isSelected(),circleVisualCheckBox.isSelected());
 			browseButton.setDisable(true);
 			browseButton.setVisible(false);
 			browseButton.setFocusTraversable(false);
@@ -215,20 +221,28 @@ public class MenuController {
 	 * 
 	 */
 	public void newGameButtonListener() {
-		gameStage.close();
-		newGameButton.setVisible(false);
-		newGameButton.setDisable(true);
-		newGameButton.setFocusTraversable(false);
-		browseButton.setDisable(false);
-		browseButton.setVisible(true);
-		browseButton.setFocusTraversable(true);
-		playButton.setVisible(true);
-		playButton.setFocusTraversable(true);
-		resumeButton.setVisible(false);
-		resumeButton.setDisable(true);
-		resumeButton.setFocusTraversable(false);
-		imageSmothingCheckBox.setDisable(false);
-		circleVisualCheckBox.setDisable(false);
+		try {
+			gameStage.close();
+			game.stopGame();
+			chosenSong.setText("Selected Song ...");
+			backgroundMusicPlayer.play();
+			browseButton.setDisable(false);
+			browseButton.setVisible(true);
+			browseButton.setFocusTraversable(true);
+			playButton.setVisible(true);
+			playButton.setFocusTraversable(true);
+			resumeButton.setVisible(false);
+			resumeButton.setDisable(true);
+			resumeButton.setFocusTraversable(false);
+			newGameButton.setVisible(false);
+			newGameButton.setDisable(true);
+			newGameButton.setFocusTraversable(false);
+			imageSmothingCheckBox.setDisable(false);
+			circleVisualCheckBox.setDisable(false);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 	//-----------------------------------------------------------------------------------------------------------

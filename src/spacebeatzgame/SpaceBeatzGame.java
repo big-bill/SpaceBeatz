@@ -9,6 +9,7 @@ import java.util.Random;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -33,29 +34,21 @@ public class SpaceBeatzGame extends Application {
 	private Stage gameStage;
 	private boolean gamePaused;
 
-	private double screenHeight; // Screen height used by the Scene object
-	private double screenWidth;  // Screen width used by the Scene object
-
 	private ArrayList<npcSprite> enemy;  // ArrayList used to hold enemy sprites
 	private int enemyIndex;				 // Index that steps through the enemy ArrayList properly
-	private final int enemyTotal = 80;   // Total amount of enemies in the ArrayList
+	private final int enemyTotal = 130;   // Total amount of enemies in the ArrayList
 
 	private Media audioFile;
 	private MediaPlayer player;
 	private URL url;
-	private int bandRate;   	// Band rate for the audio spectrum listener
+	private final int bandRate = 128;   // Band rate for the audio spectrum listener
 	private boolean imageSmooth;
 	private boolean circleVisualization;
-
-	private int currentLevel;
 
 	public SpaceBeatzGame(URL url, Stage gameStage, boolean smooth, boolean circVis) {
 		enemyIndex = 0;
 		gamePaused = false;
-		screenHeight = 600;
-		screenWidth = 600;
-		bandRate = 128;
-		currentLevel = 2;
+		player = null;
 		this.url = url;
 		this.gameStage = gameStage;
 		imageSmooth = smooth;
@@ -80,7 +73,7 @@ public class SpaceBeatzGame extends Application {
 		audioFile = new Media(url.toString());
 		player = new MediaPlayer(audioFile);
 
-		player.setAudioSpectrumInterval(.2);  //default is .1 this greatly hinders performance we can decrease it as we optimize our code
+		player.setAudioSpectrumInterval(.3);  //default is .1 this greatly hinders performance we can decrease it as we optimize our code
 		player.setAudioSpectrumNumBands(bandRate);   //default is 128 this greatly hinders performance we may can up it as we optimize our code
 
 		//play the song
@@ -123,12 +116,12 @@ public class SpaceBeatzGame extends Application {
 		//Create GraphicsContext NOTE: This class is used to issue draw calls to a Canvas using a buffer.  NOTE 2: Class has lots of options we may need to use
 		//See http://docs.oracle.com/javafx/2/canvas/jfxpub-canvas.htm# for GraphicContext tutorial
 		GraphicsContext gc = canvas.getGraphicsContext2D();
-
+		
 		//Add the canvas to the rootGroup
 		rootGroup.getChildren().addAll(visualPane, canvas);
 
 		//Create the Scene with rootGroup
-		Scene scene = new Scene(rootGroup, screenWidth, screenHeight);
+		Scene scene = new Scene(rootGroup, 600, 600);
 
 		scene.setFill(bgPattern);
 		//Add Scene to gameStage
@@ -187,7 +180,7 @@ public class SpaceBeatzGame extends Application {
 					if (!gamePaused) {
 						// Step through the enemy sprites ArrayList and pause their animation
 						for (int i = 0; i < enemy.size(); ++i) {
-							if(enemy.get(i).isVisible()) {
+							if(enemy.get(i).isActive()) {
 								enemy.get(i).pauseSprite();
 							}
 						}
@@ -198,7 +191,7 @@ public class SpaceBeatzGame extends Application {
 					else {
 						// Step through the enemy sprites ArrayList and resume their animation
 						for (int i = 0; i < enemy.size(); ++i) {
-							if(enemy.get(i).isVisible()) {
+							if(enemy.get(i).isActive()) {
 								enemy.get(i).resumeSprite();
 							}
 						}
@@ -223,17 +216,17 @@ public class SpaceBeatzGame extends Application {
 
 				// Step through the enemy ArrayList and render each sprite on the canvas
 				for (int i = 0; i < enemy.size(); i++) {
-					if(enemy.get(i).isVisible()) {
+					if(enemy.get(i).isActive()) {
 						enemy.get(i).render(gc);
 						enemy.get(i).update(elapsedTime);
 						if (enemy.get(i).intersects(ship)) {
 							// ship.deathAnimation();
 							// enemy[count].deathAnimation();
-							enemy.get(i).hide(screen);	// TODO: Change to death
+							enemy.get(i).stopMovement();	// TODO: Change to death
 							//enemy.trimToSize();
 						} else if (enemy.get(i).getPositionX() <= -100) {
-							// If the enemy exits the screen and is no longer visible we hide it and set its velocity to 0
-							enemy.get(i).hide(screen);
+							// If the enemy exits the screen and is no longer isActive we hide it and set its velocity to 0
+							enemy.get(i).stopMovement();
 						}
 					}
 				}
@@ -272,16 +265,36 @@ public class SpaceBeatzGame extends Application {
 				}
 			}
 			
-			// This loop will repeat based on the magnitude levels
-			for (int x = 0; x < (newLevels/20); ++x) {
+			// Add an enemy if the magnitudes level is a bit low
+			if(newLevels < 30 && newLevels > 5) {
 				enemy.get(enemyIndex).placeIntoView(screen);
 				// Increase enemy index
 				enemyIndex++;
-				// If the index is greater than the total stored amount of enemeys we reset back to 0
+				// If the index is greater than the total stored amount of enemies we reset back to 0
+				if(enemyIndex >= enemyTotal) {
+					enemyIndex = 0;
+				}
+			}
+			
+			// This loop will repeat based on the magnitude levels
+			for (int x = 0; x < (newLevels/30); ++x) {
+				enemy.get(enemyIndex).placeIntoView(screen);
+				// Increase enemy index
+				enemyIndex++;
+				// If the index is greater than the total stored amount of enemies we reset back to 0
 				if(enemyIndex >= enemyTotal) {
 					enemyIndex = 0;
 				}
 			}
 		});
 	}
+	
+
+	// Called by the menu to free up game resources and dispose of data
+	public void stopGame() {
+		enemy.clear();
+		player.stop();
+		player.dispose();	
+	}
+	
 }
