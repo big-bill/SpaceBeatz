@@ -60,9 +60,9 @@ public class Sprite {
 	protected double height;
 
 	/**
-	 * Sprite visibility
+	 * Sprite state (if the sprite is active on the screen or not)
 	 */
-	protected boolean visible;
+	protected boolean isActive;
 	/**
 	 * Sprite ImageView
 	 */
@@ -73,7 +73,7 @@ public class Sprite {
 	 */
 	public Sprite() {
 		image = null;
-		visible = false;
+		isActive = false;
 		width = 0.0;
 		height = 0.0;
 		positionX = 0.0;
@@ -127,35 +127,35 @@ public class Sprite {
 
 		// If the user is holding down the "A" key, the ship moves left 
 		if(input.contains("A")) {
-			if(this.getBoundary().getMinX() <= screen.getBoundary().getMinX())
-				this.setPosition(screen.getBoundary().getMinX(), this.positionY);
+			if(getBoundary().getMinX() <= screen.getBoundary().getMinX())
+				setPosition(screen.getBoundary().getMinX(), positionY);
 			else
-				this.addVelocity(-700, 0);
+				addVelocity(-700, 0);
 		}
 
 		// If the user is holding down the "D" key, the ship moves right 
 		if(input.contains("D")) {
-			if(this.getBoundary().getMaxX() >= screen.getBoundary().getMaxX())
-				this.setPosition(screen.getBoundary().getMaxX() - 55, this.positionY); 
+			if(getBoundary().getMaxX() >= screen.getBoundary().getMaxX())
+				setPosition(screen.getBoundary().getMaxX() - 55, positionY); 
 			else
-				this.addVelocity(700, 0);
+				addVelocity(700, 0);
 		}
 
 		// If the user is holding down the "W" key, the ship moves up
 		if(input.contains("W")) {
-			if(this.getBoundary().getMinY() <= screen.getBoundary().getMinY())
-				this.setPosition(this.positionX, screen.getBoundary().getMinY()); 
+			if(getBoundary().getMinY() <= screen.getBoundary().getMinY())
+				setPosition(positionX, screen.getBoundary().getMinY()); 
 			else    
-				this.addVelocity(0, -700);
+				addVelocity(0, -700);
 
 		}
 
 		// If the user is holding down the "S" key, the ship moves down 
 		if(input.contains("S")) {
-			if(this.getBoundary().getMaxY() >= screen.getBoundary().getMaxY() - 15)
-				this.setPosition(this.positionX, screen.getBoundary().getMaxY() - 55);
+			if(getBoundary().getMaxY() >= screen.getBoundary().getMaxY() - 15)
+				setPosition(positionX, screen.getBoundary().getMaxY() - 55);
 			else
-				this.addVelocity(0, 700);
+				addVelocity(0, 700);
 		}
 
 	}
@@ -163,30 +163,26 @@ public class Sprite {
 	/**
 	 * This places the sprite onto the screen and sets the visibility option to true, which will
 	 * allow for the sprite to be rendered and updated.
-	 * This will only move the sprite if the sprite is currently not visible.
+	 * This will only move the sprite if the sprite is currently not isActive.
 	 * If you want to move a sprite regardless of visibility, use setPosition()
 	 * 
 	 * @param screen Used to place the sprite on the right side of the screen
 	 */
 	public void placeIntoView(ScreenAttributes screen) {
-		// Only change and reset the sprite's position if the sprite is not visible.
-		// If one is needed to move a sprite to a position, please use setPosition()
 		pauseSprite();
 		setPosition(screen.getScreenWidth() + 80, (Math.random() * screen.getBoundary().getMaxY()));
 		addVelocity((Math.random() * (-100) - 400), 0);
 		storedVelocityX = velocityX;
 		storedVelocityY = velocityY;
-		visible = true;
+		isActive = true;
 	}
 
 
 	/**
-	 * This hides the sprite and halts its velocity.
-	 * 
-	 * @param screen Used to place the sprite on the right side of the screen
+	 * This changes the sprite's state to inactive and halts it.
 	 */
-	public void hide(ScreenAttributes screen) {
-		visible = false;
+	public void stopMovement() {
+		isActive = false;
 		setVelocity(0.0, 0.0);
 	}
 
@@ -197,7 +193,6 @@ public class Sprite {
 	 * @param yPos
 	 */
 	public void setPosition(double xPos, double yPos) {
-		visible = true;
 		positionX = xPos;
 		positionY = yPos;
 	}
@@ -248,15 +243,6 @@ public class Sprite {
 	public void resumeSprite() {
 		velocityX = storedVelocityX;
 		velocityY = storedVelocityY;
-	}
-
-	/**
-	 * Checks whether or not the sprite is currently visible or not.
-	 * 
-	 * @return Returns the visibility status of the sprite.
-	 */
-	public boolean isVisible() {
-		return visible;
 	}
 
 	/**
@@ -333,6 +319,16 @@ public class Sprite {
 	public ImageView getSpriteIV() {
 		return spriteIV;
 	}
+	
+	/**
+	 * Checks whether or not the sprite is currently active or not.
+	 * 
+	 * @return Returns the state of the sprite (if it is on screen or not)
+	 */
+	public boolean isActive() {
+		return isActive;
+	}
+
 
 
 }
