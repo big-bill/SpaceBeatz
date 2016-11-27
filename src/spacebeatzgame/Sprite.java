@@ -252,13 +252,13 @@ public class Sprite {
 			graphicsContext.drawImage(image, positionX, positionY);
 	}
 
-	/**
+        /**
 	 * Gets the boundary of the sprite for collision detection.
 	 *
 	 * @return
 	 */
-	public Rectangle2D getBoundary() {
-		return new Rectangle2D(positionX, positionY, width, height);
+	public Rectangle2D getBoundary() {//Narrow bounds -15 X -15 to increas fairness of intersections
+		return new Rectangle2D(positionX, positionY, width-15, height-15);
 	}
 
 	/**
