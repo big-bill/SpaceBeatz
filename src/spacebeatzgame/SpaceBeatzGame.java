@@ -9,7 +9,6 @@ import java.util.Random;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -267,7 +266,7 @@ public class SpaceBeatzGame extends Application {
 			
 			// Add an enemy if the magnitudes level is a bit low
 			if(newLevels < 30 && newLevels > 5) {
-				enemy.get(enemyIndex).placeIntoView(screen);
+				enemy.get(enemyIndex).activate(screen);
 				// Increase enemy index
 				enemyIndex++;
 				// If the index is greater than the total stored amount of enemies we reset back to 0
@@ -278,7 +277,7 @@ public class SpaceBeatzGame extends Application {
 			
 			// This loop will repeat based on the magnitude levels
 			for (int x = 0; x < (newLevels/30); ++x) {
-				enemy.get(enemyIndex).placeIntoView(screen);
+				enemy.get(enemyIndex).activate(screen);
 				// Increase enemy index
 				enemyIndex++;
 				// If the index is greater than the total stored amount of enemies we reset back to 0

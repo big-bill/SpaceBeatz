@@ -6,7 +6,6 @@ import java.net.URI;
 import java.net.URL;
 
 import javafx.animation.Animation;
-import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.control.Button;

@@ -161,14 +161,12 @@ public class Sprite {
 	}
 
 	/**
-	 * This places the sprite onto the screen and sets the visibility option to true, which will
-	 * allow for the sprite to be rendered and updated.
-	 * This will only move the sprite if the sprite is currently not isActive.
-	 * If you want to move a sprite regardless of visibility, use setPosition()
+	 * This places the sprite onto the screen and sets the visibility option to true, which 
+	 * will allow for the sprite to be rendered and updated.
 	 * 
 	 * @param screen Used to place the sprite on the right side of the screen
 	 */
-	public void placeIntoView(ScreenAttributes screen) {
+	public void activate(ScreenAttributes screen) {
 		pauseSprite();
 		setPosition(screen.getScreenWidth() + 80, (Math.random() * screen.getBoundary().getMaxY()));
 		addVelocity((Math.random() * (-100) - 400), 0);
