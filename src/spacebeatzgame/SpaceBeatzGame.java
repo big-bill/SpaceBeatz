@@ -18,12 +18,14 @@ import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 public class SpaceBeatzGame extends Application {
@@ -43,7 +45,8 @@ public class SpaceBeatzGame extends Application {
 	private final int bandRate = 128;   // Band rate for the audio spectrum listener
 	private boolean imageSmooth;
 	private boolean circleVisualization;
-
+        private Hud hud = new Hud();
+        
 	public SpaceBeatzGame(URL url, Stage gameStage, boolean smooth, boolean circVis) {
 		enemyIndex = 0;
 		gamePaused = false;
@@ -52,7 +55,7 @@ public class SpaceBeatzGame extends Application {
 		this.gameStage = gameStage;
 		imageSmooth = smooth;
 		circleVisualization = circVis;
-
+                
 		// Initialize the enemy Sprite ArrayList
 		enemy = new ArrayList<npcSprite>();
 		for(int i = 0; i < enemyTotal; ++i) {
@@ -62,7 +65,9 @@ public class SpaceBeatzGame extends Application {
 				enemy.add(new npcSprite("src/spacebeatzgame/res/asteroid.png", 55, 55, true, imageSmooth));
 			}
 		}
-
+                //position hud
+                hud.setHudPos(Screen.getPrimary().getVisualBounds().getMaxX()/2, Screen.getPrimary().getVisualBounds().getMinY());
+                
 		start(gameStage);
 	}
 
@@ -115,9 +120,10 @@ public class SpaceBeatzGame extends Application {
 		//Create GraphicsContext NOTE: This class is used to issue draw calls to a Canvas using a buffer.  NOTE 2: Class has lots of options we may need to use
 		//See http://docs.oracle.com/javafx/2/canvas/jfxpub-canvas.htm# for GraphicContext tutorial
 		GraphicsContext gc = canvas.getGraphicsContext2D();
-		
+	
+                
 		//Add the canvas to the rootGroup
-		rootGroup.getChildren().addAll(visualPane, canvas);
+		rootGroup.getChildren().addAll(visualPane, canvas, hud.getHud());
 
 		//Create the Scene with rootGroup
 		Scene scene = new Scene(rootGroup, 600, 600);

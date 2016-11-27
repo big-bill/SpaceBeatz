@@ -99,7 +99,7 @@ public class Hud {
     /**
      * Constructor for Hud
      */
-    Hud() {
+    public Hud() {
 
         //Set Attributes of the hud
         hudRect = new Rectangle(WIDTH, HEIGHT);
