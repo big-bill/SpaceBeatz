@@ -6,11 +6,16 @@ import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.CacheHint;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.util.Duration;
 
 
 public class Sprite {
@@ -48,6 +53,17 @@ public class Sprite {
 	 * Stored value of the sprite's velocity on the Y-axis
 	 */
 	protected double storedVelocityY;
+	
+	/**
+	 * Status on whether the sprite is invincible or not
+	 */
+	protected boolean vulnerable;
+
+	
+	/**
+	 * Status on whether the sprite should be rendered or not
+	 */
+	protected boolean renderSprite;
 
 	/**
 	 * Sprite width
@@ -74,6 +90,8 @@ public class Sprite {
 	public Sprite() {
 		image = null;
 		isActive = false;
+		vulnerable = true;
+		renderSprite = true;
 		width = 0.0;
 		height = 0.0;
 		positionX = 0.0;
@@ -157,8 +175,47 @@ public class Sprite {
 			else
 				addVelocity(0, 700);
 		}
-
 	}
+	
+	/**
+	 * Called when a sprite is hit, flashes the sprite to indicate that it has been hit
+	 * 
+	 */
+	public void hitSprite() {
+		// First check if the user is vulnerable (user can't get hit if they were just hit and now flashing)
+		if(vulnerable) {
+			renderSprite = vulnerable = false;
+			Timeline userHit = new Timeline(new KeyFrame(Duration.seconds(.15), new EventHandler<ActionEvent>() {
+				 @Override
+				    public void handle(ActionEvent event) {
+					 // If the renderSprite is true, we set it to false so it won't be rendered
+						if(renderSprite)
+							renderSprite = false;
+						else
+							renderSprite = true;
+				    }
+			}));
+			
+			// After the flashing animation is over, we set the values back to true so the user will be registered when hit and rendered
+			userHit.setOnFinished(new EventHandler<ActionEvent>() {
+				 @Override
+				 public void handle(ActionEvent event) {
+					 vulnerable = true;
+					 renderSprite = true;
+			}});
+			// Sets the amount of times the flashing (10 times, the method sets it to true and false) occurs
+			userHit.setCycleCount(20);
+			userHit.play();
+		}
+	}
+	
+	/**
+	 * This method is used if the player sprite should be rendered on screen or not.
+	 * This is used for flashing the sprite to indicate that it was hit.
+	 * 
+	 * @return The status of if the sprite should be rendered on screen or not
+	 */
+	public boolean getRenderSprite() { return renderSprite; }
 
 	/**
 	 * This places the sprite onto the screen and sets the visibility option to true, which 
@@ -249,7 +306,7 @@ public class Sprite {
 	 * @param graphicsContext
 	 */
 	public void render(GraphicsContext graphicsContext) {
-			graphicsContext.drawImage(image, positionX, positionY);
+		graphicsContext.drawImage(image, positionX, positionY);
 	}
 
         /**

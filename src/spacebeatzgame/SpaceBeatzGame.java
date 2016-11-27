@@ -211,7 +211,10 @@ public class SpaceBeatzGame extends Application {
 
 				// render
 				gc.clearRect(0, 0, screen.getScreenWidth(), screen.getScreenHeight());
-				ship.render(gc);
+				
+				// We only check this because when the ship is hit it will flash, and when it flashes we don't render the ship sprite
+				if(ship.getRenderSprite())
+					ship.render(gc);
 
 				// Step through the enemy ArrayList and render each sprite on the canvas
 				for (int i = 0; i < enemy.size(); i++) {
@@ -219,10 +222,9 @@ public class SpaceBeatzGame extends Application {
 						enemy.get(i).render(gc);
 						enemy.get(i).update(elapsedTime);
 						if (enemy.get(i).intersects(ship)) {
-							// ship.deathAnimation();
-							// enemy[count].deathAnimation();
-							enemy.get(i).stopMovement();	// TODO: Change to death
-							//enemy.trimToSize();
+							// Since the enemy hit the ship, the ship flashes and becomes invunerable for a brief moment
+							ship.hitSprite();
+							enemy.get(i).stopMovement();
 						} else if (enemy.get(i).getPositionX() <= -100) {
 							// If the enemy exits the screen and is no longer isActive we hide it and set its velocity to 0
 							enemy.get(i).stopMovement();
