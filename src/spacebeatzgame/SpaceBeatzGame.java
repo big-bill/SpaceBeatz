@@ -32,6 +32,8 @@ public class SpaceBeatzGame extends Application {
 	Long lastNanoTimeEnemy = System.nanoTime();
 	private Stage gameStage;
 	private boolean gamePaused;
+	private double totalTimeElapsed;
+	private String[] time;
 
 	ArrayList<String> input; 			 // This ArrayList stores the keyboard input
 
@@ -46,12 +48,14 @@ public class SpaceBeatzGame extends Application {
 	private boolean imageSmooth;
 	private boolean circleVisualization;
 	private Hud hud = new Hud();
-        private int collisionCounter = 0;
+	private int collisionCounter = 0;
 
 	public SpaceBeatzGame(URL url, Stage gameStage, boolean smooth, boolean circVis) {
 		enemyIndex = 0;
 		gamePaused = false;
 		player = null;
+		totalTimeElapsed = 0.0;
+		time = null;
 		hud = new Hud();
 		this.url = url;
 		this.gameStage = gameStage;
@@ -164,27 +168,27 @@ public class SpaceBeatzGame extends Application {
 
 			public void handle(long currentNanoTime) {
 
+				// calculate time since last update.
+				double elapsedTime = (currentNanoTime - lastNanoTimeHero.doubleValue()) / 1000000000.0;
+				totalTimeElapsed += elapsedTime;
+				lastNanoTimeHero = currentNanoTime;
+
+				// Check if time is null, if it is not, the end of the media has been reached
+				if(time != null) {
+					// We check if the total time elapsed is greater than the total duration time plus 7 seconds for the enemies to clear the screen
+					if(totalTimeElapsed * 1000 > Double.parseDouble(time[0]) + 7000)
+						gameStage.hide();
+				}
+
 				// We check if the song is over
 				player.setOnEndOfMedia(new Runnable() {
 
 					@Override
 					public void run() {
-						try {
-							// ON THE MENU HAVE STATS AND DISPLAY THEM IF THE GAME IS OVER MAKE SURE THAT IS KNOWN
-							Thread.sleep(2000);
-							gameStage.hide();
-						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-
+						String timeThing = String.valueOf(player.getTotalDuration());
+						time = timeThing.split(" ");
 					}
-
 				});
-
-				// calculate time since last update.
-				double elapsedTime = (currentNanoTime - lastNanoTimeHero.doubleValue()) / 1000000000.0;
-				lastNanoTimeHero = currentNanoTime;
 
 				// If the game is resumed and the gamePaused boolean value is true, we resume the game
 				// This will only occur if the "Resume" button is pressed from the main menu
@@ -226,7 +230,7 @@ public class SpaceBeatzGame extends Application {
 						}
 					}
 				}
-                                hud.updateHud(collisionCounter, player);
+				hud.updateHud(collisionCounter, player);
 			}
 
 		}.start();
