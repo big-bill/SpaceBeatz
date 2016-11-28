@@ -34,23 +34,26 @@ public class SpaceBeatzGame extends Application {
 	Long lastNanoTimeEnemy = System.nanoTime();
 	private Stage gameStage;
 	private boolean gamePaused;
+	
+	ArrayList<String> input; 			 // This ArrayList stores the keyboard input
 
 	private ArrayList<npcSprite> enemy;  // ArrayList used to hold enemy sprites
 	private int enemyIndex;				 // Index that steps through the enemy ArrayList properly
-	private final int enemyTotal = 130;   // Total amount of enemies in the ArrayList
+	private final int enemyTotal = 130;  // Total amount of enemies in the ArrayList
 
 	private Media audioFile;
 	private MediaPlayer player;
 	private URL url;
-	private final int bandRate = 128;   // Band rate for the audio spectrum listener
+	private final int bandRate = 128;    // Band rate for the audio spectrum listener
 	private boolean imageSmooth;
 	private boolean circleVisualization;
-        private Hud hud = new Hud();
+    private Hud hud;
         
 	public SpaceBeatzGame(URL url, Stage gameStage, boolean smooth, boolean circVis) {
 		enemyIndex = 0;
 		gamePaused = false;
 		player = null;
+		hud = new Hud();
 		this.url = url;
 		this.gameStage = gameStage;
 		imageSmooth = smooth;
@@ -65,8 +68,8 @@ public class SpaceBeatzGame extends Application {
 				enemy.add(new npcSprite("src/spacebeatzgame/res/asteroid.png", 55, 55, true, imageSmooth));
 			}
 		}
-                //position hud
-                hud.setHudPos(Screen.getPrimary().getVisualBounds().getMaxX()/2, Screen.getPrimary().getVisualBounds().getMinY());
+        //position hud
+        hud.setHudPos(Screen.getPrimary().getVisualBounds().getMaxX()/2, Screen.getPrimary().getVisualBounds().getMinY());
                 
 		start(gameStage);
 	}
@@ -106,8 +109,7 @@ public class SpaceBeatzGame extends Application {
 			e1.getMessage();
 			System.exit(1);
 		}
-
-		// TODO: Change to field?
+		
 		Sprite ship = new Sprite();
 		ship.setAllImageAttributes("src/spacebeatzgame/res/ship.png", 55, 55, true, imageSmooth);
 
@@ -140,8 +142,7 @@ public class SpaceBeatzGame extends Application {
 
 		gameStage.show();
 
-		//This Block handles keyboard input
-		ArrayList<String> input = new ArrayList<>();
+		input = new ArrayList<>();
 
 		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
 			@Override
@@ -296,6 +297,34 @@ public class SpaceBeatzGame extends Application {
 		});
 	}
 	
+	// Pause the game
+	public void pauseGame() {
+
+		// First check if the game is paused
+		if (!gamePaused) {
+			// Step through the enemy sprites ArrayList and pause their animation
+			for (int i = 0; i < enemy.size(); ++i) {
+				if(enemy.get(i).isActive()) {
+					enemy.get(i).pauseSprite();
+				}
+			}
+			player.pause();
+			gamePaused = true;
+			gameStage.hide();
+		} // If the first if statement was not entered, that means we are resuming since the Resume button has been pressed
+		else {
+			// Step through the enemy sprites ArrayList and resume their animation
+			for (int i = 0; i < enemy.size(); ++i) {
+				if(enemy.get(i).isActive()) {
+					enemy.get(i).resumeSprite();
+				}
+			}
+			player.play();
+			gamePaused = false;
+		}
+		input.clear();
+		return;
+	}
 
 	// Called by the menu to free up game resources and dispose of data
 	public void stopGame() {

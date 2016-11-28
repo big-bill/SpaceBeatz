@@ -345,14 +345,14 @@ public class Sprite {
 		return flag;
 	}
 
-	/**
-	 * Sprite fields
-	 *
-	 * @return String of the sprite position and velocity.
-	 */
+
+
+	@Override
 	public String toString() {
-		return " Position: [" + positionX + "," + positionY + "]"
-				+ " Velocity: [" + velocityX + "," + velocityY + "]";
+		return "Sprite [image=" + image + ", positionX=" + positionX + ", positionY=" + positionY + ", velocityX="
+				+ velocityX + ", storedVelocityX=" + storedVelocityX + ", velocityY=" + velocityY + ", storedVelocityY="
+				+ storedVelocityY + ", vulnerable=" + vulnerable + ", renderSprite=" + renderSprite + ", width=" + width
+				+ ", height=" + height + ", isActive=" + isActive + ", spriteIV=" + spriteIV + "]";
 	}
 
 	public double getPositionX() {
