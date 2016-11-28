@@ -46,6 +46,7 @@ public class SpaceBeatzGame extends Application {
 	private boolean imageSmooth;
 	private boolean circleVisualization;
 	private Hud hud = new Hud();
+        private int collisionCounter = 0;
 
 	public SpaceBeatzGame(URL url, Stage gameStage, boolean smooth, boolean circVis) {
 		enemyIndex = 0;
@@ -216,8 +217,8 @@ public class SpaceBeatzGame extends Application {
 						enemy.get(i).render(gc);
 						enemy.get(i).update(elapsedTime);
 						if (enemy.get(i).intersects(ship)) {
-							// Since the enemy hit the ship, the ship flashes and becomes invunerable for a brief moment
-							ship.hitSprite();
+							// Since the enemy hit the ship, the ship flashes and becomes invunerable for a brief moment and update collison count appropiately 
+							collisionCounter = ship.hitSprite(collisionCounter);
 							enemy.get(i).stopMovement();
 						} else if (enemy.get(i).getPositionX() <= -100) {
 							// If the enemy exits the screen and is no longer isActive we hide it and set its velocity to 0
@@ -225,7 +226,7 @@ public class SpaceBeatzGame extends Application {
 						}
 					}
 				}
-
+                                hud.updateHud(collisionCounter, player);
 			}
 
 		}.start();

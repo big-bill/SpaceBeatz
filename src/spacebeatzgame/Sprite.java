@@ -181,9 +181,10 @@ public class Sprite {
 	 * Called when a sprite is hit, flashes the sprite to indicate that it has been hit
 	 * 
 	 */
-	public void hitSprite() {
+	public int hitSprite(int collisions) {
 		// First check if the user is vulnerable (user can't get hit if they were just hit and now flashing)
 		if(vulnerable) {
+                        collisions++;//increment collison if vulnerable
 			renderSprite = vulnerable = false;
 			Timeline userHit = new Timeline(new KeyFrame(Duration.seconds(.15), new EventHandler<ActionEvent>() {
 				 @Override
@@ -206,7 +207,9 @@ public class Sprite {
 			// Sets the amount of times the flashing (10 times, the method sets it to true and false) occurs
 			userHit.setCycleCount(20);
 			userHit.play();
+                        
 		}
+                return collisions;//
 	}
 	
 	/**
