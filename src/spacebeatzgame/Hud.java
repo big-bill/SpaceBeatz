@@ -11,19 +11,18 @@ import javafx.scene.text.FontWeight;
 
 /**
  *About Hud Class
- * 
- * 
+ * Hud or Heads Up Display gives information to the the end user
+ * in the form of numerical metrics about the current game state.
  */
 public class Hud {
 
     /**
-     * hudRect represents the heads up display of the game and contains
-     * pertinent game statistics
+     * The root node of the hud
      */
     private Pane hudPane;
 
     /**
-     * Hud Color
+     * Hud text color
      */
     private final Color TEXT_COLOR = Color.WHITE;
 
@@ -38,7 +37,7 @@ public class Hud {
     private Label scoreLabel= new Label();
     
     /**
-     * Holds current game score
+     * Holds current number of collisions
      */
     private Label collisionLabel= new Label();
 
@@ -53,7 +52,7 @@ public class Hud {
     private final String SCORE_STRING = "Score: ";
     
     /**
-     * Holds String collisions
+     * Holds String for collisions
      */
     private final String COLLISION_STRING = "Collisions: ";
 
@@ -63,22 +62,22 @@ public class Hud {
     private final Font GAME_FONT = Font.font("Agency FB Bold", FontWeight.BOLD, 24);
 
     /**
-     * Holds statistic for hud
+     * Container for elapsed time metric
      */
     private HBox timeBox = new HBox();
 
     /**
-     * Holds statistic for hud
+     * Container for score metric
      */
     private HBox scoreBox = new HBox();
 
     /**
-     * Holds statistic for hud
+     * Container for collision metric
      */
     private HBox collisionBox = new HBox();
     
     /**
-     * Holds statistic for hud
+     * Grouping container for all metrics
      */
     private HBox statBox = new HBox(150);
 
@@ -150,8 +149,9 @@ public class Hud {
     public Pane getHud() {
         return hudPane;
     }
+    
     /**
-     * updates the hud statistics and scores the player
+     * updates the hud metrics and computes the player's score.
      * 
      * @param collisions number of collisions
      * @param player mediaPlayer
@@ -168,12 +168,12 @@ public class Hud {
         collisionLabel.setText(COLLISION_STRING + collisions);
 
         //calculate Score
-        //always get 1 point per second
+        //always get 5 points per second
         if (seconds > 0 && minutes < 1) {
             currentScore = seconds * 5;
         }
 
-        //get extra point based of minutes passed
+        //get bonus point based on minutes passed up to 5 minutes
         switch (minutes) {
             case 1:
                 currentScore += 1000;
@@ -183,6 +183,12 @@ public class Hud {
                 break;
             case 3:
                 currentScore += seconds * 3000;
+                break;
+            case 4:
+                currentScore += seconds * 4000;
+                break;
+            case 5:
+                currentScore += seconds * 5000;
                 break;
             default:
                 currentScore += 0;
