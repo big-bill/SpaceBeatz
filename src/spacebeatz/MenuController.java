@@ -212,13 +212,11 @@ public class MenuController {
 	 */
 	public void resumeButtonListener() { 
 		// If the game is not running, that means the game is hidden and will be opened back up
+		// Else, the game is over and we start a new game 
 		if(!game.isRunning())
 			gameStage.show();
-		else {
-		// Else, the game is over and we start a new game 
-			newGameButtonListener();
+		else 
 			newGameButton.fire();			
-		}
 	}
 	//-----------------------------------------------------------------------------------------------------------
 	/**
