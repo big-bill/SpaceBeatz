@@ -2,6 +2,7 @@ package spacebeatzgame;
 
 import javafx.scene.Group;
 import javafx.scene.control.Label;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -75,12 +76,12 @@ public class Hud {
     /**
      * Holds game font
      */
-    private final Font GAME_FONT = Font.font("Agency FB Bold", FontWeight.BOLD, 14);
+    private final Font GAME_FONT = Font.font("Agency FB Bold", FontWeight.BOLD, 36);
 
     /**
      * Holds statistics for hud with a 12 pixel spacing.
      */
-    private HBox statBox = new HBox(12);
+    private HBox statBox = new HBox(100);
 
     /**
      * Hud x position.
@@ -91,11 +92,6 @@ public class Hud {
      * Hud y position.
      */
     protected double positionY;
-    
-    /**
-     * Group for hud
-     */
-    Group hudGroup = new Group();
 
     /**
      * Constructor for Hud
@@ -104,9 +100,6 @@ public class Hud {
 
         //Set Attributes of the hud
         hudPane = new Pane();
-        //hudPane.setFill(HUD_COLOR);
-        //hudPane.setArcHeight(ARC_HEIGHT);
-        //hudPane.setArcWidth(ARC_WIDTH);
 
         //Set Attributes of labels
         etLabel.setText(ET_STRING + "--:--");
@@ -119,9 +112,6 @@ public class Hud {
         statBox.setFocusTraversable(false);
         
         hudPane.getChildren().add(statBox);
-        
-        //hudGroup.getChildren().addAll(hudPane);
-        //hudGroup.setOpacity(OPACITY);
     }
 
     /**
