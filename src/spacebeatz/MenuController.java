@@ -5,7 +5,10 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 
+import com.sun.glass.events.MouseEvent;
+
 import javafx.animation.Animation;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
@@ -129,6 +132,9 @@ public class MenuController {
 			URI uri = file.toURI();
 			URL url = uri.toURL();
 
+			newGameButton.setOnAction(event -> {
+				newGameButtonListener();
+			});
 
 			backgroundMusicAudio = new Media(url.toString());
 			backgroundMusicPlayer = new MediaPlayer(backgroundMusicAudio);
@@ -216,7 +222,7 @@ public class MenuController {
 		if(!game.isRunning())
 			gameStage.show();
 		else 
-			newGameButton.fire();			
+			newGameButton.fire();		
 	}
 	//-----------------------------------------------------------------------------------------------------------
 	/**

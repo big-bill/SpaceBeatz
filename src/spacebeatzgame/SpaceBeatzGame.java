@@ -32,7 +32,7 @@ public class SpaceBeatzGame extends Application {
 	Long lastNanoTimeEnemy = System.nanoTime();
 	private Stage gameStage;
 	private boolean gamePaused;
-	
+
 	ArrayList<String> input; 			 // This ArrayList stores the keyboard input
 
 	private ArrayList<npcSprite> enemy;  // ArrayList used to hold enemy sprites
@@ -45,8 +45,8 @@ public class SpaceBeatzGame extends Application {
 	private final int bandRate = 128;    // Band rate for the audio spectrum listener
 	private boolean imageSmooth;
 	private boolean circleVisualization;
-        private Hud hud = new Hud();
-        
+	private Hud hud = new Hud();
+
 	public SpaceBeatzGame(URL url, Stage gameStage, boolean smooth, boolean circVis) {
 		enemyIndex = 0;
 		gamePaused = false;
@@ -56,7 +56,7 @@ public class SpaceBeatzGame extends Application {
 		this.gameStage = gameStage;
 		imageSmooth = smooth;
 		circleVisualization = circVis;
-                
+
 		// Initialize the enemy Sprite ArrayList
 		enemy = new ArrayList<npcSprite>();
 		for(int i = 0; i < enemyTotal; ++i) {
@@ -66,7 +66,7 @@ public class SpaceBeatzGame extends Application {
 				enemy.add(new npcSprite("src/spacebeatzgame/res/asteroid.png", 55, 55, true, imageSmooth));
 			}
 		}
-		
+
 		start(gameStage);
 	}
 
@@ -105,7 +105,7 @@ public class SpaceBeatzGame extends Application {
 			e1.getMessage();
 			System.exit(1);
 		}
-		
+
 		Sprite ship = new Sprite();
 		ship.setAllImageAttributes("src/spacebeatzgame/res/ship.png", 55, 55, true, imageSmooth);
 
@@ -118,8 +118,8 @@ public class SpaceBeatzGame extends Application {
 		//Create GraphicsContext NOTE: This class is used to issue draw calls to a Canvas using a buffer.  NOTE 2: Class has lots of options we may need to use
 		//See http://docs.oracle.com/javafx/2/canvas/jfxpub-canvas.htm# for GraphicContext tutorial
 		GraphicsContext gc = canvas.getGraphicsContext2D();
-	
-                
+
+
 		//Add the canvas to the rootGroup
 		rootGroup.getChildren().addAll(visualPane, canvas, hud.getHud());
 
@@ -162,23 +162,23 @@ public class SpaceBeatzGame extends Application {
 		new AnimationTimer() {
 
 			public void handle(long currentNanoTime) {
-				
+
 				// We check if the song is over
 				player.setOnEndOfMedia(new Runnable() {
-					
+
 					@Override
 					public void run() {
 						try {
-							// CHANGE TO DISPLAY VICTORY SCREEN
+							// ON THE MENU HAVE STATS AND DISPLAY THEM IF THE GAME IS OVER MAKE SURE THAT IS KNOWN
 							Thread.sleep(2000);
 							gameStage.hide();
 						} catch (InterruptedException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-						
+
 					}
-					
+
 				});
 
 				// calculate time since last update.
@@ -205,7 +205,7 @@ public class SpaceBeatzGame extends Application {
 
 				// render
 				gc.clearRect(0, 0, screen.getScreenWidth(), screen.getScreenHeight());
-				
+
 				// We only check this because when the ship is hit it will flash, and when it flashes we don't render the ship sprite
 				if(ship.getRenderSprite())
 					ship.render(gc);
@@ -259,7 +259,7 @@ public class SpaceBeatzGame extends Application {
 					break;
 				}
 			}
-			
+
 			// Add an enemy if the magnitudes level is a bit low
 			if(newLevels < 30 && newLevels > 5) {
 				enemy.get(enemyIndex).activate(screen);
@@ -270,7 +270,7 @@ public class SpaceBeatzGame extends Application {
 					enemyIndex = 0;
 				}
 			}
-			
+
 			// This loop will repeat based on the magnitude levels
 			for (int x = 0; x < (newLevels/30); ++x) {
 				enemy.get(enemyIndex).activate(screen);
@@ -283,7 +283,7 @@ public class SpaceBeatzGame extends Application {
 			}
 		});
 	}
-	
+
 	// Pause the game
 	public void pauseGame() {
 
@@ -319,11 +319,11 @@ public class SpaceBeatzGame extends Application {
 		player.stop();
 		player.dispose();	
 	}
-	
-	
+
+
 	/**
 	 * Returns if the game is currently running or not.
 	 */
 	public boolean isRunning() { return (!gamePaused); }
-	
+
 }
