@@ -7,7 +7,7 @@ INSTEAD APPEND '<B>(DONE: YOUR NAME)</B>' TO THE LAST LINE OF THE ITEM AND USE <
 
 <b>*)</b><strike> Class npcSprite extends sprite and is currently blank much of the logic located in the main including the random position & velocity generation needs to be move to this class.</strike><b>IDEA SCRAPPED</b>
 
-<b>*)</b> The class sprite needs to show a blow up image after collision with another sprite or we need to implement another ideajust because we collide and blow up doesn't mean the game has to end it just means we wasted a life or something else will happen.
+<b>*)</b><strike>The class sprite needs to show a blow up image after collision with another sprite or we need to implement another ideajust because we collide and blow up doesn't mean the game has to end it just means we wasted a life or something else will happen.</strike><b>DONE: BIG BILL</b>
 
 <b>*)</b> <strike>The games logic is located below the "new AnimationTimer()" line 120 on my end 
 NOTE: ALL GAME LOGIC HAS TO BE INSIDE THE TIMER The entire thing should really be in its own class, AnimationTimer is abstract if nothing else all the 'if()' statements should be contained in methods.</strike><b>DONE: BIG BILL</b>
@@ -31,7 +31,7 @@ based of audio file which I think is possible but difficult to implement. Also w
 
 <b>WISHES/IDEAS</b>
 
-<b>*)</b> Create HUD 'Heads up display lives score etc'
+<b>*)</b><strike>Create HUD 'Heads up display lives score etc'</strike><b>Done: Munshower</b>
 
 <b>*)</b> Power up sprites that float by the same as enemies. shields could protect the ship from collision could decay over time or with number of collisions. Bomb power ups that fire when collected destroying sprites around the ship or could be held until the user wishes to use it to clear an area around them.
 
