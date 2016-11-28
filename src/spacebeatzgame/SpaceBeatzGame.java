@@ -173,45 +173,18 @@ public class SpaceBeatzGame extends Application {
 
 				// If the game is resumed and the gamePaused boolean value is true, we resume the game
 				// This will only occur if the "Resume" button is pressed from the main menu
-				if (gameStage.isFocused() && gamePaused) {
+				if (gameStage.isFocused() && gamePaused) 
 					input.add(KeyCode.ESCAPE.toString());
-				}
 
 				ship.setVelocity(0, 0);
 
 				// If the input contains the ESC key being pressed we pause the game
-				if (input.contains(KeyCode.ESCAPE.toString())) {
-
-					// First check if the game is paused
-					if (!gamePaused) {
-						// Step through the enemy sprites ArrayList and pause their animation
-						for (int i = 0; i < enemy.size(); ++i) {
-							if(enemy.get(i).isActive()) {
-								enemy.get(i).pauseSprite();
-							}
-						}
-						player.pause();
-						gamePaused = true;
-						gameStage.hide();
-					} // If the first if statement was not entered, that means we are resuming since the Resume button has been pressed
-					else {
-						// Step through the enemy sprites ArrayList and resume their animation
-						for (int i = 0; i < enemy.size(); ++i) {
-							if(enemy.get(i).isActive()) {
-								enemy.get(i).resumeSprite();
-							}
-						}
-						player.play();
-						gamePaused = false;
-					}
-					input.clear();
-					return;
-				}
+				if (input.contains(KeyCode.ESCAPE.toString())) 
+					pauseGame();
 
 				// If the game is not paused, we move the ship based on the input provided
-				if (!gamePaused) {
+				if (!gamePaused) 
 					ship.moveSprite(input, screen);
-				}
 
 				// Update the ship's position
 				ship.update(elapsedTime);
