@@ -18,14 +18,12 @@ import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 public class SpaceBeatzGame extends Application {
@@ -68,7 +66,7 @@ public class SpaceBeatzGame extends Application {
 				enemy.add(new npcSprite("src/spacebeatzgame/res/asteroid.png", 55, 55, true, imageSmooth));
 			}
 		}
-                
+		
 		start(gameStage);
 	}
 
@@ -164,6 +162,24 @@ public class SpaceBeatzGame extends Application {
 		new AnimationTimer() {
 
 			public void handle(long currentNanoTime) {
+				
+				// We check if the song is over
+				player.setOnEndOfMedia(new Runnable() {
+					
+					@Override
+					public void run() {
+						try {
+							// CHANGE TO DISPLAY VICTORY SCREEN
+							Thread.sleep(2000);
+							gameStage.hide();
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						
+					}
+					
+				});
 
 				// calculate time since last update.
 				double elapsedTime = (currentNanoTime - lastNanoTimeHero.doubleValue()) / 1000000000.0;
@@ -303,5 +319,11 @@ public class SpaceBeatzGame extends Application {
 		player.stop();
 		player.dispose();	
 	}
+	
+	
+	/**
+	 * Returns if the game is currently running or not.
+	 */
+	public boolean isRunning() { return (!gamePaused); }
 	
 }

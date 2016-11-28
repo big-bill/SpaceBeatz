@@ -28,7 +28,6 @@ public class MenuController {
 	
 	SpaceBeatzGame game;
 	
-	
 	/**
 	 * 
 	 */
@@ -136,7 +135,6 @@ public class MenuController {
 			backgroundMusicPlayer.setVolume(0.2);
 			backgroundMusicPlayer.setCycleCount(Animation.INDEFINITE);
 			backgroundMusicPlayer.play();
-
 		} 
 		catch (MalformedURLException | NullPointerException | IllegalArgumentException err) {
 			err.printStackTrace();
@@ -213,7 +211,14 @@ public class MenuController {
 	 * 
 	 */
 	public void resumeButtonListener() { 
-		gameStage.show();
+		// If the game is not running, that means the game is hidden and will be opened back up
+		if(!game.isRunning())
+			gameStage.show();
+		else {
+		// Else, the game is over and we start a new game 
+			newGameButtonListener();
+			newGameButton.fire();			
+		}
 	}
 	//-----------------------------------------------------------------------------------------------------------
 	/**
