@@ -35,7 +35,7 @@ public class SpaceBeatzGame extends Application {
 
 	ArrayList<String> input; 			 // This ArrayList stores the keyboard input
 
-	private ArrayList<npcSprite> enemy;  // ArrayList used to hold enemy sprites
+	private ArrayList<NPCSprite> enemy;  // ArrayList used to hold enemy sprites
 	private int enemyIndex;				 // Index that steps through the enemy ArrayList properly
 	private final int enemyTotal = 130;  // Total amount of enemies in the ArrayList
 
@@ -59,12 +59,12 @@ public class SpaceBeatzGame extends Application {
 		circleVisualization = circVis;
 
 		// Initialize the enemy Sprite ArrayList
-		enemy = new ArrayList<npcSprite>();
+		enemy = new ArrayList<NPCSprite>();
 		for(int i = 0; i < enemyTotal; ++i) {
 			if (enemy.size() % 20 == 0) {
-				enemy.add(new npcSprite("src/spacebeatzgame/res/enemy.png", 80, 80, true, imageSmooth));
+				enemy.add(new NPCSprite("src/spacebeatzgame/res/enemy.png", 80, 80, true, imageSmooth));
 			} else {
-				enemy.add(new npcSprite("src/spacebeatzgame/res/asteroid.png", 55, 55, true, imageSmooth));
+				enemy.add(new NPCSprite("src/spacebeatzgame/res/asteroid.png", 55, 55, true, imageSmooth));
 			}
 		}
 
