@@ -68,8 +68,6 @@ public class SpaceBeatzGame extends Application {
 				enemy.add(new npcSprite("src/spacebeatzgame/res/asteroid.png", 55, 55, true, imageSmooth));
 			}
 		}
-        //position hud
-        hud.setHudPos(Screen.getPrimary().getVisualBounds().getMaxX()/2, Screen.getPrimary().getVisualBounds().getMinY());
                 
 		start(gameStage);
 	}

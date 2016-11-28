@@ -26,7 +26,7 @@ public class Hud {
     /**
      * Hud Color
      */
-    private final Color HUD_COLOR = Color.SKYBLUE;
+    private final Color TEXT_COLOR = Color.WHITE;
 
     /**
      * Opacity of HUD
@@ -44,16 +44,6 @@ public class Hud {
     private final double HEIGHT = 100;
 
     /**
-     * Vertical diameter of the arc at the four corners of the rectangle.
-     */
-    private final double ARC_HEIGHT = 20;
-
-    /**
-     * Horizontal diameter of the arc at the four corners of the rectangle
-     */
-    private final double ARC_WIDTH = 20;
-
-    /**
      * Holds elapsed time of game
      */
     private Label etLabel = new Label();
@@ -61,7 +51,12 @@ public class Hud {
     /**
      * Holds current game score
      */
-    private Label scoreLabel= new Label();;
+    private Label scoreLabel= new Label();
+    
+    /**
+     * Holds current game score
+     */
+    private Label collisionLabel= new Label();
 
     /**
      * Holds String for Elapsed Time
@@ -72,11 +67,16 @@ public class Hud {
      * Holds String for Score
      */
     private final String SCORE_STRING = "Score: ";
+    
+    /**
+     * Holds String collisions
+     */
+    private final String COLLISION_STRING = "Collisions: ";
 
     /**
      * Holds game font
      */
-    private final Font GAME_FONT = Font.font("Agency FB Bold", FontWeight.BOLD, 36);
+    private final Font GAME_FONT = Font.font("Agency FB Bold", FontWeight.BOLD, 24);
 
     /**
      * Holds statistics for hud with a 12 pixel spacing.
@@ -102,13 +102,22 @@ public class Hud {
         hudPane = new Pane();
 
         //Set Attributes of labels
-        etLabel.setText(ET_STRING + "--:--");
         etLabel.setFont(GAME_FONT);
-        scoreLabel.setText(SCORE_STRING + "000,000");
+        etLabel.setTextFill(TEXT_COLOR);
+        etLabel.setText(ET_STRING + "--:--");
+         
         scoreLabel.setFont(GAME_FONT);
+        scoreLabel.setTextFill(TEXT_COLOR);
+        scoreLabel.setText(SCORE_STRING + "000,000");
+        
+        collisionLabel.setFont(GAME_FONT);
+        collisionLabel.setTextFill(TEXT_COLOR);
+        collisionLabel.setText(COLLISION_STRING + "0");
+        
+        
 
         //add children to statBox
-        statBox.getChildren().addAll(etLabel, scoreLabel);
+        statBox.getChildren().addAll(scoreLabel,etLabel,collisionLabel);
         statBox.setFocusTraversable(false);
         
         hudPane.getChildren().add(statBox);
