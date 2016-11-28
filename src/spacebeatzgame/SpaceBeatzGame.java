@@ -47,7 +47,7 @@ public class SpaceBeatzGame extends Application {
 	private final int bandRate = 128;    // Band rate for the audio spectrum listener
 	private boolean imageSmooth;
 	private boolean circleVisualization;
-    private Hud hud;
+        private Hud hud = new Hud();
         
 	public SpaceBeatzGame(URL url, Stage gameStage, boolean smooth, boolean circVis) {
 		enemyIndex = 0;
