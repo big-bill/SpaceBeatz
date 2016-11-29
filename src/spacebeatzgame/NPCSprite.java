@@ -10,6 +10,8 @@ public class NPCSprite extends Sprite {
     public NPCSprite() {
         super();
     }
+    
+	// ----------------------------------------------------------------------------------------------------------
 
     public NPCSprite(String imageFile, double setWidth, double setHeight, boolean preserveRatio, boolean smooth) {
         super();

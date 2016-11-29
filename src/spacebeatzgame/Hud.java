@@ -94,11 +94,16 @@ public class Hud {
     /**
      * Current Score
      */
-    int currentScore = 0;
+    private int currentScore = 0;
+    
+    private int currentHitCount = 0;
     
     /**
      * Constructor for Hud
      */
+    
+	// ----------------------------------------------------------------------------------------------------------
+
     public Hud() {
 
         //Set Attributes of the hud
@@ -129,6 +134,8 @@ public class Hud {
         
         hudPane.getChildren().add(statBox);
     }
+    
+	// ----------------------------------------------------------------------------------------------------------
 
     /**
      * Sets position of hud.
@@ -140,6 +147,8 @@ public class Hud {
         hudPane.setLayoutX(xPos);
         hudPane.setLayoutY(yPos);
     }
+ 
+	// ----------------------------------------------------------------------------------------------------------
 
     /**
      * Get the hud
@@ -150,13 +159,15 @@ public class Hud {
         return hudPane;
     }
     
+	// ----------------------------------------------------------------------------------------------------------
+
     /**
      * updates the hud metrics and computes the player's score.
      * 
      * @param collisions number of collisions
      * @param player mediaPlayer
      */
-    public void updateHud(int collisions, MediaPlayer player) {
+    public void updateHud(int collisions, int passes,  MediaPlayer player) {
 
         //Get minutes and seconds from player
         int minutes = (int) (player.getCurrentTime().toMillis() / 1000) / 60;
@@ -166,38 +177,16 @@ public class Hud {
 
         etLabel.setText(ET_STRING + eTime);
         collisionLabel.setText(COLLISION_STRING + collisions);
-
-        //calculate Score
-        //always get 5 points per second
-        if (seconds > 0 && minutes < 1) {
-            currentScore = seconds * 5;
-        }
-
-        //get bonus point based on minutes passed up to 5 minutes
-        switch (minutes) {
-            case 1:
-                currentScore += 1000;
-                break;
-            case 2:
-                currentScore += 2000;
-                break;
-            case 3:
-                currentScore += seconds * 3000;
-                break;
-            case 4:
-                currentScore += seconds * 4000;
-                break;
-            case 5:
-                currentScore += seconds * 5000;
-                break;
-            default:
-                currentScore += 0;
-                break;
+        
+        currentScore += passes;
+        
+        if(collisions > currentHitCount) {
+        	currentHitCount = collisions;
+        	currentScore -= 20;
         }
 
         scoreLabel.setText(SCORE_STRING + currentScore);
 
     }
-
 
 }

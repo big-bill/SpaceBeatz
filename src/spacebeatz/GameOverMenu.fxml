@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.effect.GaussianBlur?>
+<?import javafx.scene.effect.Glow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="561.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="spacebeatz.MenuController">
+   <children>
+      <ImageView fitHeight="589.0" fitWidth="848.0" layoutX="-3.0" layoutY="-15.0" pickOnBounds="true">
+         <image>
+            <Image url="@../../../15757.jpg" />
+         </image>
+      </ImageView>
+      <Button fx:id="browseButton" layoutX="438.0" layoutY="453.0" mnemonicParsing="false" onAction="#browseButtonListener" prefHeight="40.0" prefWidth="105.0" text="QUIT">
+         <font>
+            <Font name="Agency FB Bold" size="14.0" />
+         </font>
+      </Button>
+      <Button fx:id="browseButton1" layoutX="231.0" layoutY="453.0" mnemonicParsing="false" onAction="#browseButtonListener" prefHeight="40.0" prefWidth="114.0" text="PLAY AGAIN">
+         <font>
+            <Font name="Agency FB Bold" size="14.0" />
+         </font>
+      </Button>
+      <Label alignment="CENTER" layoutX="169.0" layoutY="64.0" prefHeight="136.0" prefWidth="462.0" text="GAME OVER" wrapText="true">
+         <font>
+            <Font name="Agency FB Bold" size="110.0" />
+         </font>
+         <textFill>
+            <LinearGradient endX="1.0" endY="1.0">
+               <stops>
+                  <Stop color="#ee0404" />
+                  <Stop color="#edce05" offset="0.15807560137457038" />
+                  <Stop color="#05edc7" offset="0.3076983844847335" />
+                  <Stop color="#056ded" offset="0.46403602322550064" />
+                  <Stop color="#1736d1" offset="0.6110123632341905" />
+                  <Stop color="#4919cf" offset="0.7569222261721372" />
+                  <Stop color="#c61b9e" offset="0.9425287356321839" />
+                  <Stop color="#c61b9e" offset="1.0" />
+               </stops>
+            </LinearGradient>
+         </textFill>
+         <effect>
+            <Glow level="1.0">
+               <input>
+                  <GaussianBlur radius="0.0" />
+               </input>
+            </Glow>
+         </effect>
+      </Label>
+      <Label alignment="CENTER" layoutX="384.0" layoutY="227.0" prefHeight="40.0" prefWidth="272.0" text="Score:" wrapText="true">
+         <font>
+            <Font name="Agency FB Bold" size="48.0" />
+         </font>
+         <textFill>
+            <LinearGradient endX="1.0" endY="1.0">
+               <stops>
+                  <Stop color="#ee0404" />
+                  <Stop color="#edce05" offset="0.15807560137457038" />
+                  <Stop color="#05edc7" offset="0.3076983844847335" />
+                  <Stop color="#056ded" offset="0.46403602322550064" />
+                  <Stop color="#1736d1" offset="0.6110123632341905" />
+                  <Stop color="#4919cf" offset="0.7569222261721372" />
+                  <Stop color="#c61b9e" offset="0.9425287356321839" />
+                  <Stop color="#c61b9e" offset="1.0" />
+               </stops>
+            </LinearGradient>
+         </textFill>
+         <effect>
+            <Glow level="1.0">
+               <input>
+                  <GaussianBlur radius="0.0" />
+               </input>
+            </Glow>
+         </effect>
+      </Label>
+      <Label alignment="CENTER" layoutX="114.0" layoutY="213.0" prefHeight="87.0" prefWidth="241.0" text="Time:" wrapText="true">
+         <font>
+            <Font name="Agency FB Bold" size="48.0" />
+         </font>
+         <textFill>
+            <LinearGradient endX="1.0" endY="1.0">
+               <stops>
+                  <Stop color="#ee0404" />
+                  <Stop color="#edce05" offset="0.15807560137457038" />
+                  <Stop color="#05edc7" offset="0.3076983844847335" />
+                  <Stop color="#056ded" offset="0.46403602322550064" />
+                  <Stop color="#1736d1" offset="0.6110123632341905" />
+                  <Stop color="#4919cf" offset="0.7569222261721372" />
+                  <Stop color="#c61b9e" offset="0.9425287356321839" />
+                  <Stop color="#c61b9e" offset="1.0" />
+               </stops>
+            </LinearGradient>
+         </textFill>
+         <effect>
+            <Glow level="1.0">
+               <input>
+                  <GaussianBlur radius="0.0" />
+               </input>
+            </Glow>
+         </effect>
+      </Label>
+   </children>
+</AnchorPane>

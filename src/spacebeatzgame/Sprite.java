@@ -53,13 +53,13 @@ public class Sprite {
 	 * Stored value of the sprite's velocity on the Y-axis
 	 */
 	protected double storedVelocityY;
-	
+
 	/**
 	 * Status on whether the sprite is invincible or not
 	 */
 	protected boolean vulnerable;
 
-	
+
 	/**
 	 * Status on whether the sprite should be rendered or not
 	 */
@@ -84,6 +84,8 @@ public class Sprite {
 	 */
 	protected ImageView spriteIV = new ImageView();
 
+	// ----------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Constructor no-args sets default position and velocities to zero
 	 */
@@ -99,6 +101,8 @@ public class Sprite {
 		velocityX = 0.0;
 		velocityY = 0.0;
 	}
+
+	// ----------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Sets the image of the sprite along with the requested sizes. Preserves
@@ -132,6 +136,8 @@ public class Sprite {
 
 	}
 
+	// ----------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Move the sprite based on the input provided with the ArrayList passed.
 	 * Also determines whether or not the sprite can move in a direction any further 
@@ -148,7 +154,7 @@ public class Sprite {
 			if(getBoundary().getMinX() <= screen.getBoundary().getMinX())
 				setPosition(screen.getBoundary().getMinX(), positionY);
 			else
-				addVelocity(-700, 0);
+				addVelocity(-500, 0);
 		}
 
 		// If the user is holding down the "D" key, the ship moves right 
@@ -156,7 +162,7 @@ public class Sprite {
 			if(getBoundary().getMaxX() >= screen.getBoundary().getMaxX())
 				setPosition(screen.getBoundary().getMaxX() - 55, positionY); 
 			else
-				addVelocity(700, 0);
+				addVelocity(500, 0);
 		}
 
 		// If the user is holding down the "W" key, the ship moves up
@@ -164,7 +170,7 @@ public class Sprite {
 			if(getBoundary().getMinY() <= screen.getBoundary().getMinY())
 				setPosition(positionX, screen.getBoundary().getMinY()); 
 			else    
-				addVelocity(0, -700);
+				addVelocity(0, -500);
 
 		}
 
@@ -173,10 +179,12 @@ public class Sprite {
 			if(getBoundary().getMaxY() >= screen.getBoundary().getMaxY() - 15)
 				setPosition(positionX, screen.getBoundary().getMaxY() - 55);
 			else
-				addVelocity(0, 700);
+				addVelocity(0, 500);
 		}
 	}
-	
+
+	// ----------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Called when a sprite is hit, flashes the sprite to indicate that it has been hit
 	 * 
@@ -184,34 +192,36 @@ public class Sprite {
 	public int hitSprite(int collisions) {
 		// First check if the user is vulnerable (user can't get hit if they were just hit and now flashing)
 		if(vulnerable) {
-                        collisions++;//increment collison if vulnerable
+			collisions++;//increment collison if vulnerable
 			renderSprite = vulnerable = false;
 			Timeline userHit = new Timeline(new KeyFrame(Duration.seconds(.15), new EventHandler<ActionEvent>() {
-				 @Override
-				    public void handle(ActionEvent event) {
-					 // If the renderSprite is true, we set it to false so it won't be rendered
-						if(renderSprite)
-							renderSprite = false;
-						else
-							renderSprite = true;
-				    }
+				@Override
+				public void handle(ActionEvent event) {
+					// If the renderSprite is true, we set it to false so it won't be rendered
+					if(renderSprite)
+						renderSprite = false;
+					else
+						renderSprite = true;
+				}
 			}));
-			
+
 			// After the flashing animation is over, we set the values back to true so the user will be registered when hit and rendered
 			userHit.setOnFinished(new EventHandler<ActionEvent>() {
-				 @Override
-				 public void handle(ActionEvent event) {
-					 vulnerable = true;
-					 renderSprite = true;
-			}});
+				@Override
+				public void handle(ActionEvent event) {
+					vulnerable = true;
+					renderSprite = true;
+				}});
 			// Sets the amount of times the flashing (10 times, the method sets it to true and false) occurs
 			userHit.setCycleCount(20);
 			userHit.play();
-                        
+
 		}
-                return collisions;//
+		return collisions;
 	}
-	
+
+	// ----------------------------------------------------------------------------------------------------------
+
 	/**
 	 * This method is used if the player sprite should be rendered on screen or not.
 	 * This is used for flashing the sprite to indicate that it was hit.
@@ -219,6 +229,8 @@ public class Sprite {
 	 * @return The status of if the sprite should be rendered on screen or not
 	 */
 	public boolean getRenderSprite() { return renderSprite; }
+
+	// ----------------------------------------------------------------------------------------------------------
 
 	/**
 	 * This places the sprite onto the screen and sets the visibility option to true, which 
@@ -235,6 +247,7 @@ public class Sprite {
 		isActive = true;
 	}
 
+	// ----------------------------------------------------------------------------------------------------------
 
 	/**
 	 * This changes the sprite's state to inactive and halts it.
@@ -243,6 +256,8 @@ public class Sprite {
 		isActive = false;
 		setVelocity(0.0, 0.0);
 	}
+
+	// ----------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Sets the position of the sprite.
@@ -255,6 +270,8 @@ public class Sprite {
 		positionY = yPos;
 	}
 
+	// ----------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Sets the speed and direction of the sprite.
 	 *
@@ -265,6 +282,8 @@ public class Sprite {
 		velocityX = speedX;
 		velocityY = speedY;
 	}
+
+	// ----------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Adds velocity to the sprite.
@@ -277,6 +296,8 @@ public class Sprite {
 		velocityY += speedY;
 	}
 
+	// ----------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Updates the sprite velocity and position.
 	 *
@@ -287,6 +308,8 @@ public class Sprite {
 		positionY += velocityY * time;
 	}
 
+	// ----------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Pauses the sprite's animation and stores the previous velocity values.
 	 */
@@ -295,6 +318,8 @@ public class Sprite {
 		velocityY = 0.0;
 	}
 
+	// ----------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Resume the sprite's animation. Should only be called if the sprite has been paused.
 	 */
@@ -302,6 +327,8 @@ public class Sprite {
 		velocityX = storedVelocityX;
 		velocityY = storedVelocityY;
 	}
+
+	// ----------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Renders the sprite position.
@@ -312,7 +339,9 @@ public class Sprite {
 		graphicsContext.drawImage(image, positionX, positionY);
 	}
 
-        /**
+	// ----------------------------------------------------------------------------------------------------------
+
+	/**
 	 * Gets the boundary of the sprite for collision detection.
 	 *
 	 * @return
@@ -320,6 +349,8 @@ public class Sprite {
 	public Rectangle2D getBoundary() {//Narrow bounds -15 X -15 to increas fairness of intersections
 		return new Rectangle2D(positionX, positionY, width-15, height-15);
 	}
+
+	// ----------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Intersect detects collision of one sprite and another
@@ -331,6 +362,8 @@ public class Sprite {
 	public boolean intersects(Sprite sprite) {
 		return sprite.getBoundary().intersects(this.getBoundary());
 	}
+
+	// ----------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Intersect detects collision of one sprite and another
@@ -348,7 +381,7 @@ public class Sprite {
 		return flag;
 	}
 
-
+	// ----------------------------------------------------------------------------------------------------------
 
 	@Override
 	public String toString() {
@@ -358,26 +391,38 @@ public class Sprite {
 				+ ", height=" + height + ", isActive=" + isActive + ", spriteIV=" + spriteIV + "]";
 	}
 
+	// ----------------------------------------------------------------------------------------------------------
+
 	public double getPositionX() {
 		return positionX;
 	}
+
+	// ----------------------------------------------------------------------------------------------------------
 
 	public double getPositionY() {
 		return positionY;
 	}
 
+	// ----------------------------------------------------------------------------------------------------------
+
 	public double getVelocityX() {
 		return velocityX;
 	}
+
+	// ----------------------------------------------------------------------------------------------------------
 
 	public double getVelocityY() {
 		return velocityY;
 	}
 
+	// ----------------------------------------------------------------------------------------------------------
+
 	public ImageView getSpriteIV() {
 		return spriteIV;
 	}
-	
+
+	// ----------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Checks whether or not the sprite is currently active or not.
 	 * 
@@ -386,7 +431,5 @@ public class Sprite {
 	public boolean isActive() {
 		return isActive;
 	}
-
-
 
 }

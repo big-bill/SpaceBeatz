@@ -21,20 +21,9 @@ public class Main extends Application {
 			e.printStackTrace();
 		}
 	}
-////////////////////////////////////////////////
-//VM Args Trouble should hardware acceleration//
-////////////////////////////////////////////////
-//Check for hardware acceleration              /
-//                                             /
-// -Dprism.verbose=true                        /
-//                                             /
-//"sw" or "j2d" for software accelerated       /
-//"d3d" or "es2" for hardware accelerated      /
-////////////////////////////////////////////////
-//Attempt to force hardware acceleration       /
-//                                             /
-// -Dprism.forceGPU=true                       /
-////////////////////////////////////////////////
+
+	// ----------------------------------------------------------------------------------------------------------
+
 	public static void main(String[] args) {
 		launch(args);
 	}

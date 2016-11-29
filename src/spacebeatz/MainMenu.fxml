@@ -17,16 +17,11 @@
 <?import javafx.scene.paint.Stop?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="561.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="spacebeatz.MenuController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="561.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="spacebeatz.MenuController">
    <children>
-      <ImageView fitHeight="620.0" fitWidth="845.0" pickOnBounds="true">
+      <ImageView fitHeight="607.0" fitWidth="853.0" layoutX="-8.0" layoutY="-18.0" pickOnBounds="true">
          <image>
-            <Image url="@res/bluebackground.jpg" />
-         </image>
-      </ImageView>
-      <ImageView fitHeight="447.0" fitWidth="854.0" layoutX="-8.0" layoutY="64.0" pickOnBounds="true">
-         <image>
-            <Image url="@res/bigBang.gif" />
+            <Image url="@res/spaceBeatzBG.jpg" />
          </image>
       </ImageView>
       <Button fx:id="browseButton" layoutX="473.0" layoutY="453.0" mnemonicParsing="false" onAction="#browseButtonListener" prefHeight="40.0" prefWidth="70.0" text="Browse">

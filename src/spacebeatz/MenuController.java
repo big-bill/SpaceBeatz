@@ -5,10 +5,8 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 
-import com.sun.glass.events.MouseEvent;
-
 import javafx.animation.Animation;
-import javafx.event.Event;
+
 import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
@@ -27,9 +25,6 @@ import spacebeatzgame.SpaceBeatzGame;
 
 
 public class MenuController {
-	
-	
-	SpaceBeatzGame game;
 	
 	/**
 	 * 
@@ -117,7 +112,9 @@ public class MenuController {
 	 * so the controller will have access to its stage
 	 */
 	private Stage gameStage;
-
+	
+	SpaceBeatzGame game;
+	
 
 	@FXML
 	public void initialize() {
