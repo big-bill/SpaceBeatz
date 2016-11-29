@@ -17,7 +17,7 @@
 <?import javafx.scene.paint.Stop?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="561.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="spacebeatz.MenuController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="561.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="spacebeatz.MenuController">
    <children>
       <ImageView fitHeight="607.0" fitWidth="853.0" layoutX="-8.0" layoutY="-18.0" pickOnBounds="true">
          <image>
@@ -120,7 +120,7 @@
             </Button>
          </children>
       </Group>
-      <CheckBox fx:id="imageSmothingCheckBox" layoutX="631.0" layoutY="11.0" mnemonicParsing="false" selected="true" text="Image Smoothing" textFill="WHITE">
+      <CheckBox fx:id="imageSmothingCheckBox" layoutX="609.0" layoutY="11.0" mnemonicParsing="false" selected="true" text="Image Smoothing" textFill="WHITE">
          <font>
             <Font name="Agency FB Bold" size="14.0" />
          </font>
@@ -128,7 +128,7 @@
             <Tooltip text="Disabling May Improve Performance" />
          </tooltip>
       </CheckBox>
-      <CheckBox fx:id="circleVisualCheckBox" layoutX="631.0" layoutY="40.0" mnemonicParsing="false" text="Additional Music Visualization" textFill="WHITE">
+      <CheckBox fx:id="circleVisualCheckBox" layoutX="609.0" layoutY="40.0" mnemonicParsing="false" text="Use Alternate Music Visualization" textFill="WHITE">
          <font>
             <Font name="Agency FB Bold" size="14.0" />
          </font>

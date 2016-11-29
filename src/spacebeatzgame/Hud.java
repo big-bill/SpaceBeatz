@@ -182,7 +182,7 @@ public class Hud {
 
 		if(collisions > currentHitCount) {
 			currentHitCount = collisions;
-			currentScore -= 25;
+			currentScore -= 50;
 		}
 
 		scoreLabel.setText(SCORE_STRING + currentScore);
