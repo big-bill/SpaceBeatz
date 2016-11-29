@@ -89,13 +89,21 @@ public class MenuController {
 	/**
 	 * 
 	 */
-	@FXML
-	private CheckBox imageSmothingCheckBox;
-	/**
-	 * 
-	 */
-	@FXML
-	private CheckBox circleVisualCheckBox;
+    @FXML
+    private CheckBox imageSmothingCheckBox;
+    /**
+     *
+     */
+    @FXML
+    private CheckBox circleVisualCheckBox;
+    @FXML
+    private Label finalScore;
+
+    @FXML
+    private Label finalTime;
+
+    @FXML
+    private Label finalCollisons;
 	//Non-FXML Variables
 	//-----------------------------------------------------------------------------------------------------------
 	private String songPath;
@@ -152,6 +160,9 @@ public class MenuController {
 	 * 
 	 */
 	public void browseButtonListener() {
+            finalTime.setVisible(false);
+            finalScore.setVisible(false);
+            finalCollisons.setVisible(false);
 		// Open up a FileChooser and let the user choose a track to play
 		FileChooser fileChooser = new FileChooser();
 		// Filter only mp3 files
@@ -254,9 +265,12 @@ public class MenuController {
 	//-----------------------------------------------------------------------------------------------------------
 
 	public void displayScore(String time, int score, int hits) { 
-		System.out.println(time);
-		System.out.println(score);
-		System.out.println(hits);
+            finalTime.setVisible(true);
+            finalTime.setText(time);
+            finalScore.setVisible(true);
+            finalScore.setText("Score: " + score);
+            finalCollisons.setVisible(true);
+            finalCollisons.setText("Collisions: " + hits);
 		newGameButton.fire();
 	}
 	
