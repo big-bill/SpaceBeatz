@@ -10,20 +10,24 @@ import java.util.Random;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.event.EventHandler;
+import javafx.scene.CacheHint;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 public class SpaceBeatzGame extends Application {
@@ -109,17 +113,21 @@ public class SpaceBeatzGame extends Application {
 
 		//create pane for visualizations
 		visualPane = new Pane();
-
+                Pane gifPane = new Pane();
 		Image background;
 		ImagePattern bgPattern = null;
 		try {
-			File f = new File("src/spacebeatzgame/res/Space.jpg");
+			File f = new File("src/spacebeatzgame/res/starfield9.gif");///changed to gif
 			URI uri = f.toURI();
 			URL url = uri.toURL();
 
-			background = new Image(url.toString(), screen.getScreenWidth(), screen.getScreenHeight(), true, imageSmooth);
-			bgPattern = new ImagePattern(background);
-
+			//background = new Image(url.toString(), screen.getScreenWidth(), screen.getScreenHeight(), true, imageSmooth);////////////////////////////////////Testing gif
+                        background = new Image(url.toString(),Screen.getPrimary().getBounds().getMaxX(),Screen.getPrimary().getBounds().getMaxX(), true, imageSmooth);///NEW
+			//bgPattern = new ImagePattern(background);/////////////////////////////////////////////////////////////////////////////////////////////////////////Testing GIF
+                        ImageView bgImage = new ImageView(background);/////////////////NEW
+//                        bgImage.setCache(true);///////////////////////////////////////NEW
+//                        bgImage.setCacheHint(CacheHint.SPEED);////////////////////////NEW doesn't seem to help regardless of param
+                        visualPane.getChildren().add(bgImage);/////////////////////////NEW
 		} catch (MalformedURLException | NullPointerException | IllegalArgumentException e1) {
 			e1.printStackTrace();
 			e1.getMessage();
@@ -155,7 +163,7 @@ public class SpaceBeatzGame extends Application {
 			}
 		});
 
-		scene.setFill(bgPattern);
+		//scene.setFill(bgPattern);/////////////////////////////////////////////////////////////testing gif
 		//Add Scene to gameStage
 		gameStage.setScene(scene);
 		//Format the Stage
