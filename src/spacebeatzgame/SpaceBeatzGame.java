@@ -119,9 +119,11 @@ public class SpaceBeatzGame extends Application {
 			URI uri = f.toURI();
 			URL url = uri.toURL();
 
-                        background = new Image(url.toString(),Screen.getPrimary().getBounds().getMaxX(),Screen.getPrimary().getBounds().getMaxX(), true, imageSmooth);///NEW
-                        ImageView bgImage = new ImageView(background);
-                        visualPane.getChildren().add(bgImage);
+			background = new Image(url.toString(),Screen.getPrimary().getBounds().getMaxX(),Screen.getPrimary().getBounds().getMaxX(), true, imageSmooth);///NEW
+			ImageView bgImage = new ImageView(background);
+			bgImage.setCache(true);
+			bgImage.setCacheHint(CacheHint.SPEED);
+			visualPane.getChildren().add(bgImage);
 		} catch (MalformedURLException | NullPointerException | IllegalArgumentException e1) {
 			e1.printStackTrace();
 			e1.getMessage();
@@ -157,7 +159,7 @@ public class SpaceBeatzGame extends Application {
 			}
 		});
 
-		
+
 		//Add Scene to gameStage
 		gameStage.setScene(scene);
 		//Format the Stage
