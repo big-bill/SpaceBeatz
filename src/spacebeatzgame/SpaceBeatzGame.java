@@ -29,6 +29,7 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import spacebeatz.MenuController;
 
 public class SpaceBeatzGame extends Application {
 
@@ -60,9 +61,13 @@ public class SpaceBeatzGame extends Application {
 	private int collisionCounter = 0;	 // Stores the total amount of player collisions
 	private Circle[] circle = new Circle[(bandRate / 5)];
 
+
+	private MenuController menu;
+
 	// ----------------------------------------------------------------------------------------------------------
 
-	public SpaceBeatzGame(URL url, Stage gameStage, boolean smooth, boolean circVis) {
+	public SpaceBeatzGame(MenuController menu, URL url, Stage gameStage, boolean smooth, boolean circVis) {
+		this.menu = menu;
 		enemyIndex = 0;
 		gamePaused = false;
 		player = null;
@@ -78,7 +83,7 @@ public class SpaceBeatzGame extends Application {
 		enemy = new ArrayList<NPCSprite>();
 		for(int i = 0; i < enemyTotal; ++i) {
 			if (enemy.size() % 20 == 0) {
-				enemy.add(new NPCSprite("src/spacebeatzgame/res/enemy.png", 80, 80, true, imageSmooth));
+				enemy.add(new NPCSprite("src/spacebeatzgame/res/enemy2.png", 80, 80, true, imageSmooth));
 			} else {
 				enemy.add(new NPCSprite("src/spacebeatzgame/res/asteroid.png", 55, 55, true, imageSmooth));
 			}
@@ -115,7 +120,7 @@ public class SpaceBeatzGame extends Application {
 		visualPane = new Pane();
 		Image background;
 		try {
-			File f = new File("src/spacebeatzgame/res/starfield.gif");///changed to gif
+			File f = new File("src/spacebeatzgame/res/starfield.gif"); //changed to gif
 			URI uri = f.toURI();
 			URL url = uri.toURL();
 
@@ -246,8 +251,7 @@ public class SpaceBeatzGame extends Application {
 	// ----------------------------------------------------------------------------------------------------------
 
 	// Main game loop that contains the game's logic
-	public void gameEngine() {
-
+	public void gameEngine() {	
 		// User sprite
 		Sprite ship = new Sprite();
 		ship.setAllImageAttributes("src/spacebeatzgame/res/ship.png", 55, 55, true, imageSmooth);
@@ -265,8 +269,10 @@ public class SpaceBeatzGame extends Application {
 				// Check if time is null, if it is not, the end of the media has been reached
 				if(totalTime != 0.0) {
 					// We check if the total time elapsed is greater than the total duration time plus 7 seconds for the enemies to clear the screen
-					if(totalTimeElapsed * 1000 > totalTime + 7000)
-						gameStage.hide();
+					if(totalTimeElapsed * 1000 > totalTime + 7000) {
+						menu.displayScore(hud.getTime(), hud.getCurrentScore(), hud.getCurrentHitCount());
+						this.stop();
+					}
 				}
 
 				// If the game is resumed and the gamePaused boolean value is true, we resume the game

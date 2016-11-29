@@ -119,7 +119,7 @@ public class MenuController {
 	@FXML
 	public void initialize() {
 		try {
-			/*	
+			/**	
 			 *  Music Source:
 			 * 		Voltaic Kevin MacLeod (incompetech.com)
 			 * 		Licensed under Creative Commons: By Attribution 3.0 License
@@ -144,7 +144,7 @@ public class MenuController {
 		}
 		catch (Exception e) {
 			e.printStackTrace();
-		}   	
+		}   
 	}
 
 	//-----------------------------------------------------------------------------------------------------------
@@ -187,7 +187,7 @@ public class MenuController {
 
 			gameStage = new Stage();
 			// TODO: There may be a better way to handle this
-			game = new SpaceBeatzGame(url,gameStage,imageSmothingCheckBox.isSelected(),circleVisualCheckBox.isSelected());
+			game = new SpaceBeatzGame(this, url,gameStage,imageSmothingCheckBox.isSelected(),circleVisualCheckBox.isSelected());
 			browseButton.setDisable(true);
 			browseButton.setVisible(false);
 			browseButton.setFocusTraversable(false);
@@ -250,6 +250,16 @@ public class MenuController {
 		}
 
 	}
+	
+	//-----------------------------------------------------------------------------------------------------------
+
+	public void displayScore(String time, int score, int hits) { 
+		System.out.println(time);
+		System.out.println(score);
+		System.out.println(hits);
+		newGameButton.fire();
+	}
+	
 	//-----------------------------------------------------------------------------------------------------------
 	/**
 	 * 

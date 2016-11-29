@@ -138,6 +138,30 @@ public class Hud {
 	// ----------------------------------------------------------------------------------------------------------
 
 	/**
+	 * @return the etLabel
+	 */
+	public String getTime() {
+		return etLabel.getText();
+	}
+
+
+	/**
+	 * @return the currentScore
+	 */
+	public int getCurrentScore() {
+		return currentScore;
+	}
+	
+
+	/**
+	 * @return the currentHitCount
+	 */
+	public int getCurrentHitCount() {
+		return currentHitCount;
+	}
+
+
+	/**
 	 * Sets position of hud.
 	 *
 	 * @param xPos x coordinate position
