@@ -57,7 +57,7 @@ public class SpaceBeatzGame extends Application {
 	private Circle[] circle = new Circle[(bandRate / 5)];
 
 	// ----------------------------------------------------------------------------------------------------------
-	
+
 	public SpaceBeatzGame(URL url, Stage gameStage, boolean smooth, boolean circVis) {
 		enemyIndex = 0;
 		gamePaused = false;
@@ -83,10 +83,11 @@ public class SpaceBeatzGame extends Application {
 	}
 
 	// ----------------------------------------------------------------------------------------------------------
-	
+
 	@Override
 	public void start(Stage gameStage) {
-		
+
+		// Build the media player and logic for it
 		buildMediaPlayer();
 
 		// Build the game's stage
@@ -135,7 +136,7 @@ public class SpaceBeatzGame extends Application {
 
 		//Create the Scene with rootGroup
 		Scene scene = new Scene(rootGroup, 600, 600);
-		
+
 		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
 			@Override
 			public void handle(KeyEvent e) {
@@ -165,7 +166,7 @@ public class SpaceBeatzGame extends Application {
 
 		gameStage.show();
 	}
-	
+
 	// ----------------------------------------------------------------------------------------------------------
 
 	// Builds the media player and defines the logic behind it
@@ -184,56 +185,56 @@ public class SpaceBeatzGame extends Application {
 		});
 
 		// This Listener is responsible for spawning enemies based on frequency levels
-				player.setAudioSpectrumListener((double timestamp, double duration, float[] magnitudes, float[] phases) -> {
-					//If additional visualization selected 
-					if (circleVisualization) {
-						visualPane.getChildren().clear();
-						Random rand = new Random(System.currentTimeMillis());
-						for (int count = 0; count < (phases.length / 20) - 1; count++) {
-							int red = rand.nextInt(255);
-							int green = rand.nextInt(255);
-							int blue = rand.nextInt(255);
-							circle[count] = new Circle(Math.random() * 500);
-							circle[count].setCenterX(Math.random() * gameStage.getWidth() - 100);
-							circle[count].setCenterY(Math.random() * gameStage.getHeight() - 100);
-							circle[count].setFill(Color.rgb(red, green, blue, .70));
-							visualPane.getChildren().add(circle[count]);
-							//Caching circles here does not seem to help likely due to the way they are altered in size and position
-						}
-					}
-					int newLevels = 0;
-					// Step through the magnitudes array and get their level of intensity
-					for (int i = 0; i < magnitudes.length; ++i) {
-						if (magnitudes[i] != -60) {
-							newLevels++;
-						} else {
-							break;
-						}
-					}
+		player.setAudioSpectrumListener((double timestamp, double duration, float[] magnitudes, float[] phases) -> {
+			//If additional visualization selected 
+			if (circleVisualization) {
+				visualPane.getChildren().clear();
+				Random rand = new Random(System.currentTimeMillis());
+				for (int count = 0; count < (phases.length / 20) - 1; count++) {
+					int red = rand.nextInt(255);
+					int green = rand.nextInt(255);
+					int blue = rand.nextInt(255);
+					circle[count] = new Circle(Math.random() * 500);
+					circle[count].setCenterX(Math.random() * gameStage.getWidth() - 100);
+					circle[count].setCenterY(Math.random() * gameStage.getHeight() - 100);
+					circle[count].setFill(Color.rgb(red, green, blue, .70));
+					visualPane.getChildren().add(circle[count]);
+					//Caching circles here does not seem to help likely due to the way they are altered in size and position
+				}
+			}
+			int newLevels = 0;
+			// Step through the magnitudes array and get their level of intensity
+			for (int i = 0; i < magnitudes.length; ++i) {
+				if (magnitudes[i] != -60) {
+					newLevels++;
+				} else {
+					break;
+				}
+			}
 
-					// Add an enemy if the magnitudes level is a bit low
-					if(newLevels < 30 && newLevels > 5) {
-						enemy.get(enemyIndex).activate(screen);
-						// Increase enemy index
-						enemyIndex++;
-						// If the index is greater than the total stored amount of enemies we reset back to 0
-						if(enemyIndex >= enemyTotal) {
-							enemyIndex = 0;
-						}
-					}
+			// Add an enemy if the magnitudes level is a bit low
+			if(newLevels < 30 && newLevels > 5) {
+				enemy.get(enemyIndex).activate(screen);
+				// Increase enemy index
+				enemyIndex++;
+				// If the index is greater than the total stored amount of enemies we reset back to 0
+				if(enemyIndex >= enemyTotal) {
+					enemyIndex = 0;
+				}
+			}
 
-					// This loop will repeat based on the magnitude levels
-					for (int x = 0; x < (newLevels/30); ++x) {
-						enemy.get(enemyIndex).activate(screen);
-						// Increase enemy index
-						enemyIndex++;
-						// If the index is greater than the total stored amount of enemies we reset back to 0
-						if(enemyIndex >= enemyTotal) {
-							enemyIndex = 0;
-						}
-					}
-				});
-		
+			// This loop will repeat based on the magnitude levels
+			for (int x = 0; x < (newLevels/30); ++x) {
+				enemy.get(enemyIndex).activate(screen);
+				// Increase enemy index
+				enemyIndex++;
+				// If the index is greater than the total stored amount of enemies we reset back to 0
+				if(enemyIndex >= enemyTotal) {
+					enemyIndex = 0;
+				}
+			}
+		});
+
 		// Play the song
 		player.play();
 	}
@@ -242,12 +243,12 @@ public class SpaceBeatzGame extends Application {
 
 	// Main game loop that contains the game's logic
 	public void gameEngine() {
-		
+
 		// User sprite
 		Sprite ship = new Sprite();
 		ship.setAllImageAttributes("src/spacebeatzgame/res/ship.png", 55, 55, true, imageSmooth);
 		ship.setPosition(300, 300);
-		
+
 		new AnimationTimer() {
 
 			public void handle(long currentNanoTime) {
@@ -312,7 +313,7 @@ public class SpaceBeatzGame extends Application {
 
 		}.start();
 	}
-	
+
 	// ----------------------------------------------------------------------------------------------------------
 
 	// Pause the game
