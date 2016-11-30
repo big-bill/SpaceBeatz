@@ -11,10 +11,8 @@ import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.CacheHint;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 
 
@@ -75,31 +73,29 @@ public class Sprite {
 	 */
 	protected double height;
 
-	/**
-	 * Sprite state (if the sprite is active on the screen or not)
-	 */
-	protected boolean isActive;
-	/**
-	 * Sprite ImageView
-	 */
-	protected ImageView spriteIV = new ImageView();
-
 	// ----------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Constructor no-args sets default position and velocities to zero
+	 * Constructor no-args sets default position and velocities to zero.
+	 * Sets the sprite's render status to false
 	 */
 	public Sprite() {
 		image = null;
-		isActive = false;
 		vulnerable = true;
-		renderSprite = true;
+		renderSprite = false;
 		width = 0.0;
 		height = 0.0;
 		positionX = 0.0;
 		positionY = 0.0;
 		velocityX = 0.0;
 		velocityY = 0.0;
+	}
+
+	// ----------------------------------------------------------------------------------------------------------
+
+	public Sprite(String imageFile, double setWidth, double setHeight, boolean preserveRatio, boolean smooth) {
+		this();
+		setAllImageAttributes(imageFile, setWidth, setHeight, preserveRatio, smooth);
 	}
 
 	// ----------------------------------------------------------------------------------------------------------
@@ -112,12 +108,8 @@ public class Sprite {
 	 * @param setWidth The requested width of the sprite.
 	 * @param setHeight The requested height of the sprite.
 	 * @param preserveRatio Boolean to preserve ratio *Note please keep true
-	 * @param smooth Boolean to smooth Image must be recreated to change see
-	 * note below
-	 * 
+	 * @param smooth Boolean to smooth Image 
 	 */
-	// Note !!Image smoothing may be turned off to increase performance 
-	// end booleans preserve ration ,smooth, NOT USED load in background  unless we need to multithread
 	public void setAllImageAttributes(String imageFile, double setWidth, double setHeight, boolean preserveRatio, boolean smooth) { 
 		try {
 			File file = new File(imageFile);
@@ -126,9 +118,6 @@ public class Sprite {
 			this.image = new Image(url.toString(), setWidth, setHeight, preserveRatio, smooth);
 			width = image.getRequestedWidth();
 			height = image.getRequestedHeight();
-			spriteIV = new ImageView(image);
-			spriteIV.setCache(true);
-			spriteIV.setCacheHint(CacheHint.SPEED);
 		} 
 		catch(IllegalArgumentException | MalformedURLException e) {
 			e.printStackTrace();
@@ -142,7 +131,6 @@ public class Sprite {
 	 * Move the sprite based on the input provided with the ArrayList passed.
 	 * Also determines whether or not the sprite can move in a direction any further 
 	 * based on the boundaries passed by ScreenAttributes object.
-	 * 
 	 * 
 	 * @param input User input, determines direction the sprite will move
 	 * @param screen Provides boundaries for the sprite object
@@ -188,11 +176,13 @@ public class Sprite {
 	/**
 	 * Called when a sprite is hit, flashes the sprite to indicate that it has been hit
 	 * 
+	 * @param collisions The total amount of collisions is passed
+	 * @return returns the total amount of collisions with the sprite
 	 */
 	public int hitSprite(int collisions) {
 		// First check if the user is vulnerable (user can't get hit if they were just hit and now flashing)
 		if(vulnerable) {
-			collisions++;//increment collison if vulnerable
+			collisions++; // If vulnerable, we increment the total amount of collisions
 			renderSprite = vulnerable = false;
 			Timeline userHit = new Timeline(new KeyFrame(Duration.seconds(.15), new EventHandler<ActionEvent>() {
 				@Override
@@ -215,20 +205,10 @@ public class Sprite {
 			// Sets the amount of times the flashing (10 times, the method sets it to true and false) occurs
 			userHit.setCycleCount(20);
 			userHit.play();
-
 		}
+		// Return the new total of collision counter back to the game (will be counted on the hud)
 		return collisions;
 	}
-
-	// ----------------------------------------------------------------------------------------------------------
-
-	/**
-	 * This method is used if the player sprite should be rendered on screen or not.
-	 * This is used for flashing the sprite to indicate that it was hit.
-	 * 
-	 * @return The status of if the sprite should be rendered on screen or not
-	 */
-	public boolean getRenderSprite() { return renderSprite; }
 
 	// ----------------------------------------------------------------------------------------------------------
 
@@ -236,19 +216,20 @@ public class Sprite {
 	 * This changes the sprite's state to inactive and halts it.
 	 */
 	public void stopMovement() {
-		isActive = false;
+		renderSprite = false;
 		setVelocity(0.0, 0.0);
 	}
 
 	// ----------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Sets the position of the sprite.
+	 * Sets the position of the sprite and sets the status for rendering the sprite to true.
 	 *
 	 * @param xPos
 	 * @param yPos
 	 */
 	public void setPosition(double xPos, double yPos) {
+		renderSprite = true;
 		positionX = xPos;
 		positionY = yPos;
 	}
@@ -325,11 +306,30 @@ public class Sprite {
 	// ----------------------------------------------------------------------------------------------------------
 
 	/**
+	 * This method is used if the sprite should be rendered on screen or not.
+	 * 
+	 * @return The status of if the sprite should be rendered on screen or not
+	 */
+	public boolean getRenderSprite() { return renderSprite; }
+
+	// ----------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Sets the status on whether or not the sprite should be rendered on the screen or not.
+	 * s
+	 * @param renderStatus Determines if the sprite will be rendered
+	 */
+	public void setRenderSprite(boolean renderStatus) { renderSprite = renderStatus;  }
+
+	// ----------------------------------------------------------------------------------------------------------
+
+	/**
 	 * Gets the boundary of the sprite for collision detection.
 	 *
 	 * @return
 	 */
-	public Rectangle2D getBoundary() {//Narrow bounds -15 X -15 to increas fairness of intersections
+	public Rectangle2D getBoundary() {
+		//Narrow bounds -15 X -15 to increase fairness of intersections
 		return new Rectangle2D(positionX, positionY, width-15, height-15);
 	}
 
@@ -342,9 +342,7 @@ public class Sprite {
 	 * @return Boolean is true if a sprite and another intersect false
 	 * otherwise.
 	 */
-	public boolean intersects(Sprite sprite) {
-		return sprite.getBoundary().intersects(this.getBoundary());
-	}
+	public boolean intersects(Sprite sprite) { return sprite.getBoundary().intersects(this.getBoundary()); }
 
 	// ----------------------------------------------------------------------------------------------------------
 
@@ -371,48 +369,23 @@ public class Sprite {
 		return "Sprite [image=" + image + ", positionX=" + positionX + ", positionY=" + positionY + ", velocityX="
 				+ velocityX + ", storedVelocityX=" + storedVelocityX + ", velocityY=" + velocityY + ", storedVelocityY="
 				+ storedVelocityY + ", vulnerable=" + vulnerable + ", renderSprite=" + renderSprite + ", width=" + width
-				+ ", height=" + height + ", isActive=" + isActive + ", spriteIV=" + spriteIV + "]";
+				+ ", height=" + height + "]";
 	}
 
 	// ----------------------------------------------------------------------------------------------------------
 
-	public double getPositionX() {
-		return positionX;
-	}
+	public double getPositionX() { return positionX; }
 
 	// ----------------------------------------------------------------------------------------------------------
 
-	public double getPositionY() {
-		return positionY;
-	}
+	public double getPositionY() { return positionY; }
 
 	// ----------------------------------------------------------------------------------------------------------
 
-	public double getVelocityX() {
-		return velocityX;
-	}
+	public double getVelocityX() { return velocityX; }
 
 	// ----------------------------------------------------------------------------------------------------------
 
-	public double getVelocityY() {
-		return velocityY;
-	}
-
-	// ----------------------------------------------------------------------------------------------------------
-
-	public ImageView getSpriteIV() {
-		return spriteIV;
-	}
-
-	// ----------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Checks whether or not the sprite is currently active or not.
-	 * 
-	 * @return Returns the state of the sprite (if it is on screen or not)
-	 */
-	public boolean isActive() {
-		return isActive;
-	}
+	public double getVelocityY() { return velocityY; }
 
 }

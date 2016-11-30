@@ -1,12 +1,15 @@
+/**
+ * Extends the sprite class
+ * Currently not much usage, could be extended for future uses.
+ * 
+ * @author Billy Matthews
+ * @author Robert Munshower
+ * @author Andrew Smith
+ */
 package spacebeatzgame;
 
 public class NPCSprite extends Sprite {
-	/**
-	 * About NPCSprite
-	 * extends the sprite class minimal current usage as of 11/28/16
-	 * may by used in future releases to extend functionality of non-playable
-	 * sprites.
-	 */
+	
 	public NPCSprite() {
 		super();
 	}
@@ -37,7 +40,6 @@ public class NPCSprite extends Sprite {
 		addVelocity((Math.random() * (-100) - 400), 0);
 		storedVelocityX = velocityX;
 		storedVelocityY = velocityY;
-		isActive = true;
 	}
 
 }

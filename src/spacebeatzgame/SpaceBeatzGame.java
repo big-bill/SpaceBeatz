@@ -1,3 +1,10 @@
+/**
+ * This class contains most of the game's logic and data.
+ * 
+ * @author Billy Matthews
+ * @author Robert Munshower
+ * @author Andrew Smith
+ */
 package spacebeatzgame;
 
 import java.io.File;
@@ -24,6 +31,7 @@ import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaPlayer.Status;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
@@ -49,7 +57,7 @@ public class SpaceBeatzGame extends Application {
 
 	private ArrayList<NPCSprite> enemy;  // ArrayList used to hold enemy sprites
 	private int enemyIndex;				 // Index that steps through the enemy ArrayList properly
-	private final int enemyTotal = 130;  // Total amount of enemies in the ArrayList
+	private final int enemyTotal = 100;  // Total amount of enemies in the ArrayList
 
 	private Media audioFile;
 	private MediaPlayer player;
@@ -144,7 +152,7 @@ public class SpaceBeatzGame extends Application {
 		rootGroup.getChildren().addAll(visualPane, canvas, hud.getHud());
 
 		//Create the Scene with rootGroup
-		Scene scene = new Scene(rootGroup, 600, 600);
+		Scene scene = new Scene(rootGroup, 800, 600);
 
 		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
 			@Override
@@ -255,22 +263,31 @@ public class SpaceBeatzGame extends Application {
 		// User sprite
 		Sprite ship = new Sprite();
 		ship.setAllImageAttributes("src/spacebeatzgame/res/ship.png", 55, 55, true, imageSmooth);
+		// Place the sprite on the screen, also changing the render status to true
 		ship.setPosition(300, 300);
 
 		new AnimationTimer() {
 
 			public void handle(long currentNanoTime) {
-
-				// calculate time since last update.
+				// Reset the ships velocity every frame so the ship doesn't constantly gain velocity
+				ship.setVelocity(0, 0);
+				
+				// Check if the music player has spontaneously stopped, and if so exit the game
+				if(player.getStatus() == Status.DISPOSED) {
+					menu.displayScore(hud.getTime(), hud.getCurrentScore(), hud.getCurrentHitCount(), true);
+					this.stop();
+				}
+				
+				// Calculate time since last update
 				double elapsedTime = (currentNanoTime - lastNanoTimeHero.doubleValue()) / 1000000000.0;
 				totalTimeElapsed += elapsedTime;
 				lastNanoTimeHero = currentNanoTime;
 
-				// Check if time is null, if it is not, the end of the media has been reached
-				if(totalTime != 0.0) {
+				// Check if time is null, and if it's not, then the end of the media has been reached
+				if(totalTime != 0.0 || player.getStatus() == Status.STOPPED) {
 					// We check if the total time elapsed is greater than the total duration time plus 7 seconds for the enemies to clear the screen
 					if(totalTimeElapsed * 1000 > totalTime + 7000) {
-						menu.displayScore(hud.getTime(), hud.getCurrentScore(), hud.getCurrentHitCount());
+						menu.displayScore(hud.getTime(), hud.getCurrentScore(), hud.getCurrentHitCount(), true);
 						this.stop();
 					}
 				}
@@ -279,8 +296,6 @@ public class SpaceBeatzGame extends Application {
 				// This will only occur if the "Resume" button is pressed from the main menu
 				if (gameStage.isFocused() && gamePaused) 
 					input.add(KeyCode.ESCAPE.toString());
-
-				ship.setVelocity(0, 0);
 
 				// If the input contains the ESC key being pressed we pause the game
 				if (input.contains(KeyCode.ESCAPE.toString())) 
@@ -304,7 +319,7 @@ public class SpaceBeatzGame extends Application {
 
 				// Step through the enemy ArrayList and render each sprite on the canvas
 				for (int i = 0; i < enemy.size(); i++) {
-					if(enemy.get(i).isActive()) {
+					if(enemy.get(i).getRenderSprite()) {
 						enemy.get(i).render(gc);
 						enemy.get(i).update(elapsedTime);
 						if (enemy.get(i).intersects(ship)) {
@@ -333,18 +348,19 @@ public class SpaceBeatzGame extends Application {
 		if (!gamePaused) {
 			// Step through the enemy sprites ArrayList and pause their animation
 			for (int i = 0; i < enemy.size(); ++i) {
-				if(enemy.get(i).isActive()) {
+				if(enemy.get(i).getRenderSprite()) {
 					enemy.get(i).pauseSprite();
 				}
 			}
 			player.pause();
 			gamePaused = true;
 			gameStage.hide();
+			menu.displayScore(hud.getTime(), hud.getCurrentScore(), hud.getCurrentHitCount(), false);
 		} // If the first if statement was not entered, that means we are resuming since the Resume button has been pressed
 		else {
 			// Step through the enemy sprites ArrayList and resume their animation
 			for (int i = 0; i < enemy.size(); ++i) {
-				if(enemy.get(i).isActive()) {
+				if(enemy.get(i).getRenderSprite()) {
 					enemy.get(i).resumeSprite();
 				}
 			}
@@ -359,7 +375,6 @@ public class SpaceBeatzGame extends Application {
 
 	// Called by the menu to free up game resources and dispose of data
 	public void stopGame() {
-		enemy.clear();
 		player.stop();
 		player.dispose();	
 	}
