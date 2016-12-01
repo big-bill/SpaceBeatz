@@ -119,99 +119,6 @@ public class SpaceBeatzGame extends Application {
 
 	// ----------------------------------------------------------------------------------------------------------
 
-	// Build the game's stage
-	public void buildStage() {
-		// Get screen attributes
-		screen = new ScreenAttributes();
-
-		Group rootGroup = new Group();
-
-		// Create pane for visualizations
-		visualPane = new Pane();
-
-		ImagePattern bgPattern = null;
-		switch (bgChoice) {
-		// Case 1 is the choice for the starfield gif
-		case 1: 
-			try {
-				File f = new File("src/spacebeatzgame/res/starfield.gif");
-				URI uri = f.toURI();
-				URL url = uri.toURL();
-
-				Image background = new Image(url.toString(), Screen.getPrimary().getBounds().getMaxX(), Screen.getPrimary().getBounds().getMaxX(), true, imageSmooth);
-				ImageView bgImage = new ImageView(background);
-				bgImage.setCache(true);
-				bgImage.setCacheHint(CacheHint.SPEED);
-				visualPane.getChildren().add(bgImage);
-			} catch (MalformedURLException | NullPointerException | IllegalArgumentException e1) {
-				System.err.println("Error loading background image. Please check your files.");
-				e1.getMessage();
-				System.exit(1);
-			}
-			break;
-			
-		// Case 2 is the choice for a static image of space
-		case 3:
-			try {
-				File f = new File("src/spacebeatzgame/res/Space.jpg");
-				URI uri = f.toURI();
-				URL url = uri.toURL();
-
-				Image background = new Image(url.toString(), screen.getScreenWidth(), screen.getScreenHeight(), true, imageSmooth);
-				bgPattern = new ImagePattern(background);
-			} catch (MalformedURLException | NullPointerException | IllegalArgumentException e1) {
-				System.err.println("Error loading background image. Please check your files.");
-				e1.getMessage();
-				System.exit(1);
-			}
-			break;
-		}
-
-		Canvas canvas = new Canvas(screen.getScreenWidth(), screen.getScreenHeight());
-
-		gc = canvas.getGraphicsContext2D();
-
-		// Add the canvas to the rootGroup
-		rootGroup.getChildren().addAll(visualPane, canvas, hud.getHud());
-
-		// Create the Scene with rootGroup
-		Scene scene = new Scene(rootGroup, 800, 600);
-
-		// Set the event handler for when a key is pressed
-		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
-			@Override
-			public void handle(KeyEvent e) {
-				String code = e.getCode().toString();
-				if (!input.contains(code)) input.add(code);
-			}
-		});
-
-		// Create the event handler for when a key is released
-		scene.setOnKeyReleased(new EventHandler<KeyEvent>() {
-			@Override
-			public void handle(KeyEvent e) {
-				String code = e.getCode().toString();
-				input.remove(code);
-			}
-		});
-
-		// Add Scene to gameStage
-		gameStage.setScene(scene);
-
-		// Format the Stage
-		gameStage.setTitle("SpaceBeatz");
-		if(bgChoice == 2) scene.setFill(Color.WHITE);
-		if(bgChoice == 3) scene.setFill(bgPattern);
-		gameStage.setFullScreen(true);
-
-		// We set this to NO_MATCH because ESC will be tested to close the screen instead 
-		gameStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
-
-		gameStage.show();
-	}
-
-	// ----------------------------------------------------------------------------------------------------------
-
 	// Builds the media player and defines the logic behind it
 	public void buildMediaPlayer() {
 		audioFile = new Media(url.toString());
@@ -273,6 +180,98 @@ public class SpaceBeatzGame extends Application {
 
 		// Play the song
 		player.play();
+	}
+	// ----------------------------------------------------------------------------------------------------------
+
+	// Build the game's stage
+	public void buildStage() {
+		// Get screen attributes
+		screen = new ScreenAttributes();
+
+		Group rootGroup = new Group();
+
+		// Create pane for visualizations
+		visualPane = new Pane();
+
+		ImagePattern bgPattern = null;
+		switch (bgChoice) {
+		// Case 1 is the choice for the starfield gif
+		case 1: 
+			try {
+				File f = new File("src/spacebeatzgame/res/starfield.gif");
+				URI uri = f.toURI();
+				URL url = uri.toURL();
+
+				Image background = new Image(url.toString(), Screen.getPrimary().getBounds().getMaxX(), Screen.getPrimary().getBounds().getMaxX(), true, imageSmooth);
+				ImageView bgImage = new ImageView(background);
+				bgImage.setCache(true);
+				bgImage.setCacheHint(CacheHint.SPEED);
+				visualPane.getChildren().add(bgImage);
+			} catch (MalformedURLException | NullPointerException | IllegalArgumentException e1) {
+				System.err.println("Error loading background image. Please check your files.");
+				e1.getMessage();
+				System.exit(1);
+			}
+			break;
+
+		// Case 2 is the choice for a static image of space
+		case 3:
+			try {
+				File f = new File("src/spacebeatzgame/res/Space.jpg");
+				URI uri = f.toURI();
+				URL url = uri.toURL();
+
+				Image background = new Image(url.toString(), screen.getScreenWidth(), screen.getScreenHeight(), true, imageSmooth);
+				bgPattern = new ImagePattern(background);
+			} catch (MalformedURLException | NullPointerException | IllegalArgumentException e1) {
+				System.err.println("Error loading background image. Please check your files.");
+				e1.getMessage();
+				System.exit(1);
+			}
+			break;
+		}
+
+		Canvas canvas = new Canvas(screen.getScreenWidth(), screen.getScreenHeight());
+
+		gc = canvas.getGraphicsContext2D();
+
+		// Add the canvas to the rootGroup
+		rootGroup.getChildren().addAll(visualPane, canvas, hud.getHud());
+
+		// Create the Scene with rootGroup
+		Scene scene = new Scene(rootGroup, 800, 600);
+
+		// Set the event handler for when a key is pressed
+		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+			@Override
+			public void handle(KeyEvent e) {
+				String code = e.getCode().toString();
+				if (!input.contains(code)) input.add(code);
+			}
+		});
+
+		// Create the event handler for when a key is released
+		scene.setOnKeyReleased(new EventHandler<KeyEvent>() {
+			@Override
+			public void handle(KeyEvent e) {
+				String code = e.getCode().toString();
+				input.remove(code);
+			}
+		});
+
+		// Add Scene to gameStage
+		gameStage.setScene(scene);
+
+		// Format the Stage
+		gameStage.setTitle("SpaceBeatz");
+		if(bgChoice == 2) scene.setFill(Color.WHITE);
+		if(bgChoice == 3) scene.setFill(bgPattern);
+		gameStage.setFullScreen(true);
+
+		// We set this to NO_MATCH because ESC will be tested to close the screen instead 
+		gameStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
+
+		gameStage.show();
 	}
 
 	// ----------------------------------------------------------------------------------------------------------
@@ -389,7 +388,7 @@ public class SpaceBeatzGame extends Application {
 	// ----------------------------------------------------------------------------------------------------------
 
 	// Called by the menu to free up game resources and dispose of data
-	public void stopGame() { player.stop(); }
+	public void stopGame() { player.dispose(); }
 
 	// ----------------------------------------------------------------------------------------------------------
 

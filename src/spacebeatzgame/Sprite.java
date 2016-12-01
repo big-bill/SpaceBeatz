@@ -120,7 +120,7 @@ public class Sprite {
 				vulnerable = true;
 				renderSprite = true;
 			}});
-		
+
 		// Set the cycle count to 20, flashing the sprite 10 times
 		userHit.setCycleCount(20);
 	}

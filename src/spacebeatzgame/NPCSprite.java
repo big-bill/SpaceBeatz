@@ -6,6 +6,7 @@
  * @author Robert Munshower
  * @author Andrew Smith
  */
+
 package spacebeatzgame;
 
 public class NPCSprite extends Sprite {

@@ -56,9 +56,7 @@ public class ScreenAttributes {
 	 *
 	 * @return A double value that is the screen height
 	 */
-	public double getScreenHeight() {
-		return screenHeight;
-	}
+	public double getScreenHeight() { return screenHeight; }
 
 	// ----------------------------------------------------------------------------------------------------------
 
@@ -67,9 +65,7 @@ public class ScreenAttributes {
 	 *
 	 * @return A double value that is the screen width
 	 */
-	public double getScreenWidth() {
-		return screenWidth;
-	}
+	public double getScreenWidth() { return screenWidth; }
 	
 	// ----------------------------------------------------------------------------------------------------------
 
@@ -77,9 +73,7 @@ public class ScreenAttributes {
 	 * Gets the min X coordinate.
 	 * @return A double value that is the minimum X coordinate
 	 */
-	public double getMinX() {
-		return minX;
-	}
+	public double getMinX() { return minX; }
 	
 	// ----------------------------------------------------------------------------------------------------------
 
@@ -87,9 +81,7 @@ public class ScreenAttributes {
 	 * Gets the min Y coordinate
 	 * @return A double value that is the minimum Y coordinate
 	 */
-	public double getMinY() {
-		return minY;
-	}
+	public double getMinY() { return minY; }
 	
 	// ----------------------------------------------------------------------------------------------------------
 
@@ -97,9 +89,7 @@ public class ScreenAttributes {
 	 * Set the screen width.
 	 * @param width custom double value for width
 	 */
-	private void setWidth(double width){
-		screenWidth = width;
-	}
+	private void setWidth(double width) { screenWidth = width; }
 	
 	// ----------------------------------------------------------------------------------------------------------
 
@@ -107,9 +97,7 @@ public class ScreenAttributes {
 	 * Set the screen height.
 	 * @param height custom double value for height
 	 */
-	private void setHeight(double height){
-		screenHeight = height;
-	}
+	private void setHeight(double height) { screenHeight = height; }
 	
 	// ----------------------------------------------------------------------------------------------------------
 
@@ -118,9 +106,7 @@ public class ScreenAttributes {
 	 *
 	 * @return
 	 */
-	public Rectangle2D getBoundary() {
-		return new Rectangle2D(minX, minY, screenWidth, screenHeight);
-	}
+	public Rectangle2D getBoundary() { return new Rectangle2D(minX, minY, screenWidth, screenHeight); }
 
 	// ----------------------------------------------------------------------------------------------------------
 
