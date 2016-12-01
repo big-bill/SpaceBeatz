@@ -1,6 +1,6 @@
 /**
  * This is the menu controller for the MainMenu.fxml file.
- *
+ * 
  * @author Billy Matthews
  * @author Robert Munshower
  * @author Andrew Smith
@@ -21,7 +21,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;

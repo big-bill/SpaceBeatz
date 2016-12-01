@@ -1,3 +1,10 @@
+/**
+ * This is the menu controller for the MainMenu.fxml file.
+ * 
+ * @author Billy Matthews
+ * @author Robert Munshower
+ * @author Andrew Smith
+ */
 package spacebeatzgame;
 
 import javafx.geometry.Rectangle2D;
