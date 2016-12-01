@@ -3,11 +3,14 @@
 <?import javafx.scene.Group?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.CustomMenuItem?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.control.SplitMenuButton?>
 <?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.effect.GaussianBlur?>
 <?import javafx.scene.effect.Glow?>
 <?import javafx.scene.image.Image?>
@@ -103,7 +106,46 @@
       </Button>
       <SplitMenuButton maxHeight="40.0" maxWidth="70.0" minHeight="40.0" minWidth="70.0" mnemonicParsing="false" popupSide="RIGHT" prefHeight="40.0" prefWidth="70.0" text="File">
         <items>
+            <CustomMenuItem mnemonicParsing="false">
+               <content>
+                  <Label text="Graphic Properties" />
+               </content>
+            </CustomMenuItem>
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <SeparatorMenuItem mnemonicParsing="false">
+               <content>
+                <CheckBox fx:id="imageSmoothingCheckBox" selected="true" text="Smooth Images" />
+               </content>
+            </SeparatorMenuItem>
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <CustomMenuItem mnemonicParsing="false">
+               <content>
+                  <Label text="Background Selection" />
+               </content>
+            </CustomMenuItem>
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <SeparatorMenuItem mnemonicParsing="false">
+               <content>
+                  <RadioButton fx:id="gifRadio" mnemonicParsing="false" selected="true" text="Space Travel">
+                     <toggleGroup>
+                        <ToggleGroup fx:id="backgroundSelectionGroup" />
+                     </toggleGroup>
+                  </RadioButton>
+               </content>
+            </SeparatorMenuItem>
+            <SeparatorMenuItem mnemonicParsing="false">
+               <content>
+                  <RadioButton fx:id="circRadio" mnemonicParsing="false" text="Music Visualizer" toggleGroup="$backgroundSelectionGroup" />
+               </content>
+            </SeparatorMenuItem>
+            <SeparatorMenuItem mnemonicParsing="false">
+               <content>
+                  <RadioButton fx:id="staticRadio" mnemonicParsing="false" text="Static Space" toggleGroup="$backgroundSelectionGroup" />
+               </content>
+            </SeparatorMenuItem>
+            <SeparatorMenuItem mnemonicParsing="false" />
             <MenuItem fx:id="aboutMenuItem" mnemonicParsing="false" onAction="#aboutMenuItemListener" text="About" />
+            <SeparatorMenuItem mnemonicParsing="false" />
           <MenuItem fx:id="quitMenuItem" mnemonicParsing="false" onAction="#quitMenuItemListener" text="Quit" />
         </items>
          <font>
@@ -112,7 +154,7 @@
       </SplitMenuButton>
       <Group fx:id="textFieldGroup" layoutY="42.0" opacity="0.95" visible="false">
          <children>
-            <TextArea editable="false" focusTraversable="false" layoutY="-13.0" prefHeight="471.0" prefWidth="800.0" text="                                                                                                   Space Beatz 2016&#10;------------------------------------------------------------------------------------------------------------------------------------------------------------------&#10;                                                                                                 Development Team&#10;                             &#10;                              Robert Munshower                                        Billy Matthews                                        Andrew Smith     &#10;------------------------------------------------------------------------------------------------------------------------------------------------------------------&#10;This game is joint development project between three developers. It was created as their final project for Java II. The program written in Java uses many aspects of the JavaFX API. The game itself is procedural and declarative in nature taking advantage of FXML. This unique game uses audio visualization techniques that create a dynamic and customized game play experience.&#10;------------------------------------------------------------------------------------------------------------------------------------------------------------------&#10;Game Controls&#10;&#10;W  -  UP&#10;&#10;A   -  Left&#10;&#10;S   -   Down&#10;&#10;D  -    Right&#10;&#10;Escape - Pause&#10;------------------------------------------------------------------------------------------------------------------------------------------------------------------&#10;&#10;Please Enjoy The Game." wrapText="true" />
+            <TextArea editable="false" focusTraversable="false" layoutY="-13.0" opacity="0.98" prefHeight="471.0" prefWidth="800.0" text="                                                                                                   Space Beatz 2016&#10;------------------------------------------------------------------------------------------------------------------------------------------------------------------&#10;                                                                                                 Development Team&#10;                             &#10;                              Robert Munshower                                        Billy Matthews                                        Andrew Smith     &#10;------------------------------------------------------------------------------------------------------------------------------------------------------------------&#10;This game is joint development project between three developers. It was created as their final project for Java II. The program written in Java uses many aspects of the JavaFX API. The game itself is procedural and declarative in nature taking advantage of FXML. This unique game uses audio visualization techniques that create a dynamic and customized game play experience.&#10;------------------------------------------------------------------------------------------------------------------------------------------------------------------&#10;Game Controls&#10;&#10;W  -  UP&#10;&#10;A   -  Left&#10;&#10;S   -   Down&#10;&#10;D  -    Right&#10;&#10;Escape - Pause&#10;------------------------------------------------------------------------------------------------------------------------------------------------------------------&#10;&#10;Please Enjoy The Game." wrapText="true" />
             <Button layoutX="716.0" layoutY="417.0" maxHeight="40.0" maxWidth="70.0" minHeight="40.0" minWidth="70.0" mnemonicParsing="false" onAction="#closeTextFieldButtonListener" prefHeight="40.0" prefWidth="70.0" text="Close">
                <font>
                   <Font name="Agency FB" size="14.0" />
@@ -120,22 +162,7 @@
             </Button>
          </children>
       </Group>
-      <CheckBox fx:id="imageSmothingCheckBox" layoutX="609.0" layoutY="11.0" mnemonicParsing="false" selected="true" text="Image Smoothing" textFill="WHITE">
-         <font>
-            <Font name="Agency FB Bold" size="14.0" />
-         </font>
-         <tooltip>
-            <Tooltip text="Disabling May Improve Performance" />
-         </tooltip>
-      </CheckBox>
-      <CheckBox fx:id="circleVisualCheckBox" layoutX="609.0" layoutY="40.0" mnemonicParsing="false" text="Use Alternate Music Visualization" textFill="WHITE">
-         <font>
-            <Font name="Agency FB Bold" size="14.0" />
-         </font>
-         <tooltip>
-            <Tooltip text="Enabling May Decrease Performance" />
-         </tooltip>
-      </CheckBox>
+      <Group layoutX="85.0" layoutY="31.0" />
       <Label fx:id="finalScore" layoutX="450.0" layoutY="298.0" onMousePressed="#browseButtonListener" prefHeight="35.0" prefWidth="201.0" text="Score:" textFill="WHITE" visible="false">
          <font>
             <Font name="Agency FB Bold" size="24.0" />
