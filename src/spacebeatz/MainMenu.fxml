@@ -166,17 +166,17 @@
          </children>
       </Group>
       <Group layoutX="85.0" layoutY="31.0" />
-      <Label fx:id="finalScore" layoutX="450.0" layoutY="298.0" onMousePressed="#browseButtonListener" prefHeight="35.0" prefWidth="201.0" text="Score:" textFill="WHITE" visible="false">
+      <Label fx:id="score" layoutX="450.0" layoutY="298.0" onMousePressed="#browseButtonListener" prefHeight="35.0" prefWidth="201.0" text="Score:" textFill="WHITE" visible="false">
          <font>
             <Font name="Agency FB Bold" size="24.0" />
          </font>
       </Label>
-      <Label fx:id="finalTime" layoutX="450.0" layoutY="263.0" onMousePressed="#browseButtonListener" prefHeight="35.0" prefWidth="201.0" text="Time:" textFill="WHITE" visible="false">
+      <Label fx:id="time" layoutX="450.0" layoutY="263.0" onMousePressed="#browseButtonListener" prefHeight="35.0" prefWidth="201.0" text="Time:" textFill="WHITE" visible="false">
          <font>
             <Font name="Agency FB Bold" size="24.0" />
          </font>
       </Label>
-      <Label fx:id="finalCollisons" layoutX="450.0" layoutY="343.0" onMousePressed="#browseButtonListener" prefHeight="35.0" prefWidth="201.0" text="Collisions:" textFill="WHITE" visible="false">
+      <Label fx:id="collisons" layoutX="450.0" layoutY="343.0" onMousePressed="#browseButtonListener" prefHeight="35.0" prefWidth="201.0" text="Collisions:" textFill="WHITE" visible="false">
          <font>
             <Font name="Agency FB Bold" size="24.0" />
          </font>
