@@ -73,6 +73,11 @@ public class Sprite {
 	 */
 	protected double height;
 
+	/**
+	 * Timeline for flashing the sprite
+	 */
+	protected Timeline userHit;
+
 	// ----------------------------------------------------------------------------------------------------------
 
 	/**
@@ -89,6 +94,28 @@ public class Sprite {
 		positionY = 0.0;
 		velocityX = 0.0;
 		velocityY = 0.0;
+
+		userHit = new Timeline(new KeyFrame(Duration.seconds(.15), new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				// If the renderSprite is true, we set it to false so it won't be rendered
+				if(renderSprite)
+					renderSprite = false;
+				else
+					renderSprite = true;
+			}
+		}));
+
+		// After the flashing animation is over, we set the values back to true so the user will be registered when hit and rendered
+		userHit.setOnFinished(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				vulnerable = true;
+				renderSprite = true;
+			}});
+		
+		// Set the cycle count to 20, flashing the sprite 10 times
+		userHit.setCycleCount(20);
 	}
 
 	// ----------------------------------------------------------------------------------------------------------
@@ -120,7 +147,8 @@ public class Sprite {
 			height = image.getRequestedHeight();
 		} 
 		catch(IllegalArgumentException | MalformedURLException e) {
-			e.printStackTrace();
+			System.err.print(e.getMessage());
+			System.exit(1);
 		}
 
 	}
@@ -164,7 +192,7 @@ public class Sprite {
 
 		// If the user is holding down the "S" key, the ship moves down 
 		if(input.contains("S")) {
-			if(getBoundary().getMaxY() >= screen.getBoundary().getMaxY() - 15)
+			if(getBoundary().getMaxY() >= screen.getBoundary().getMaxY() - 15) 
 				setPosition(positionX, screen.getBoundary().getMaxY() - 55);
 			else
 				addVelocity(0, 500);
@@ -184,30 +212,42 @@ public class Sprite {
 		if(vulnerable) {
 			collisions++; // If vulnerable, we increment the total amount of collisions
 			renderSprite = vulnerable = false;
-			Timeline userHit = new Timeline(new KeyFrame(Duration.seconds(.15), new EventHandler<ActionEvent>() {
-				@Override
-				public void handle(ActionEvent event) {
-					// If the renderSprite is true, we set it to false so it won't be rendered
-					if(renderSprite)
-						renderSprite = false;
-					else
-						renderSprite = true;
-				}
-			}));
-
-			// After the flashing animation is over, we set the values back to true so the user will be registered when hit and rendered
-			userHit.setOnFinished(new EventHandler<ActionEvent>() {
-				@Override
-				public void handle(ActionEvent event) {
-					vulnerable = true;
-					renderSprite = true;
-				}});
-			// Sets the amount of times the flashing (10 times, the method sets it to true and false) occurs
-			userHit.setCycleCount(20);
 			userHit.play();
 		}
 		// Return the new total of collision counter back to the game (will be counted on the hud)
 		return collisions;
+	}
+
+	// ----------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Updates the sprite velocity and position.
+	 *
+	 * @param time Double value that should reflect
+	 */
+	public void update(double time) {
+		positionX += velocityX * time;
+		positionY += velocityY * time;
+	}
+
+	// ----------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Pauses the sprite's animation and stores the previous velocity values.
+	 */
+	public void pauseSprite() {
+		velocityX = 0.0;
+		velocityY = 0.0;
+	}
+
+	// ----------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Resume the sprite's animation. Should only be called if the sprite has been paused.
+	 */
+	public void resumeSprite() {
+		velocityX = storedVelocityX;
+		velocityY = storedVelocityY;
 	}
 
 	// ----------------------------------------------------------------------------------------------------------
@@ -263,50 +303,16 @@ public class Sprite {
 	// ----------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Updates the sprite velocity and position.
-	 *
-	 * @param time Double value that should reflect
-	 */
-	public void update(double time) {
-		positionX += velocityX * time;
-		positionY += velocityY * time;
-	}
-
-	// ----------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Pauses the sprite's animation and stores the previous velocity values.
-	 */
-	public void pauseSprite() {
-		velocityX = 0.0;
-		velocityY = 0.0;
-	}
-
-	// ----------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Resume the sprite's animation. Should only be called if the sprite has been paused.
-	 */
-	public void resumeSprite() {
-		velocityX = storedVelocityX;
-		velocityY = storedVelocityY;
-	}
-
-	// ----------------------------------------------------------------------------------------------------------
-
-	/**
 	 * Renders the sprite position.
 	 *
 	 * @param graphicsContext
 	 */
-	public void render(GraphicsContext graphicsContext) {
-		graphicsContext.drawImage(image, positionX, positionY);
-	}
+	public void render(GraphicsContext graphicsContext) { graphicsContext.drawImage(image, positionX, positionY); }
 
 	// ----------------------------------------------------------------------------------------------------------
 
 	/**
-	 * This method is used if the sprite should be rendered on screen or not.
+	 * This method returns the render status of the sprite.
 	 * 
 	 * @return The status of if the sprite should be rendered on screen or not
 	 */
@@ -355,11 +361,9 @@ public class Sprite {
 	 * otherwise.
 	 */
 	public boolean beyondWindow(Sprite sprite,ScreenAttributes screen) {
-		boolean flag = false;
-		if(sprite.getPositionX() > screen.getScreenWidth() || sprite.getPositionY() >screen.getScreenHeight()) {
-			flag = true;
-		}
-		return flag;
+		if(sprite.getPositionX() > screen.getScreenWidth() || sprite.getPositionY() > screen.getScreenHeight())
+			return true;
+		return false;
 	}
 
 	// ----------------------------------------------------------------------------------------------------------
