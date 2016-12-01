@@ -34,108 +34,108 @@ import spacebeatzgame.SpaceBeatzGame;
 public class MenuController {
 
     /**
-     *
+     * The root node of the main menu
      */
     @FXML
     private AnchorPane anchorPane;
     /**
-     *
+     * Displays the chosen song title
      */
     @FXML
     private Label chosenSong;
     /**
-     *
+     * Opens filed explorer
      */
     @FXML
     private Button browseButton;
     /**
-     *
+     * Starts the game
      */
     @FXML
     private Button playButton;
     /**
-     *
+     * Resumes a game in progress
      */
     @FXML
     private Button resumeButton;
     /**
-     *
+     * Creates a new game
      */
     @FXML
     private Button newGameButton;
     /**
-     *
+     * Menu item that on action quits the game
      */
     @FXML
     private MenuItem quitMenuItem;
     /**
-     *
+     * Menu item that on action shows the about dialog
      */
     @FXML
     private MenuItem aboutMenuItem;
     /**
-     *
+     * Holds about dialog
      */
     @FXML
     private Group textFieldGroup;
     /**
-     *
+     * Image smoothing on and off
      */
     @FXML
     private CheckBox imageSmoothingCheckBox;
     /**
-     *
+     * Gif background selection
      */
     @FXML
     private RadioButton gifRadio;
     /**
-     * 
+     * Radio buttons group
      */
     @FXML
     private ToggleGroup backgroundSelectionGroup;
     /**
-     * 
+     * Circle visualization radio
      */
     @FXML
     private RadioButton circRadio;
     /**
-     * 
+     * Static image radio
      */
     @FXML
     private RadioButton staticRadio;
 
     /**
-     *
+     * Displays final score
      */
     @FXML
-    private Label finalScore;
+    private Label score;
+
+    /**
+     * Displays game time
+     */
+    @FXML
+    private Label time;
 
     /**
      *
      */
     @FXML
-    private Label finalTime;
+    private Label collisons;
 
-    /**
-     *
-     */
-    @FXML
-    private Label finalCollisons;
-    
     //Non-FXML Variables
     // ----------------------------------------------------------------------------------------------------------
     /**
-     *
+     * Holds the path to selected music
      */
     private String songPath;
 
     /**
-     *
+     * Background music
      */
     private Media backgroundMusicAudio;
 
     /**
-     *
+     * Background music player
      */
     private MediaPlayer backgroundMusicPlayer;
 
@@ -146,7 +146,7 @@ public class MenuController {
     private Stage gameStage;
 
     /**
-     *
+     * Uninitialized game
      */
     SpaceBeatzGame game;
 
@@ -187,9 +187,9 @@ public class MenuController {
      */
     public void browseButtonListener() {
         // If the game was played to completion, we hide the stats for the next game.
-        finalTime.setVisible(false);
-        finalScore.setVisible(false);
-        finalCollisons.setVisible(false);
+        time.setVisible(false);
+        score.setVisible(false);
+        collisons.setVisible(false);
 
         // Open up a FileChooser and let the user choose a track to play
         FileChooser fileChooser = new FileChooser();
@@ -238,8 +238,8 @@ public class MenuController {
 
         try {
             // Create a new stage for the game
-            gameStage = new Stage();                                                           //False is old circ viz off
-            game = new SpaceBeatzGame(this, url, gameStage, imageSmoothingCheckBox.isSelected(),false);
+            gameStage = new Stage();
+            game = new SpaceBeatzGame(this, url, gameStage, imageSmoothingCheckBox.isSelected(), getBackground());
 
             // We then disable and enable the appropriate buttons. 
             browseButton.setDisable(true);
@@ -254,6 +254,9 @@ public class MenuController {
             newGameButton.setDisable(false);
             newGameButton.setFocusTraversable(true);
             imageSmoothingCheckBox.setDisable(true);
+            circRadio.setDisable(true);
+            staticRadio.setDisable(true);
+            gifRadio.setDisable(true);
         } catch (Exception gameException) {
             System.err.print(gameException.getMessage());
             System.err.println("Something has gone horribly wrong!");
@@ -293,6 +296,9 @@ public class MenuController {
             newGameButton.setDisable(true);
             newGameButton.setFocusTraversable(false);
             imageSmoothingCheckBox.setDisable(false);
+            circRadio.setDisable(false);
+            staticRadio.setDisable(false);
+            gifRadio.setDisable(false);
         } catch (Exception e) {
             System.err.print(e.getMessage());
             e.printStackTrace();
@@ -309,12 +315,12 @@ public class MenuController {
      * @param hits Total amount of enemy collisions
      */
     public void displayScore(String time, int score, int hits, boolean endGame) {
-        finalTime.setVisible(true);
-        finalTime.setText(time);
-        finalScore.setVisible(true);
-        finalScore.setText("Score: " + score);
-        finalCollisons.setVisible(true);
-        finalCollisons.setText("Collisions: " + hits);
+        this.time.setVisible(true);
+        this.time.setText(time);
+        this.score.setVisible(true);
+        this.score.setText("Score: " + score);
+        collisons.setVisible(true);
+        collisons.setText("Collisions: " + hits);
         // We activate the newGameButton so that the state of the menu will activate the appropriate buttons for the user
         // This will only occur if the game is over
         if (endGame) {
@@ -346,6 +352,26 @@ public class MenuController {
     public void closeTextFieldButtonListener() {
         textFieldGroup.setVisible(false);
         imageSmoothingCheckBox.setDisable(false);
+    }
+
+    /**
+     * Gets the selected background and returns the appropriate int to be used
+     * by the spaceBeatzGame class. If for some reason nothing is selected the
+     * gif background is used.
+     *
+     * @return integer representing background to be used in game
+     */
+    private int getBackground() {
+
+        if (gifRadio.isSelected()) {
+            return 1;
+        } else if (circRadio.isSelected()) {
+            return 2;
+        } else if (staticRadio.isSelected()) {
+            return 3;
+        } else {
+            return 1;
+        }
     }
 
 }
