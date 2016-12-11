@@ -126,7 +126,7 @@
             <SeparatorMenuItem mnemonicParsing="false" />
             <SeparatorMenuItem mnemonicParsing="false">
                <content>
-                  <RadioButton fx:id="gifRadio" mnemonicParsing="false" selected="true" text="Space Travel">
+                  <RadioButton fx:id="gifRadio" mnemonicParsing="false" text="Space Travel">
                      <toggleGroup>
                         <ToggleGroup fx:id="backgroundSelectionGroup" />
                      </toggleGroup>
@@ -140,7 +140,7 @@
             </SeparatorMenuItem>
             <SeparatorMenuItem mnemonicParsing="false">
                <content>
-                  <RadioButton fx:id="staticRadio" mnemonicParsing="false" text="Static Space" toggleGroup="$backgroundSelectionGroup" />
+                  <RadioButton fx:id="staticRadio" mnemonicParsing="false" selected="true" text="Static Space" toggleGroup="$backgroundSelectionGroup" />
                </content>
             </SeparatorMenuItem>
             <SeparatorMenuItem mnemonicParsing="false" />

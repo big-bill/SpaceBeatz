@@ -52,11 +52,12 @@ public class SpaceBeatzGame extends Application {
 
 	// input will be used to detect user input and will determine the ship's movement
 	// Will also be used to check for the ESC key being pressed to pause the game
-	ArrayList<String> input = new ArrayList<>();
+	private ArrayList<String> input = new ArrayList<>();
 
-	private ArrayList<NPCSprite> enemies = new ArrayList<NPCSprite>();	// ArrayList used to hold enemy sprites
+	// ArrayList used to hold enemy sprites
+	private ArrayList<NPCSprite> enemies = new ArrayList<NPCSprite>();
 	private int enemyIndex;					// Index that steps through the enemy ArrayList properly
-	private final int enemyTotal = 100;		// Total amount of enemies in the ArrayList
+	private final int enemyTotal = 160;		// Total amount of enemies in the ArrayList
 
 	private URL url;						// URL for the audio file
 	private Media audioFile;				// Loads the audio file
@@ -124,7 +125,7 @@ public class SpaceBeatzGame extends Application {
 		audioFile = new Media(url.toString());
 		player = new MediaPlayer(audioFile);
 
-		player.setAudioSpectrumInterval(.3);  // Change this value to alter the enemy spawn rate
+		player.setAudioSpectrumInterval(.2);  // Change this value to alter the enemy spawn rate
 		player.setAudioSpectrumNumBands(bandRate);
 
 		// We check if the song is over, and if so get the total duration of the song
@@ -151,30 +152,45 @@ public class SpaceBeatzGame extends Application {
 				}
 			}
 
-			// newLevels counts the magnitude levels that do not equal -60
-			int newLevels = 0;
+			// TODO: The logic can be improved. Right now there isn't any rhyme or reason to it.
+			// TODO: Also need to verify that enemies can't over-spawn (max right now is 160 enemies on screen) 
+			/*
+			 * As of now the enemy spawn rate is .2 seconds and is based on the magnitude levels picked up by the media player.
+			 * Here is the current spawn logic
+			 * Magnitude Levels  0 through 4: 			Spawn 0 enemies
+			 * Magnitude Levels 5 through 59: 			Spawn 1 enemy
+			 * Magnitude Levels 60 through 89: 			Spawn 2 enemies
+			 * Magnitude Levels 90 through 119: 		Spawn 3 enemies
+			 * Magnitude Levels 120 - BandRate (128): 	Spawn 4 enemies
+			 */
+			
+			// indexLevel will equal the index the first instance of -60 is found in magnitudes
+			int indexLevel = 0;
 			// Step through the magnitudes array and get their level of intensity
 			for (int i = 0; i < magnitudes.length; ++i) {
-				if (magnitudes[i] != -60) newLevels++;
-				else break;
+				if (magnitudes[i] == -60) {
+					indexLevel = i + 1;
+					break;
+				}
 			}
 
 			// Add an enemy if the magnitudes level are low
-			if(newLevels < 30 && newLevels > 5) {
+			if(indexLevel < 30 && indexLevel > 5) {
 				enemies.get(enemyIndex).activate(screen);
 				// Increase enemy index
 				enemyIndex++;
 				// If the index is greater than the total stored amount of enemies we reset back to 0
 				if(enemyIndex >= enemyTotal) enemyIndex = 0;
 			}
-
-			// This loop will repeat based on the magnitude levels
-			for (int x = 0; x < (newLevels / 30); ++x) {
-				enemies.get(enemyIndex).activate(screen);
-				// Increase enemy index
-				enemyIndex++;
-				// If the index is greater than the total stored amount of enemies we reset back to 0
-				if(enemyIndex >= enemyTotal) enemyIndex = 0;
+			else {
+				// This loop will repeat based on the magnitude levels
+				for (int x = 0; x < (indexLevel / 30); ++x) {
+					enemies.get(enemyIndex).activate(screen);
+					// Increase enemy index
+					enemyIndex++;
+					// If the index is greater than the total stored amount of enemies we reset back to 0
+					if(enemyIndex >= enemyTotal) enemyIndex = 0;
+				}
 			}
 		});
 
@@ -214,7 +230,7 @@ public class SpaceBeatzGame extends Application {
 			}
 			break;
 
-		// Case 2 is the choice for a static image of space
+		// Case 3 is the choice for a static image of space
 		case 3:
 			try {
 				File f = new File("src/spacebeatzgame/res/Space.jpg");
@@ -288,14 +304,11 @@ public class SpaceBeatzGame extends Application {
 		new AnimationTimer() {
 			@Override
 			public void handle(long currentNanoTime) {
-				// Reset the ships velocity every frame so the ship doesn't constantly gain velocity
-				ship.setVelocity(0, 0);
 
-				// Check if the music player has spontaneously stopped, and if so exit the game
-				if(player.getStatus() == Status.DISPOSED) {
-					menu.displayScore(hud.getTime(), hud.getCurrentScore(), hud.getCurrentHitCount(), true);
-					this.stop();
-				}
+				// Calculate time since last update
+				double elapsedTime = (currentNanoTime - lastNanoTimeHero.doubleValue()) / 1000000000.0;
+				totalTimeElapsed += elapsedTime;
+				lastNanoTimeHero = currentNanoTime;
 
 				// Check if time is not 0, and if it's not, then the end of the media has been reached
 				if(totalTime != 0.0 || player.getStatus() == Status.STOPPED) {
@@ -305,11 +318,12 @@ public class SpaceBeatzGame extends Application {
 						this.stop();
 					}
 				}
+				
+				// Check if the music player has been spontaneously disposed of, and if so exit the game
+				if(player.getStatus() == Status.DISPOSED) this.stop();
 
-				// Calculate time since last update
-				double elapsedTime = (currentNanoTime - lastNanoTimeHero.doubleValue()) / 1000000000.0;
-				totalTimeElapsed += elapsedTime;
-				lastNanoTimeHero = currentNanoTime;
+				// Reset the ships velocity every frame so the ship doesn't constantly gain velocity
+				ship.setVelocity(0, 0);
 
 				// If the game is resumed and the gamePaused boolean value is true, we resume the game
 				// This will only occur if the "Resume" button is pressed from the main menu
@@ -336,8 +350,8 @@ public class SpaceBeatzGame extends Application {
 				// Step through the enemy ArrayList and render each sprite on the canvas
 				for (Sprite enemy : enemies)  {
 					if(enemy.getRenderSprite()) {
-						enemy.render(gc);
 						enemy.update(elapsedTime);
+						enemy.render(gc);
 						if (enemy.intersects(ship)) {
 							// Since the enemy hit the ship, the ship flashes and becomes invulnerable for a brief moment
 							// This returns the total number of collisions which will be sent to the HUD
@@ -353,6 +367,8 @@ public class SpaceBeatzGame extends Application {
 				}
 				// Update the HUD's counters
 				hud.updateHud(collisionCounter, enemiesPassed, player);
+				// Update game status on menu
+				menu.displayScore(hud.getTime(), hud.getCurrentScore(), hud.getCurrentHitCount(), false);
 			}
 
 		}.start();
@@ -370,8 +386,11 @@ public class SpaceBeatzGame extends Application {
 			// Step through the enemy sprites ArrayList and pause their animation
 			for (Sprite enemy : enemies) if(enemy.getRenderSprite()) enemy.pauseSprite();
 
+			// Pause the media player and the game
 			player.pause();
 			gamePaused = true;
+			
+			// Then we hide the game and send the current score to the menu
 			gameStage.hide();
 			menu.displayScore(hud.getTime(), hud.getCurrentScore(), hud.getCurrentHitCount(), false);
 		}

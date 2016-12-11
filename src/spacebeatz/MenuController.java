@@ -277,6 +277,7 @@ public class MenuController {
 		try {
 			gameStage.close();
 			game.stopGame();
+			System.gc();
 			chosenSong.setText("Selected Song ...");
 			backgroundMusicPlayer.play();
 			browseButton.setDisable(false);
@@ -357,7 +358,7 @@ public class MenuController {
 		if (gifRadio.isSelected()) return 1;
 		else if (circRadio.isSelected()) return 2; 
 		else if (staticRadio.isSelected()) return 3;
-		else return 1;
+		else return 3;
 	}
 
 }

@@ -119,7 +119,7 @@ public class Hud {
 		//Set Attributes of labels
 		etLabel.setFont(GAME_FONT);
 		etLabel.setTextFill(TEXT_COLOR);
-		etLabel.setText(ET_STRING + "--:--");
+		etLabel.setText(ET_STRING + "00:00");
 		timeBox.getChildren().add(etLabel);
 
 		scoreLabel.setFont(GAME_FONT);
@@ -206,7 +206,8 @@ public class Hud {
 
 		String eTime = String.format("%02d:%02d", minutes, seconds);
 
-		etLabel.setText(ET_STRING + eTime);
+		if(minutes > 0 || seconds >= 1) etLabel.setText(ET_STRING + eTime);
+		
 		collisionLabel.setText(COLLISION_STRING + collisions);
 
 		currentScore += passes;
