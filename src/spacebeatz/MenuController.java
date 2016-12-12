@@ -7,20 +7,10 @@
  */
 package spacebeatz;
 
-import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URL;
-
 import javafx.animation.Animation;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -30,8 +20,17 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 import spacebeatzgame.SpaceBeatzGame;
 
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
+
 public class MenuController {
 
+    /**
+     * Uninitialized game
+     */
+    SpaceBeatzGame game;
     /**
      * The root node of the main menu
      */
@@ -102,47 +101,37 @@ public class MenuController {
      */
     @FXML
     private RadioButton staticRadio;
-
     /**
      * Displays final score
      */
     @FXML
     private Label score;
-
     /**
      * Displays game time
      */
     @FXML
     private Label time;
 
+    //Non-FXML Variables
+    // ----------------------------------------------------------------------------------------------------------
     /**
      *
      */
     @FXML
     private Label collisons;
-
-    //Non-FXML Variables
-    // ----------------------------------------------------------------------------------------------------------
     /**
      * Holds the path to selected music
      */
     private String songPath;
-
     /**
      * Background music player
      */
     private MediaPlayer backgroundMusicPlayer;
-
     /**
-     * gameStage is passed to the spaceBeatzGame class so the controller will
+     * gameStage is passed to the SpaceBeatzGame class so the controller will
      * have access to its stage
      */
     private Stage gameStage;
-
-    /**
-     * Uninitialized game
-     */
-    SpaceBeatzGame game;
 
     /**
      * Initializes the menu by loading the background music.

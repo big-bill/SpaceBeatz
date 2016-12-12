@@ -7,16 +7,8 @@
  */
 package spacebeatzgame;
 
-import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Random;
-
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
-import javafx.event.EventHandler;
 import javafx.scene.CacheHint;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -26,7 +18,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCombination;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -38,31 +29,33 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import spacebeatz.MenuController;
 
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Random;
+
 public class SpaceBeatzGame extends Application {
 
+    private final int enemyTotal = 160;         // Total amount of enemies in the ArrayList
+    private final int bandRate = 128;           // Band rate for the audio spectrum listener
     private Stage gameStage;
     private ScreenAttributes screen;
     private Pane visualPane;
     private GraphicsContext gc;
-
-    Long lastNanoTimeHero = System.nanoTime();
+    private Long lastNanoTimeHero = System.nanoTime();
     private boolean gamePaused;                 // Used to communicate with menu that the game is paused or not
     private double totalTimeElapsed;            // Total time elapsed (current time of the song, stops when music stops)
     private double totalTime;                   // Total time the game has been running
-
     // input will be used to detect user input and will determine the ship's movement
     // Will also be used to check for the ESC key being pressed to pause the game
-    private ArrayList<String> input = new ArrayList<>();
-
+    private ArrayList<String> input;
     // ArrayList used to hold enemy sprites
-    private ArrayList<NPCSprite> enemies = new ArrayList<NPCSprite>();
+    private ArrayList<NPCSprite> enemies;
     private int enemyIndex;                     // Index that steps through the enemy ArrayList properly
-    private final int enemyTotal = 160;         // Total amount of enemies in the ArrayList
-
     private URL url;                            // URL for the audio file
-    private Media audioFile;                    // Loads the audio file
     private MediaPlayer player;                 // Plays the audio file
-    private final int bandRate = 128;           // Band rate for the audio spectrum listener
     private boolean imageSmooth;                // Value that will determine if the image will be smooth or not
     private boolean circleVisualization;        // Value that will determine if the visualization will be used or not
     private int bgChoice;                       // Choice selected by the user in the main menu
@@ -92,6 +85,8 @@ public class SpaceBeatzGame extends Application {
         this.bgChoice = bgChoice;
         if (bgChoice == 2) circleVisualization = true;
 
+        input = new ArrayList<>();
+        enemies = new ArrayList<>();
         // Initialize the enemy Sprite ArrayList
         if (enemies.isEmpty()) {
             for (int i = 0; i < enemyTotal; ++i) {
@@ -122,20 +117,15 @@ public class SpaceBeatzGame extends Application {
     // ----------------------------------------------------------------------------------------------------------
 
     // Builds the media player and defines the logic behind it
-    public void buildMediaPlayer() {
-        audioFile = new Media(url.toString());
+    private void buildMediaPlayer() {
+        Media audioFile = new Media(url.toString());
         player = new MediaPlayer(audioFile);
 
         player.setAudioSpectrumInterval(.2);  // Change this value to alter the enemy spawn rate
         player.setAudioSpectrumNumBands(bandRate);
 
         // We check if the song is over, and if so get the total duration of the song
-        player.setOnEndOfMedia(new Runnable() {
-            @Override
-            public void run() {
-                totalTime = player.getTotalDuration().toMillis();
-            }
-        });
+        player.setOnEndOfMedia(() -> totalTime = player.getTotalDuration().toMillis());
 
         // This Listener is responsible for spawning enemies based on magnitude levels
         player.setAudioSpectrumListener((double timestamp, double duration, float[] magnitudes, float[] phases) -> {
@@ -202,7 +192,7 @@ public class SpaceBeatzGame extends Application {
     // ----------------------------------------------------------------------------------------------------------
 
     // Build the game's stage
-    public void buildStage() {
+    private void buildStage() {
         // Get screen attributes
         screen = new ScreenAttributes();
 
@@ -260,22 +250,16 @@ public class SpaceBeatzGame extends Application {
         Scene scene = new Scene(rootGroup, 800, 600);
 
         // Set the event handler for when a key is pressed
-        scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent e) {
-                String code = e.getCode().toString();
-                if (!input.contains(code)) input.add(code);
-            }
-        });
+        scene.setOnKeyPressed((event -> {
+            String code = event.getCode().toString();
+            if (!input.contains(code)) input.add(code);
+        }));
 
         // Create the event handler for when a key is released
-        scene.setOnKeyReleased(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent e) {
-                String code = e.getCode().toString();
-                input.remove(code);
-            }
-        });
+        scene.setOnKeyReleased((event -> {
+            String code = event.getCode().toString();
+            input.remove(code);
+        }));
 
         // Add Scene to gameStage
         gameStage.setScene(scene);
@@ -295,7 +279,7 @@ public class SpaceBeatzGame extends Application {
     // ----------------------------------------------------------------------------------------------------------
 
     // Main game loop that contains the game's logic
-    public void gameEngine() {
+    private void gameEngine() {
         // User sprite
         Sprite ship = new Sprite();
         ship.setAllImageAttributes("src/spacebeatzgame/res/ship.png", 55, 55, true, imageSmooth);
@@ -381,7 +365,7 @@ public class SpaceBeatzGame extends Application {
     /**
      * This method pauses and resumes the game.
      */
-    public void toggleGameStatus() {
+    private void toggleGameStatus() {
 
         // First check if the game is paused
         if (!gamePaused) {
