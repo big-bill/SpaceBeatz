@@ -150,9 +150,9 @@ public class SpaceBeatzGame extends Application {
             /*
              * As of now the enemy spawn rate is .2 seconds and is based on the magnitude levels picked up by the media player.
 			 * Here is the current spawn logic
-			 * Magnitude Levels  0 through 4: 			Spawn 0 enemies
-			 * Magnitude Levels 5 through 59: 			Spawn 1 enemy
-			 * Magnitude Levels 60 through 89: 			Spawn 2 enemies
+			 * Magnitude Levels  0 through 4: 		Spawn 0 enemies
+			 * Magnitude Levels 5 through 59: 		Spawn 1 enemy
+			 * Magnitude Levels 60 through 89: 		Spawn 2 enemies
 			 * Magnitude Levels 90 through 119: 		Spawn 3 enemies
 			 * Magnitude Levels 120 - BandRate (128): 	Spawn 4 enemies
 			 */
